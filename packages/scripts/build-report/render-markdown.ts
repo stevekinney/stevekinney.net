@@ -52,6 +52,11 @@ export const renderMarkdownReport = (report: BuildReport): string =>
               `${orUnavailable(report.assets.largestClientChunk?.path)})`,
             )
             .item(
+              `Largest on-demand client chunk: ${orUnavailable(report.assets.largestLazyClientChunk?.formattedSize)}`,
+              `(${orUnavailable(report.assets.largestLazyClientChunk?.formattedGzipSize)} gzip,`,
+              `${orUnavailable(report.assets.largestLazyClientChunk?.path)})`,
+            )
+            .item(
               `Main stylesheet: ${orUnavailable(report.assets.mainStylesheet?.formattedSize)}`,
               `(${orUnavailable(report.assets.mainStylesheet?.formattedGzipSize)} gzip,`,
               `${orUnavailable(report.assets.mainStylesheet?.path)})`,

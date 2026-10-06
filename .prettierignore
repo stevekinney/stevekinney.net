@@ -8,3 +8,5 @@ test-results/.last-run.json
 applications/website/.generated/**
 # Claude automation scripts — not project source
 .claude/**
+# Claude Code workflow scripts: top-level `return` doesn't parse as a module
+**/*.workflow.js

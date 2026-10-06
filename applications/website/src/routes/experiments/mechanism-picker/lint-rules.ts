@@ -1,9 +1,8 @@
 import type { RungId } from './ladder';
 
 /**
- * The linter's heuristics, as data the learner can edit. Every word list is
- * matched case-insensitively as a whole word or phrase. The classifications and
- * suggestions follow the course outline's advice on writing instructions.
+ * The linter's heuristics, as data. Every word list is matched
+ * case-insensitively as a whole word or phrase.
  */
 export const classifications = [
   'must-hold',
@@ -207,17 +206,3 @@ export const defaultRules: LintRules = {
     triggers: ['after', 'before', 'when', 'whenever', 'if', 'once', 'while', 'until'],
   },
 };
-
-/** A deep copy of the default rules, for a fresh, editable set. */
-export const cloneRules = (rules: LintRules = defaultRules): LintRules =>
-  structuredClone(rules) as LintRules;
-
-/** Reads a comma-separated list typed into a rule's text box. */
-export const parseWordList = (text: string): string[] =>
-  text
-    .split(',')
-    .map((word) => word.trim().toLowerCase())
-    .filter((word, index, words) => word !== '' && words.indexOf(word) === index)
-    .slice(0, 200);
-
-export const formatWordList = (words: readonly string[]): string => words.join(', ');

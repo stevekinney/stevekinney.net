@@ -57,6 +57,7 @@
         "build-artifacts.ts",
         "../utilities/tailwind-playground.ts",
         "../../applications/website/static/**",
+        "../../applications/website/src/routes/experiments/**/+page.svelte",
         "../../writing/**",
         "../../courses/**",
         "../../projects/**",

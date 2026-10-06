@@ -1,10 +1,10 @@
 <script lang="ts">
   import { formatCompactTokenCount as formatTokens, formatCost } from '$lib/experiments/format';
+  import { placeTooltip } from '$lib/experiments/tooltip-position';
 
   import {
     formatAxisMultiplier,
     gridValues,
-    placeTooltip,
     speedupAxis,
     workersAt,
     X_TICKS,
@@ -81,7 +81,7 @@
   );
 
   const tooltipLeft = $derived(
-    active ? placeTooltip(x(active.workers), TOOLTIP_WIDTH, 0, width) : 0,
+    active ? placeTooltip(x(active.workers), TOOLTIP_WIDTH, width, 10) : 0,
   );
 
   const pointerWorkers = (event: PointerEvent | MouseEvent): number => {

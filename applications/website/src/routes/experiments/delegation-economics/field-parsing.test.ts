@@ -17,7 +17,7 @@ describe('field parsing', () => {
     expect(parseTokenField('lots', ranges.uniqueTokens)).toBeNull();
   });
 
-  it('lets a measured spawn overhead sit outside the slider’s 7.5K–44K', () => {
+  it('lets a typed spawn overhead sit outside the slider’s range', () => {
     expect(parseTokenField('70k', ranges.spawnTokens)).toBe(70_000);
     expect(parseTokenField('0', ranges.spawnTokens)).toBe(0);
   });
@@ -32,10 +32,10 @@ describe('field parsing', () => {
     expect(parseFractionField('most', ranges.serialFraction)).toBeNull();
   });
 
-  it('reads minutes, multipliers, and whole worker counts', () => {
+  it('reads minutes and whole worker counts', () => {
     expect(parseNumberField('60 min', ranges.soloMinutes)).toBe(60);
     expect(parseNumberField('', ranges.soloMinutes)).toBe(0);
-    expect(parseNumberField('3.5×', ranges.teamMultiplier)).toBe(3.5);
+    expect(parseNumberField('2.5', ranges.integrationMinutes)).toBe(2.5);
     expect(parseNumberField('900', ranges.soloMinutes)).toBe(600);
     expect(parseWholeField('4.4', ranges.workers)).toBe(4);
     expect(parseWholeField('', ranges.workers)).toBe(1);

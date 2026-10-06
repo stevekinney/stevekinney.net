@@ -38,7 +38,6 @@
     "content:check": "bun packages/scripts/check-content-metadata.ts",
     "content:fix": "bun packages/scripts/check-content-metadata.ts --fix",
     "playgrounds:build": "bun packages/scripts/run-with-content-history.ts turbo run playgrounds:build --filter=@stevekinney/scripts",
-    "experiments:patterns:build": "bun applications/website/src/routes/experiments/agentic-coding-patterns/build-dataset.ts",
     "content-enhancements:build": "bun packages/scripts/run-with-content-history.ts turbo run content-enhancements:build --filter=@stevekinney/scripts"
   },
   "devDependencies": {
@@ -70,6 +69,7 @@
     "@types/unist": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^8.70.0",
     "@typescript-eslint/parser": "^8.70.0",
+    "ajv": "^8.20.0",
     "autoprefixer": "^10.5.5",
     "axe-playwright": "^2.2.2",
     "clsx": "^2.1.1",
@@ -115,9 +115,18 @@
   },
   "type": "module",
   "dependencies": {
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/lang-markdown": "^6.5.2",
+    "@codemirror/language": "^6.12.4",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.13",
     "@icons-pack/svelte-simple-icons": "^7.2.0",
+    "@lezer/highlight": "^1.2.5",
+    "@lostgradient/skillset": "^0.1.1",
     "@lucide/svelte": "^1.43.0",
     "@resvg/resvg-wasm": "^2.6.2",
+    "acorn": "^8.19.0",
     "class-variance-authority": "^0.7.1",
     "hast-util-to-html": "^9.0.5",
     "hastscript": "^9.0.1",
@@ -125,6 +134,7 @@
     "modern-screenshot": "^4.7.0",
     "prose-writer": "^0.2.3",
     "sharp": "0.35.4",
+    "smol-toml": "^1.9.0",
     "zod": "^4.5.4"
   },
   "optionalDependencies": {

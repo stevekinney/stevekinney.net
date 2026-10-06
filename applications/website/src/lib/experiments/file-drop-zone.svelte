@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { FileUp, FolderUp } from '@lucide/svelte';
+  import { ChevronDown, FileUp, FolderUp } from '@lucide/svelte';
   import { onMount } from 'svelte';
   import type { Snippet } from 'svelte';
 
@@ -70,6 +70,29 @@
   onMount(() => {
     interactive = true;
   });
+
+  // Starts closed. Opening it is remembered, in one preference for every experiment. It's read after mount, so the prerendered HTML and the
+  // first client render agree, and storage can be missing or blocked.
+  const COLLAPSED_KEY = 'experiments:file-drop-zone-collapsed';
+  let collapsed = $state(true);
+  onMount(() => {
+    try {
+      collapsed = localStorage.getItem(COLLAPSED_KEY) !== 'false';
+    } catch {
+      // Storage is unavailable, so the zone starts closed.
+    }
+  });
+
+  const toggleCollapsed = (): void => {
+    collapsed = !collapsed;
+    try {
+      localStorage.setItem(COLLAPSED_KEY, String(collapsed));
+    } catch {
+      // The choice still holds until the page closes.
+    }
+  };
+
+  const hasStatus = $derived(busy ? Boolean(progress) : Boolean(status));
 
   const dragging = $derived(zoneDragDepth > 0 || (captureWindowDrops && pageDragDepth > 0));
 
@@ -159,7 +182,8 @@
   ondragover={handleZoneDragOver}
   ondrop={handleZoneDrop}
   class={merge(
-    'relative flex flex-col justify-center gap-4 rounded-lg border-2 border-dashed p-6 transition-colors',
+    'relative flex flex-col justify-center rounded-lg border-2 border-dashed transition-colors',
+    collapsed ? 'gap-0 px-6 py-4' : 'gap-4 p-6',
     dragging
       ? 'border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-950/40'
       : 'border-slate-300 dark:border-slate-600',
@@ -175,33 +199,49 @@
       <p id="{id}-title" class="font-semibold text-slate-900 dark:text-white">
         {dragging ? draggingTitle : title}
       </p>
-      <p class="text-sm text-slate-600 dark:text-slate-300">
+      <p class={['text-sm text-slate-600 dark:text-slate-300', collapsed && 'hidden']}>
         Files are read in your browser. Nothing is uploaded.
       </p>
     </div>
+    <button
+      type="button"
+      onclick={toggleCollapsed}
+      disabled={!interactive}
+      aria-expanded={!collapsed}
+      aria-controls="{id}-body"
+      aria-label={collapsed ? 'Show file controls' : 'Hide file controls'}
+      class="focus-visible:outline-primary-600 mt-0.5 ml-auto flex size-6 flex-none cursor-pointer items-center justify-center rounded text-slate-600 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 dark:text-slate-300 dark:hover:text-white"
+    >
+      <ChevronDown
+        aria-hidden="true"
+        class={['size-5 transition-transform', collapsed && '-rotate-90']}
+      />
+    </button>
   </div>
 
-  <div class="flex flex-wrap items-center gap-3">
-    <Button
-      variant="secondary"
-      loading={busy}
-      disabled={!interactive || busy}
-      onclick={() => filePicker?.click()}
-      aria-describedby={children ? `${id}-guidance` : undefined}
-    >
-      {fileButtonLabel}
-    </Button>
-    {#if folders}
+  <div class={['flex flex-wrap items-center gap-3', collapsed && hasStatus && 'mt-3']}>
+    <div id="{id}-body" class={collapsed ? 'hidden' : 'contents'}>
       <Button
         variant="secondary"
-        icon={FolderUp}
+        loading={busy}
         disabled={!interactive || busy}
-        onclick={() => folderPicker?.click()}
+        onclick={() => filePicker?.click()}
         aria-describedby={children ? `${id}-guidance` : undefined}
       >
-        {folderButtonLabel}
+        {fileButtonLabel}
       </Button>
-    {/if}
+      {#if folders}
+        <Button
+          variant="secondary"
+          icon={FolderUp}
+          disabled={!interactive || busy}
+          onclick={() => folderPicker?.click()}
+          aria-describedby={children ? `${id}-guidance` : undefined}
+        >
+          {folderButtonLabel}
+        </Button>
+      {/if}
+    </div>
     <p
       class="text-sm [overflow-wrap:anywhere] text-slate-600 dark:text-slate-300"
       aria-live="polite"
@@ -238,7 +278,10 @@
   {/if}
 
   {#if children}
-    <div id="{id}-guidance" class="text-sm text-slate-500 dark:text-slate-400">
+    <div
+      id="{id}-guidance"
+      class={['text-sm text-slate-500 dark:text-slate-400', collapsed && 'hidden']}
+    >
       {@render children()}
     </div>
   {/if}

@@ -116,6 +116,22 @@ describe('enhanceTableOfContents', () => {
     expect(firstLink?.getAttribute('href')).toBe('#caf%C3%A9-menu');
   });
 
+  test('wraps the links in a details element that starts open', () => {
+    const root = createRoot([
+      ['h2', 'one', 'One'],
+      ['h2', 'two', 'Two'],
+      ['h2', 'three', 'Three'],
+    ]);
+
+    enhanceTableOfContents(root);
+
+    const details = root.querySelector('nav[aria-label="On this page"] > details');
+    expect(details).toBeInstanceOf(HTMLDetailsElement);
+    expect((details as HTMLDetailsElement).open).toBe(true);
+    expect(details?.querySelector(':scope > summary')?.textContent).toBe('On this page');
+    expect(details?.querySelectorAll(':scope > ul a')).toHaveLength(3);
+  });
+
   test('destroy removes the injected navigation', () => {
     const root = createRoot([
       ['h2', 'one', 'One'],

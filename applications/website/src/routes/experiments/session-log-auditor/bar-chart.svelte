@@ -5,27 +5,20 @@
     /** The x-axis label, such as a day. */
     label: string;
     segments: BarSegment[];
-    /** A line under the tooltip's heading, such as “after the fix”. */
+    /** A line under the tooltip's heading, such as the day's total. */
     note?: string;
-    /** Draw this bar faded, such as a day before a fix. */
-    muted?: boolean;
   };
 </script>
 
 <script lang="ts">
+  import { placeTooltip } from '$lib/experiments/tooltip-position';
+
   type Props = {
     bars: Bar[];
     /** Describes the chart, and names the table that has the same numbers. */
     label: string;
     testId: string;
     formatValue?: (value: number) => string;
-    /** A dashed vertical line before this bar, such as a fix date. */
-    markerBefore?: string | null;
-    markerLabel?: string;
-    /** The largest value on the y axis, such as 1 for a ratio. Defaults to the tallest bar. */
-    maximum?: number;
-    /** Counts: keep the gridlines on whole numbers. */
-    integer?: boolean;
     height?: number;
   };
 
@@ -34,10 +27,6 @@
     label,
     testId,
     formatValue = (value: number) => String(value),
-    markerBefore = null,
-    markerLabel = '',
-    maximum,
-    integer = false,
     height = 200,
   }: Props = $props();
 
@@ -55,8 +44,8 @@
     bars.map((bar) => bar.segments.reduce((sum, segment) => sum + segment.value, 0)),
   );
   const tallest = $derived(Math.max(1, ...totals));
-  // Whole-number charts round the top up to an even number so the middle gridline is whole too.
-  const top = $derived(maximum ?? (integer ? Math.ceil(tallest / 2) * 2 : tallest));
+  // Counts: round the top up to an even number so the middle gridline is whole too.
+  const top = $derived(Math.ceil(tallest / 2) * 2);
   const slot = $derived(bars.length > 0 ? plotWidth / bars.length : plotWidth);
   const barWidth = $derived(Math.max(1, Math.min(28, slot * 0.8)));
 
@@ -91,21 +80,12 @@
       ? true
       : index % labelEvery === 0 && bars.length - 1 - index >= labelEvery;
 
-  const markerIndex = $derived(
-    markerBefore === null ? -1 : bars.findIndex((bar) => bar.id > markerBefore),
-  );
-
   const activeBar = $derived(active === null ? null : bars[active]);
 
-  // Centered on the bar, then held inside the chart so it can never widen a narrow page.
-  const tooltipLeft = $derived.by(() => {
-    if (active === null) return 0;
-
-    const anchor = x(active) + barWidth / 2;
-    const room = Math.max(0, width - tooltipWidth);
-
-    return Math.min(room, Math.max(0, anchor - tooltipWidth / 2));
-  });
+  // Held inside the chart so it can never widen a narrow page.
+  const tooltipLeft = $derived(
+    active === null ? 0 : placeTooltip(x(active) + barWidth / 2, tooltipWidth, width),
+  );
 
   const describe = (index: number): string => {
     const bar = bars[index];
@@ -201,7 +181,6 @@
           y={segment.y}
           width={barWidth}
           height={Math.max(0.5, segment.height)}
-          opacity={bars[index].muted ? 0.45 : 1}
           class={segment.fill}
         />
       {/each}
@@ -216,28 +195,6 @@
         </text>
       {/if}
     {/each}
-
-    {#if markerIndex > 0}
-      <line
-        x1={MARGIN.left + markerIndex * slot}
-        x2={MARGIN.left + markerIndex * slot}
-        y1={MARGIN.top}
-        y2={MARGIN.top + plotHeight}
-        stroke-dasharray="4 3"
-        stroke-width="1.5"
-        class="stroke-slate-700 dark:stroke-slate-200"
-      />
-      {#if markerLabel}
-        <text
-          x={MARGIN.left + markerIndex * slot + (markerIndex > bars.length / 2 ? -4 : 4)}
-          y={MARGIN.top + 10}
-          text-anchor={markerIndex > bars.length / 2 ? 'end' : 'start'}
-          class="fill-slate-700 text-[11px] font-semibold dark:fill-slate-200"
-        >
-          {markerLabel}
-        </text>
-      {/if}
-    {/if}
   </svg>
 
   {#if activeBar}

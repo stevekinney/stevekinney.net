@@ -1,4 +1,4 @@
-/** The outline's template for an instruction that changes a decision. */
+/** The template for an instruction that changes a decision. */
 export type WhenDoVerify = { trigger: string; action: string; result: string };
 
 const BLANK = '____';
@@ -19,6 +19,3 @@ export const formatRewrite = ({ trigger, action, result }: WhenDoVerify): string
 
   return `When ${fill(trigger)}, ${fill(action)}, then verify ${fill(result)}.`;
 };
-
-export const isComplete = ({ trigger, action, result }: WhenDoVerify): boolean =>
-  [trigger, action, result].every((part) => part.trim() !== '');

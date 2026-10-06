@@ -1,5 +1,5 @@
 /**
- * The enforcement ladder from the course outline's "Rungs on the Ladder", weakest first.
+ * The enforcement ladder, weakest first. The lesson on CLAUDE.md walks through it.
  * The lower four rungs can only ask; the upper four can refuse.
  */
 export const rungIds = [
@@ -53,6 +53,3 @@ export const rungs: readonly Rung[] = [
 
 export const findRung = (id: RungId | null | undefined): Rung | null =>
   rungs.find((rung) => rung.id === id) ?? null;
-
-export const isRungId = (value: unknown): value is RungId =>
-  typeof value === 'string' && (rungIds as readonly string[]).includes(value);

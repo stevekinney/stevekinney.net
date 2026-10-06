@@ -1,2 +1,0 @@
-{"type":"user","sessionId":"00000000-0000-4000-8000-0000000000c1","timestamp":"2026-10-04T10:00:00.000Z","message":{"role":"user","content":"Fixture prompt."}}
-{"type":"assistant","sessionId":"00000000-0000-4000-8000-0000000000c1","timestamp":"2026-10-04T10:01:00.000Z","message":{"id":"msg_fixture_x","model":"claude-opus-5-5","role":"assistant","content":[{"type":"text","text":"Fixture response."}],"usage":{"input_tokens":2,"cache_read_input_tokens":30000,"cache_creation_input_tokens":5498,"output_tokens":700}}}

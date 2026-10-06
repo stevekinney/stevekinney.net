@@ -3,6 +3,6 @@ import type { ExperimentMetadata } from '$lib/experiments/registry';
 export const experiment: ExperimentMetadata = {
   title: 'Measurement Noise',
   description:
-    'Bring timings from two ways of working and find out whether the data can tell them apart, with the uncertainty drawn out, a sample-size planner, and a warning when you’re measuring activity instead of outcomes.',
+    'Is the difference between two ways of working real, or just noise? The same five tasks, read two ways, show why it depends on how you measured.',
   added: '2026-10-04',
 };

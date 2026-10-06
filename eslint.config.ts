@@ -48,6 +48,8 @@ const config: Linter.Config[] = [
       '.claude/**',
       // Gitignored scratch space — not project source
       'tmp/**',
+      // Claude Code workflow scripts: top-level `return` and runtime globals, not modules
+      '**/*.workflow.js',
     ],
   },
   ...compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'),

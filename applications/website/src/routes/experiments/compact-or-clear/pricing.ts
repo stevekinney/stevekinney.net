@@ -1,41 +1,36 @@
 /**
- * The price table and everything derived from it. Prices are US dollars per
- * million tokens. Money is always `tokens × price` summed first and divided by
- * a million once at the end, never built from per-token rates, which would
- * leave float noise such as `1.0499999999999998` in a total that should read
- * $1.05.
+ * The prices this page needs, picked out of the shared `model-pricing.toml`
+ * while the page prerenders. Prices are US dollars per million tokens. Money is
+ * always `tokens × price` summed first and divided by a million once at the
+ * end, never built from per-token rates, which would leave float noise in a
+ * total that should read $1.05.
  */
 
-import { truncateCharacters } from '$lib/experiments/truncate';
-
-export type ModelPrice = {
-  /** A key such as `opus-5`. Imported session models match against it. */
-  id: string;
-  name: string;
-  /** Dollars per million input tokens. */
-  input: number;
-  /** Dollars per million output tokens. */
-  output: number;
-};
+import { normalizeModelIdentifier } from '$lib/experiments/model-pricing';
+import type { ModelPricingCatalog } from '$lib/experiments/model-pricing';
 
 export type CacheTtl = '5m' | '1h';
 
-/** Cache reads cost a tenth of input. Writes cost 1.25× for five minutes and 2× for an hour. */
-export const CACHE_READ_MULTIPLIER = 0.1;
-export const CACHE_WRITE_MULTIPLIERS: Record<CacheTtl, number> = { '5m': 1.25, '1h': 2 };
+export type ModelPrice = {
+  /** A key such as `claude-opus-5-5`, derived from the catalog row's name. */
+  id: string;
+  name: string;
+  input: number;
+  cachedInput: number;
+  cacheWrite5m: number;
+  cacheWrite1h: number;
+  output: number;
+  /** Model IDs as Claude Code records them, so an imported session can find its row. */
+  identifiers: string[];
+};
 
-export const TOKENS_PER_PRICE_UNIT = 1_000_000;
-
-/** The default price table. These are the specification's prices, not live ones. */
-export const defaultModels: readonly ModelPrice[] = [
-  { id: 'fable-5-1', name: 'Fable 5.1', input: 10, output: 50 },
-  { id: 'opus-5', name: 'Opus 5', input: 5, output: 25 },
-  { id: 'opus-5-5', name: 'Opus 5.5', input: 4, output: 20 },
-  { id: 'sonnet-5', name: 'Sonnet 5', input: 2, output: 10 },
-  { id: 'sonnet-5-5', name: 'Sonnet 5.5', input: 2, output: 10 },
-  { id: 'sonnet-4-6', name: 'Sonnet 4.6', input: 3, output: 15 },
-  { id: 'haiku-4-5', name: 'Haiku 4.5', input: 1, output: 5 },
-];
+export type SessionPricing = {
+  /** When the shared price table was last checked, as `YYYY-MM-DD`. */
+  updated: string;
+  models: ModelPrice[];
+  defaultModelId: string;
+  defaultSwitchId: string;
+};
 
 /** Dollars per million tokens for each way a token can be billed. */
 export type Rates = {
@@ -45,182 +40,67 @@ export type Rates = {
   write: number;
 };
 
-export const ratesFor = (model: Pick<ModelPrice, 'input' | 'output'>, ttl: CacheTtl): Rates => ({
+export const TOKENS_PER_PRICE_UNIT = 1_000_000;
+
+/** Where a long session usually starts, and the cheaper model it might move to. */
+export const DEFAULT_MODEL_IDENTIFIER = 'claude-opus-5-5';
+export const DEFAULT_SWITCH_IDENTIFIER = 'claude-sonnet-5-5';
+
+/** Compacting and switching models both happen inside Claude Code, so only Anthropic's rows apply. */
+const PROVIDER = 'Anthropic';
+
+/**
+ * Hands the page plain prices with no schema library. A missing cache-write
+ * price is billed at the input price, as the shared table's header says.
+ * Throws when a default model is missing, which fails the build rather than
+ * quietly defaulting to some other price.
+ */
+export const toSessionPricing = (catalog: ModelPricingCatalog): SessionPricing => {
+  const models = catalog.models
+    .filter((model) => model.provider === PROVIDER)
+    .map((model) => ({
+      id: model.id,
+      name: model.name,
+      input: model.input,
+      cachedInput: model.cachedInput,
+      cacheWrite5m: model.cacheWrite5m ?? model.input,
+      cacheWrite1h: model.cacheWrite1h ?? model.input,
+      output: model.output,
+      identifiers: model.identifiers,
+    }));
+
+  const find = (identifier: string): string => {
+    const model = models.find((entry) => entry.identifiers.includes(identifier));
+    if (!model) throw new Error(`model-pricing.toml has no ${PROVIDER} model ${identifier}.`);
+
+    return model.id;
+  };
+
+  return {
+    updated: catalog.updated,
+    models,
+    defaultModelId: find(DEFAULT_MODEL_IDENTIFIER),
+    defaultSwitchId: find(DEFAULT_SWITCH_IDENTIFIER),
+  };
+};
+
+export const ratesFor = (model: ModelPrice, ttl: CacheTtl): Rates => ({
   input: model.input,
   output: model.output,
-  read: model.input * CACHE_READ_MULTIPLIER,
-  write: model.input * CACHE_WRITE_MULTIPLIERS[ttl],
+  read: model.cachedInput,
+  write: ttl === '1h' ? model.cacheWrite1h : model.cacheWrite5m,
 });
 
-/**
- * Reduces a model ID from a session to the form used in the price table:
- * lowercase, without Claude Code's `[1m]` context suffix, a trailing
- * `-YYYYMMDD` date, or a leading `claude-`.
- */
-export const normalizeModelId = (model: string): string =>
-  model
-    .trim()
-    .toLowerCase()
-    .replace(/\[1m\]$/, '')
-    .replace(/-\d{8}$/, '')
-    .replace(/^claude-/, '');
-
-/**
- * Finds the price table row for a session's model ID. The match is on the
- * whole normalized ID, never on a substring: `claude-opus-5-5` must not
- * silently pick up Opus 5's prices, because Opus 5.5 is priced differently.
- */
+/** The row for a session's model ID, matched on the whole normalized ID, never a substring. */
 export const matchModel = (
   sessionModel: string,
   models: readonly ModelPrice[],
 ): ModelPrice | null => {
-  const normalized = normalizeModelId(sessionModel);
+  const normalized = normalizeModelIdentifier(sessionModel);
 
-  return models.find((model) => model.id === normalized) ?? null;
+  return models.find((model) => model.identifiers.includes(normalized)) ?? null;
 };
 
-const trimPrice = (price: number): string => {
-  if (price >= 0.0001 || price === 0) return String(Number(price.toFixed(4)));
-
-  // A price this small would round to zero, so it keeps its digits.
-  const exact = price.toFixed(20).replace(/0+$/, '');
-
-  return Number(exact) === 0 ? String(price) : exact;
-};
-
-/** A model's name with its prices, such as `Opus 5 ($5/$25)`. */
+/** A model's name with its prices, such as `Claude Opus 5.5 ($4/$20)`. */
 export const modelLabel = (model: ModelPrice): string =>
-  `${model.name} ($${trimPrice(model.input)}/$${trimPrice(model.output)})`;
-
-/** How far a price can drift from exactly 5× before the ratio counts as broken. */
-const RATIO_TOLERANCE = 1e-9;
-
-/** The models whose output price isn't five times their input price. */
-export const modelsOffTheRatio = (models: readonly ModelPrice[]): ModelPrice[] =>
-  models.filter((model) => Math.abs(model.output - 5 * model.input) > RATIO_TOLERANCE);
-
-export const pricesEqual = (first: readonly ModelPrice[], second: readonly ModelPrice[]): boolean =>
-  first.length === second.length &&
-  first.every((model, index) => {
-    const other = second[index];
-
-    return (
-      model.id === other.id &&
-      model.name === other.name &&
-      model.input === other.input &&
-      model.output === other.output
-    );
-  });
-
-/**
- * When the selected model's ID is gone from an edited table, the new ID if the edit was only a
- * rename: the same row, in the same place, with the same name and prices. Otherwise `null`.
- */
-export const renamedModelId = (
-  before: readonly ModelPrice[],
-  after: readonly ModelPrice[],
-  selectedId: string,
-): string | null => {
-  const index = before.findIndex((model) => model.id === selectedId);
-  const old = before[index];
-  const next = after[index];
-
-  return old &&
-    next &&
-    before.length === after.length &&
-    next.name === old.name &&
-    next.input === old.input &&
-    next.output === old.output
-    ? next.id
-    : null;
-};
-
-/**
- * Turns a name such as `Opus 5.5` into an ID such as `opus-5-5`, at most 60
- * characters long. Lowercasing can lengthen a name: `İ` becomes two characters.
- */
-export const toModelId = (name: string): string =>
-  name
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+/, '')
-    .slice(0, 60)
-    .replace(/-+$/, '');
-
-/**
- * What a model ID can be. A shared link has to carry the ID of the selected model, and
- * `decodeScenario` drops one that doesn't match, so an imported table can't hold one either.
- */
-export const MODEL_ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,59}$/;
-
-/** The most models a price table can hold. The editor stops at it too, so it can't export a file the importer rejects. */
-export const MAXIMUM_MODELS = 60;
-
-/** The longest a model name can be. A shared link keeps no more. */
-export const MAXIMUM_NAME_LENGTH = 60;
-
-export type ParsedPriceTable = { models: ModelPrice[] } | { error: string };
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
-
-/** A usable price per million tokens: finite, above zero, and at most $100,000. */
-export const readPrice = (value: unknown): number | null =>
-  typeof value === 'number' && Number.isFinite(value) && value > 0 && value <= 100_000
-    ? value
-    : null;
-
-/** Reads a price table from JSON text: `{ "models": [...] }`, or the bare array. */
-export const parsePriceTable = (text: string): ParsedPriceTable => {
-  let value: unknown;
-  try {
-    value = JSON.parse(text);
-  } catch {
-    return { error: 'That file isn’t valid JSON.' };
-  }
-
-  const entries = Array.isArray(value) ? value : isRecord(value) ? value.models : null;
-  if (!Array.isArray(entries) || entries.length === 0) {
-    return { error: 'Expected a "models" list with at least one model.' };
-  }
-  if (entries.length > MAXIMUM_MODELS) {
-    return { error: `A price table can hold up to ${MAXIMUM_MODELS} models.` };
-  }
-
-  const models: ModelPrice[] = [];
-  const seen = new Set<string>();
-
-  for (const [index, entry] of entries.entries()) {
-    const position = `Model ${index + 1}`;
-    if (!isRecord(entry)) return { error: `${position} isn’t an object.` };
-
-    // Names are capped so a table fits in a share link and doesn't overflow the page.
-    const name =
-      typeof entry.name === 'string' ? truncateCharacters(entry.name, MAXIMUM_NAME_LENGTH) : '';
-    if (!name) return { error: `${position} needs a name.` };
-
-    const id = typeof entry.id === 'string' && entry.id.trim() ? entry.id.trim() : toModelId(name);
-    if (!id) return { error: `${position} needs an ID.` };
-    if (!MODEL_ID_PATTERN.test(id)) {
-      return {
-        error: `The ID “${id}” can only use lowercase letters, numbers, and hyphens, and up to 60 characters.`,
-      };
-    }
-    if (seen.has(id)) return { error: `The ID “${id}” appears more than once.` };
-
-    const input = readPrice(entry.input);
-    const output = readPrice(entry.output);
-    if (input === null || output === null) {
-      return { error: `${name} needs positive input and output prices in dollars per million.` };
-    }
-
-    seen.add(id);
-    models.push({ id, name, input, output });
-  }
-
-  return { models };
-};
-
-export const serializePriceTable = (models: readonly ModelPrice[]): string =>
-  `${JSON.stringify({ models }, null, 2)}\n`;
+  `${model.name} ($${model.input}/$${model.output})`;

@@ -94,6 +94,7 @@ export const createBuildReport = (inputs: {
     },
     assets: {
       largestClientChunk: describeSizedFile(websiteOutput.largestClientChunk),
+      largestLazyClientChunk: describeSizedFile(websiteOutput.largestLazyClientChunk),
       mainStylesheet: describeSizedFile(websiteOutput.mainStylesheet),
       largestEnhancementChunk: describeSizedFile(websiteOutput.largestEnhancementChunk),
     },

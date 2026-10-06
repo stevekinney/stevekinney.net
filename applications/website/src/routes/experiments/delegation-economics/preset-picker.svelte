@@ -11,7 +11,7 @@
   const { selected, ready, onSelect }: Props = $props();
 </script>
 
-<div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" role="group" aria-label="Presets">
+<div class="grid gap-3 sm:grid-cols-2" role="group" aria-label="Presets">
   {#each presets as preset (preset.id)}
     <button
       type="button"

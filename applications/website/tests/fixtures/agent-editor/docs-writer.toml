@@ -1,0 +1,10 @@
+# A made-up Codex agent for the agent editor's tests.
+name = "docs-writer"
+description = "Updates documentation for the code a change touches."
+model = "gpt-6-luna"
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+developer_instructions = '''
+Update the docs for every public function the change touches.
+Keep every example runnable.
+'''

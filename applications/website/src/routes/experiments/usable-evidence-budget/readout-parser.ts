@@ -1,13 +1,12 @@
 import { parseTokenCount } from '$lib/experiments/format';
 
-import { termKeys } from './budget';
-import type { TermKey } from './budget';
+import type { Scenario, TermKey } from './budget';
 
 /** One category from the readout. */
 export type ReadoutRow = {
   /** The label as printed, without `(deferred)`. */
   label: string;
-  /** The label lowercased and tidied, which is how the mapping table finds it. */
+  /** The label lowercased and tidied, which is how the page decides which term it belongs to. */
   key: string;
   tokens: number;
   /** A deferred row is reported but is not in the window, so nothing counts it. */
@@ -18,20 +17,14 @@ export type ParsedReadout = {
   /** The window's size from the header's used/total pair, or null when there is no header. */
   capacity: number | null;
   rows: ReadoutRow[];
-  /** The `Free space` row, used only to check the other rows against. */
+  /** The `Free space` row, which the page quotes next to its own figure. */
   freeSpace: number | null;
   /** Which of the two printed forms this was. */
   form: 'table' | 'lines' | 'none';
 };
 
-/** Where a label goes. `free` marks the free-space row, which is only used to reconcile. */
-export type Destination = TermKey | 'ignore' | 'free';
-
-export type LabelMapping = Record<string, Destination>;
-
-export const destinations: readonly Destination[] = [...termKeys, 'ignore'];
-
-export const defaultMapping: LabelMapping = {
+/** Which term each label from the readout belongs to. */
+const labelTerms: Record<string, TermKey> = {
   'system prompt': 'instructions',
   'memory files': 'instructions',
   skills: 'instructions',
@@ -40,7 +33,6 @@ export const defaultMapping: LabelMapping = {
   'mcp tools': 'tools',
   messages: 'history',
   'autocompact buffer': 'margin',
-  'free space': 'free',
 };
 
 /** Lowercases a label and strips the markup, glyphs, and the deferred marker around it. */
@@ -204,44 +196,23 @@ export const parseReadout = (text: string): ParsedReadout => {
   };
 };
 
-export type Reconciliation = {
-  /** The window minus every counted row. */
-  expectedFree: number;
-  reportedFree: number;
-  /** Expected minus reported. Positive means the rows account for less than the readout does. */
-  difference: number;
-  /** Beyond 1% of the window, the two disagree enough to say so. */
-  mismatch: boolean;
-};
-
 export type AppliedReadout = {
-  /** The window to measure against: the header's total, or the current one. */
-  capacity: number;
-  capacityFromHeader: boolean;
+  /** The window's size from the header, or null when the paste has no header. */
+  capacity: number | null;
   /** Only terms with at least one counted row appear here. */
   values: Partial<Record<TermKey, number>>;
-  counted: (ReadoutRow & { term: TermKey })[];
   deferred: ReadoutRow[];
+  /** Rows with a label the page doesn't know. They are listed, not counted. */
   unrecognized: ReadoutRow[];
-  reconciliation: Reconciliation | null;
 };
-
-/** How far apart the two free-space figures can be, as a share of the window, before the page says so. */
-export const reconciliationTolerance = 0.01;
 
 /**
  * Sorts a readout's rows into the terms. A row marked deferred is shown and
  * counted nowhere: it is reported but not resident, so adding it would
  * double-count against the free space the readout itself reports.
  */
-export const applyReadout = (
-  parsed: ParsedReadout,
-  mapping: LabelMapping,
-  currentCapacity: number,
-): AppliedReadout => {
-  const capacity = parsed.capacity ?? currentCapacity;
+export const applyReadout = (parsed: ParsedReadout): AppliedReadout => {
   const values: Partial<Record<TermKey, number>> = {};
-  const counted: AppliedReadout['counted'] = [];
   const deferred: ReadoutRow[] = [];
   const unrecognized: ReadoutRow[] = [];
 
@@ -252,35 +223,29 @@ export const applyReadout = (
     }
 
     // Own properties only: a label such as `constructor` must not find an inherited value.
-    const destination = Object.hasOwn(mapping, row.key) ? mapping[row.key] : undefined;
-    if (destination === undefined) {
-      unrecognized.push(row);
-    } else if (destination !== 'ignore' && destination !== 'free') {
-      values[destination] = (values[destination] ?? 0) + row.tokens;
-      counted.push({ ...row, term: destination });
-    }
+    const term = Object.hasOwn(labelTerms, row.key) ? labelTerms[row.key] : undefined;
+    if (term === undefined) unrecognized.push(row);
+    else values[term] = (values[term] ?? 0) + row.tokens;
   }
 
-  let reconciliation: Reconciliation | null = null;
-  if (parsed.freeSpace !== null) {
-    const expectedFree = capacity - counted.reduce((total, row) => total + row.tokens, 0);
-    const difference = expectedFree - parsed.freeSpace;
-
-    reconciliation = {
-      expectedFree,
-      reportedFree: parsed.freeSpace,
-      difference,
-      mismatch: capacity > 0 && Math.abs(difference) > capacity * reconciliationTolerance,
-    };
-  }
-
-  return {
-    capacity,
-    capacityFromHeader: parsed.capacity !== null,
-    values,
-    counted,
-    deferred,
-    unrecognized,
-    reconciliation,
-  };
+  return { capacity: parsed.capacity, values, deferred, unrecognized };
 };
+
+/**
+ * `/context` doesn't report room held back for the reply, so the page assumes
+ * the same 32K the presets use. That keeps "Yours" comparable with them.
+ */
+export const assumedReservedOutput = 32_000;
+
+/** The pasted readout as a scenario, or null when there's no header to say how big the window is. */
+export const scenarioFromReadout = (applied: AppliedReadout): Scenario | null =>
+  applied.capacity === null
+    ? null
+    : {
+        capacity: applied.capacity,
+        instructions: applied.values.instructions ?? 0,
+        tools: applied.values.tools ?? 0,
+        history: applied.values.history ?? 0,
+        generation: assumedReservedOutput,
+        margin: applied.values.margin ?? 0,
+      };

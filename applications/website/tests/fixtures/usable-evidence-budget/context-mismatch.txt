@@ -1,5 +1,0 @@
- ⛁ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀ ⛀   claude-opus-5 · 190k/1000k tokens (19%)
-
- ⛁ System prompt: 18k tokens (1.8%)
- ⛁ Messages: 40k tokens (4.0%)
- ⛶ Free space: 810k (81.0%)

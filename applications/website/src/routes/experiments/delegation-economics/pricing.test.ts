@@ -2,13 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import modelPricingData from '$lib/experiments/model-pricing.toml';
 import { parseModelPricingCatalog } from '$lib/experiments/model-pricing-schema';
-import {
-  modelLabel,
-  parsePriceTable,
-  pricesEqual,
-  serializePriceTable,
-  toWorkerPricing,
-} from './pricing';
+import { findModel, modelLabel, toWorkerPricing } from './pricing';
 
 const catalog = parseModelPricingCatalog(modelPricingData);
 
@@ -26,28 +20,18 @@ describe('toWorkerPricing', () => {
         'Claude Haiku 4.5',
       ]),
     );
-    expect(Object.keys(pricing.models[0]).sort()).toEqual([
-      'cacheWrite5m',
-      'cachedInput',
-      'id',
-      'input',
-      'name',
-      'output',
-    ]);
+    expect(Object.keys(pricing.models[0]).sort()).toEqual(['id', 'input', 'name', 'output']);
   });
 
-  it('matches the specification’s four prices', () => {
+  it('matches the four input and output prices', () => {
     const byName = Object.fromEntries(
-      toWorkerPricing(catalog).models.map((model) => [
-        model.name,
-        [model.input, model.cachedInput, model.output],
-      ]),
+      toWorkerPricing(catalog).models.map((model) => [model.name, [model.input, model.output]]),
     );
 
-    expect(byName['Claude Fable 5.1']).toEqual([10, 0.25, 50]);
-    expect(byName['Claude Opus 5.5']).toEqual([4, 0.2, 20]);
-    expect(byName['Claude Sonnet 5.5']).toEqual([2, 0.2, 10]);
-    expect(byName['Claude Haiku 4.5']).toEqual([1, 0.1, 5]);
+    expect(byName['Claude Fable 5.1']).toEqual([10, 50]);
+    expect(byName['Claude Opus 5.5']).toEqual([4, 20]);
+    expect(byName['Claude Sonnet 5.5']).toEqual([2, 10]);
+    expect(byName['Claude Haiku 4.5']).toEqual([1, 5]);
   });
 
   it('fails when the default model is missing', () => {
@@ -60,62 +44,16 @@ describe('toWorkerPricing', () => {
   });
 });
 
-describe('price table files', () => {
+describe('models', () => {
   const models = toWorkerPricing(catalog).models;
 
-  it('round-trips through JSON', () => {
-    const parsed = parsePriceTable(serializePriceTable(models));
-
-    expect('models' in parsed && pricesEqual(parsed.models, models)).toBe(true);
+  it('falls back to the first model for an unknown ID', () => {
+    expect(findModel(models, 'gone')).toBe(models[0]);
   });
 
-  it('accepts a bare list and derives a missing ID from the name', () => {
-    expect(
-      parsePriceTable('[{"name":"My Model 2","input":1,"cachedInput":0.1,"output":5}]'),
-    ).toEqual({
-      models: [{ id: 'my-model-2', name: 'My Model 2', input: 1, cachedInput: 0.1, output: 5 }],
-    });
-  });
-
-  it('keeps a cache-write price, and reads a table without one', () => {
-    expect(models.find((model) => model.name === 'Claude Sonnet 5.5')?.cacheWrite5m).toBe(2.5);
-    expect(
-      parsePriceTable('[{"name":"A","input":1,"cachedInput":0.1,"cacheWrite5m":1.25,"output":5}]'),
-    ).toEqual({
-      models: [{ id: 'a', name: 'A', input: 1, cachedInput: 0.1, cacheWrite5m: 1.25, output: 5 }],
-    });
-    expect(
-      parsePriceTable('[{"name":"A","input":1,"cachedInput":0.1,"cacheWrite5m":0,"output":5}]'),
-    ).toEqual({ error: 'A’s cacheWrite5m has to be a positive price in dollars per million.' });
-    expect(
-      pricesEqual(
-        models,
-        models.map((model) => ({ ...model, cacheWrite5m: 99 })),
-      ),
-    ).toBe(false);
-  });
-
-  it('explains what’s wrong with a bad file', () => {
-    expect(parsePriceTable('nope')).toEqual({ error: 'That file isn’t valid JSON.' });
-    expect(parsePriceTable('{"models":[]}')).toEqual({
-      error: 'Expected a "models" list with at least one model.',
-    });
-    expect(parsePriceTable('[{"name":"A","input":1,"output":5}]')).toEqual({
-      error: 'A needs positive input, cached input, and output prices in dollars per million.',
-    });
-    expect(
-      parsePriceTable(
-        '[{"name":"A","input":1,"cachedInput":0.1,"output":5},{"name":"a","input":1,"cachedInput":0.1,"output":5}]',
-      ),
-    ).toEqual({ error: 'The ID “a” appears more than once.' });
-    expect(
-      parsePriceTable('[{"id":"Bad ID","name":"A","input":1,"cachedInput":0.1,"output":5}]'),
-    ).toMatchObject({ error: expect.stringContaining('lowercase letters') });
-  });
-
-  it('labels a model with its three prices', () => {
-    expect(
-      modelLabel({ id: 's', name: 'Claude Sonnet 5.5', input: 2, cachedInput: 0.2, output: 10 }),
-    ).toBe('Claude Sonnet 5.5 ($2 / $0.2 cached / $10)');
+  it('labels a model with its input and output prices', () => {
+    expect(modelLabel({ id: 's', name: 'Claude Sonnet 5.5', input: 2, output: 10 })).toBe(
+      'Claude Sonnet 5.5 ($2 in / $10 out)',
+    );
   });
 });

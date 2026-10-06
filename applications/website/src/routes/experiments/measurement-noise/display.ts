@@ -1,9 +1,5 @@
-import { formatCost } from '$lib/experiments/format';
-
 /** A real minus sign, which lines up with digits where a hyphen doesn't. */
 export const MINUS = '−';
-
-const withMinus = (text: string): string => text.replace(/^-/, MINUS);
 
 /** Fixed decimals with a real minus sign, and never a negative zero. */
 export const formatNumber = (value: number, decimals = 1): string => {
@@ -11,11 +7,8 @@ export const formatNumber = (value: number, decimals = 1): string => {
 
   const text = value.toFixed(decimals);
 
-  return Number(text) === 0 ? (0).toFixed(decimals) : withMinus(text);
+  return Number(text) === 0 ? (0).toFixed(decimals) : text.replace(/^-/, MINUS);
 };
-
-/** Thousands separators for counts, such as 10,000. */
-export const formatCount = (value: number): string => value.toLocaleString('en-US');
 
 /**
  * How many decimals an interval needs: enough for three significant figures
@@ -35,30 +28,3 @@ export const intervalDecimals = (lower: number, upper: number): number => {
  */
 export const differenceDecimals = (lower: number, upper: number): number =>
   Math.max(1, intervalDecimals(lower, upper) - 1);
-
-/** A p-value: three decimals, four below 0.01, and “< 0.001” below that. */
-export const formatP = (p: number | null): string => {
-  if (p === null || !Number.isFinite(p)) return '—';
-  if (p < 0.001) return '< 0.001';
-  if (p < 0.01) return p.toFixed(4);
-
-  return p.toFixed(3);
-};
-
-/** A percentage with one decimal, such as 15.0%. */
-export const formatPercent = (value: number, decimals = 1): string =>
-  `${formatNumber(value, decimals)}%`;
-
-/** A rate from 0 to 1 as a percentage. */
-export const formatRate = (rate: number): string => formatPercent(rate * 100);
-
-/** An interval as `[low, high]`. */
-export const formatInterval = (lower: number, upper: number, decimals: number): string =>
-  `[${formatNumber(lower, decimals)}, ${formatNumber(upper, decimals)}]`;
-
-/** Dollars, through the shared cost formatter, with a real minus sign for a negative amount. */
-export const formatDollars = (value: number): string => {
-  if (!Number.isFinite(value)) return '—';
-
-  return value < 0 ? `${MINUS}${formatCost(-value)}` : formatCost(value);
-};

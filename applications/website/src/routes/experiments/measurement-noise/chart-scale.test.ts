@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { jitter, niceDomain, niceStep, scale, thin, ticks } from './chart-scale';
+import { jitter, niceDomain, niceStep, scale, ticks } from './chart-scale';
 
 describe('chart scales', () => {
   it('finds the domain of 300,000 values without spreading them into arguments', () => {
@@ -37,17 +37,6 @@ describe('chart scales', () => {
 
     expect(x(5)).toBe(150);
     expect(scale(3, 3, 0, 10)(3)).toBe(5);
-  });
-
-  it('keeps every index under the limit, and an even spread over it', () => {
-    expect(thin([3, 1, 2], 5)).toEqual([0, 1, 2]);
-
-    const values = Array.from({ length: 1_000 }, (_, index) => 1_000 - index);
-    const picked = thin(values, 11);
-    expect(picked).toHaveLength(11);
-    expect(picked.map((index) => values[index])).toEqual(
-      [1, 100.9, 200.8, 300.7, 400.6, 500.5, 600.4, 700.3, 800.2, 900.1, 1000].map(Math.round),
-    );
   });
 
   it('jitters within ±1', () => {

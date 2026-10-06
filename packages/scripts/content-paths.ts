@@ -9,6 +9,7 @@ export const writingRoot = path.resolve(repositoryRoot, 'writing');
 export const coursesRoot = path.resolve(repositoryRoot, 'courses');
 export const projectsRoot = path.resolve(repositoryRoot, 'projects');
 export const websiteRoot = path.resolve(repositoryRoot, 'applications', 'website');
+export const websiteRoutesRoot = path.resolve(websiteRoot, 'src', 'routes');
 export const websiteStaticRoot = path.resolve(websiteRoot, 'static');
 export const websiteBuildRoot = path.resolve(websiteRoot, 'build');
 export const websiteSvelteKitClientRoot = path.resolve(

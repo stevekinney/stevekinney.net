@@ -17,7 +17,7 @@ export type Example = {
 };
 
 export type Cluster = {
-  /** Stable across loads, so a fix mark can find its cluster again. */
+  /** The tool and signature together, unique among the clusters. */
   key: string;
   tool: string;
   signature: string;
@@ -125,16 +125,4 @@ export const clusterErrors = (errors: readonly AuditError[], rules: readonly Rul
       };
     })
     .sort(compareClusters);
-};
-
-/** Whether a cluster's signature, tool, or any of its messages contains the search text. */
-export const matchesSearch = (cluster: Cluster, search: string): boolean => {
-  const needle = search.trim().toLowerCase();
-  if (!needle) return true;
-
-  return (
-    cluster.signature.toLowerCase().includes(needle) ||
-    cluster.tool.toLowerCase().includes(needle) ||
-    cluster.errors.some((error) => error.message.toLowerCase().includes(needle))
-  );
 };

@@ -2,7 +2,6 @@
   import { untrack } from 'svelte';
 
   import { fieldClasses, hintClasses, labelClasses } from './field-styles';
-  import FromSessionBadge from './from-session-badge.svelte';
   import { sliderPosition } from './scenario';
   import type { NumberRange } from './scenario';
 
@@ -17,25 +16,13 @@
     /** Reads the text box. Returns null for text that isn't a value. */
     parse: (text: string) => number | null;
     onChange: (value: number) => void;
-    /** Where the default comes from, such as the course outline. Shown under the box. */
+    /** Where the default comes from. Shown under the box. */
     hint?: string;
     /** What a person can type, shown when the text isn't valid. */
     example: string;
-    fromSession?: boolean;
   };
 
-  const {
-    id,
-    label,
-    value,
-    range,
-    format,
-    parse,
-    onChange,
-    hint,
-    example,
-    fromSession = false,
-  }: Props = $props();
+  const { id, label, value, range, format, parse, onChange, hint, example }: Props = $props();
 
   let text = $state(untrack(() => format(value)));
   let editing = $state(false);
@@ -67,10 +54,7 @@
 </script>
 
 <div class="min-w-0 space-y-1.5">
-  <label for={id} class={labelClasses}>
-    {label}
-    {#if fromSession}<FromSessionBadge />{/if}
-  </label>
+  <label for={id} class={labelClasses}>{label}</label>
   <div class="flex items-center gap-3">
     <input
       type="range"

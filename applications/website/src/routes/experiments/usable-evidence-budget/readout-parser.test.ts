@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { applyReadout, defaultMapping, normalizeLabel, parseReadout } from './readout-parser';
+import {
+  applyReadout,
+  assumedReservedOutput,
+  normalizeLabel,
+  parseReadout,
+  scenarioFromReadout,
+} from './readout-parser';
 
 // The first table is real `claude -p "/context"` output from Claude Code 2.1.289.
 // The later tables are synthetic stand-ins for the ones that break rows down.
@@ -137,8 +143,9 @@ describe('parseReadout', () => {
 
 describe('applyReadout', () => {
   it('sorts the print-mode rows into terms and leaves the deferred row out of every one', () => {
-    const applied = applyReadout(parseReadout(printMode), defaultMapping, 1_000_000);
+    const applied = applyReadout(parseReadout(printMode));
 
+    expect(applied.capacity).toBe(1_000_000);
     expect(applied.values).toEqual({
       instructions: 2_300 + 985 + 11_500 + 6_100,
       tools: 14_600,
@@ -149,106 +156,17 @@ describe('applyReadout', () => {
     expect(applied.unrecognized).toEqual([]);
   });
 
-  it('reconciles the real sample, which only works because deferred rows are not counted', () => {
-    const applied = applyReadout(parseReadout(printMode), defaultMapping, 1_000_000);
-
-    expect(applied.reconciliation).toMatchObject({
-      expectedFree: 931_505,
-      reportedFree: 931_500,
-      mismatch: false,
-    });
-
-    const withDeferred = 1_000_000 - (68_495 + 20_500);
-    expect(Math.abs(withDeferred - 931_500) / 1_000_000).toBeGreaterThan(0.01);
-  });
-
-  it('reconciles rows that sum to 190K against 810K free with no notice', () => {
-    const applied = applyReadout(parseReadout(interactive), defaultMapping, 1_000_000);
-
-    expect(applied.reconciliation?.mismatch).toBe(false);
-    expect(applied.reconciliation).toMatchObject({ reportedFree: 810_000 });
-
-    const exact = parseReadout(
-      '190k/1000k tokens (19%)\nSystem prompt: 18k tokens\nMessages: 40k tokens\nAutocompact buffer: 132k tokens\nFree space: 810k',
-    );
-    const reconciled = applyReadout(exact, defaultMapping, 1_000_000);
-
-    expect(reconciled.capacity).toBe(1_000_000);
-    expect(reconciled.reconciliation).toMatchObject({
-      expectedFree: 810_000,
-      reportedFree: 810_000,
-      difference: 0,
-      mismatch: false,
-    });
-  });
-
-  it('reports both numbers when they differ by more than 1% of the window', () => {
-    const parsed = parseReadout('190k/1000k\nSystem prompt: 18k\nMessages: 40k\nFree space: 810k');
-    const applied = applyReadout(parsed, defaultMapping, 1_000_000);
-
-    expect(applied.reconciliation).toMatchObject({
-      expectedFree: 942_000,
-      reportedFree: 810_000,
-      mismatch: true,
-    });
-  });
-
-  it('keeps the current capacity when there is no header', () => {
+  it('lists rows it does not know without counting them', () => {
     const applied = applyReadout(
-      parseReadout('System prompt: 18k tokens\nFree space: 182k'),
-      defaultMapping,
-      200_000,
+      parseReadout('System prompt: 18k tokens\nPlugin listing: 4k tokens'),
     );
 
-    expect(applied.capacity).toBe(200_000);
-    expect(applied.capacityFromHeader).toBe(false);
-    expect(applied.reconciliation?.mismatch).toBe(false);
-  });
-
-  it('has nothing to reconcile without a free-space row', () => {
-    const applied = applyReadout(
-      parseReadout('System prompt: 18k tokens'),
-      defaultMapping,
-      1_000_000,
-    );
-
-    expect(applied.reconciliation).toBeNull();
-  });
-
-  it('lists rows with no mapping and counts them once they are assigned', () => {
-    const parsed = parseReadout('System prompt: 18k tokens\nPlugin listing: 4k tokens');
-
-    const before = applyReadout(parsed, defaultMapping, 1_000_000);
-    expect(before.unrecognized.map((row) => row.label)).toEqual(['Plugin listing']);
-    expect(before.values).toEqual({ instructions: 18_000 });
-
-    const after = applyReadout(
-      parsed,
-      { ...defaultMapping, 'plugin listing': 'instructions' },
-      1_000_000,
-    );
-    expect(after.unrecognized).toEqual([]);
-    expect(after.values).toEqual({ instructions: 22_000 });
-  });
-
-  it('ignores rows the person assigned to ignore', () => {
-    const parsed = parseReadout('System prompt: 18k tokens\nPlugin listing: 4k tokens');
-    const applied = applyReadout(
-      parsed,
-      { ...defaultMapping, 'plugin listing': 'ignore' },
-      1_000_000,
-    );
-
-    expect(applied.unrecognized).toEqual([]);
+    expect(applied.unrecognized.map((row) => row.label)).toEqual(['Plugin listing']);
     expect(applied.values).toEqual({ instructions: 18_000 });
   });
 
   it('adds up several rows that map to the same term', () => {
-    const applied = applyReadout(
-      parseReadout('System tools: 14.6k tokens\nMCP tools: 5k tokens'),
-      defaultMapping,
-      1_000_000,
-    );
+    const applied = applyReadout(parseReadout('System tools: 14.6k tokens\nMCP tools: 5k tokens'));
 
     expect(applied.values).toEqual({ tools: 19_600 });
   });
@@ -260,12 +178,7 @@ describe('applyReadout', () => {
       ['foo', 3000],
       ['messages', 10_000],
     ]);
-
-    const applied = applyReadout(parsed, defaultMapping, 1_000_000);
-    expect(applied.unrecognized.map((row) => row.key)).toEqual(['foo']);
-
-    const assigned = applyReadout(parsed, { ...defaultMapping, foo: 'tools' }, 1_000_000);
-    expect(assigned.values).toEqual({ tools: 3000, history: 10_000 });
+    expect(applyReadout(parsed).unrecognized.map((row) => row.key)).toEqual(['foo']);
   });
 
   it('merges repeated labels in the table form too', () => {
@@ -278,8 +191,9 @@ describe('applyReadout', () => {
   });
 
   it('keeps a deferred row apart from a resident one with the same label', () => {
-    const parsed = parseReadout('System tools: 14k tokens\nSystem tools (deferred): 20k tokens');
-    const applied = applyReadout(parsed, defaultMapping, 1_000_000);
+    const applied = applyReadout(
+      parseReadout('System tools: 14k tokens\nSystem tools (deferred): 20k tokens'),
+    );
 
     expect(applied.values).toEqual({ tools: 14_000 });
     expect(applied.deferred.map((row) => row.tokens)).toEqual([20_000]);
@@ -288,29 +202,30 @@ describe('applyReadout', () => {
   it.each(['constructor', 'Constructor', '⛁ CONSTRUCTOR'])(
     'lists a row labeled %s as unrecognized instead of finding an inherited value',
     (label) => {
-      const parsed = parseReadout(`⛁ ${label}: 5k tokens\n⛁ Messages: 10k tokens`);
-      const applied = applyReadout(parsed, defaultMapping, 1_000_000);
+      const applied = applyReadout(parseReadout(`⛁ ${label}: 5k tokens\n⛁ Messages: 10k tokens`));
 
       expect(applied.unrecognized.map((row) => row.key)).toEqual(['constructor']);
       expect(applied.values).toEqual({ history: 10_000 });
-      expect(applied.counted.map((row) => row.key)).toEqual(['messages']);
     },
   );
+});
 
-  it('lists a row whose key is __proto__ as unrecognized', () => {
-    const parsed = parseReadout('⛁ Messages: 10k tokens');
-    parsed.rows.push({ label: '__proto__', key: '__proto__', tokens: 5000, deferred: false });
+describe('scenarioFromReadout', () => {
+  it('builds a scenario from the interactive readout, assuming 32K for the reply', () => {
+    const scenario = scenarioFromReadout(applyReadout(parseReadout(interactive)));
 
-    const applied = applyReadout(parsed, defaultMapping, 1_000_000);
-
-    expect(applied.unrecognized.map((row) => row.key)).toEqual(['__proto__']);
-    expect(applied.values).toEqual({ history: 10_000 });
+    expect(scenario).toEqual({
+      capacity: 1_000_000,
+      instructions: 25_500,
+      tools: 12_500,
+      history: 40_000,
+      generation: assumedReservedOutput,
+      margin: 112_000,
+    });
   });
 
-  it('never sets generation, which the readout does not report', () => {
-    const applied = applyReadout(parseReadout(printMode), defaultMapping, 1_000_000);
-
-    expect('generation' in applied.values).toBe(false);
+  it('is null without a header, because the window size is unknown', () => {
+    expect(scenarioFromReadout(applyReadout(parseReadout('System prompt: 18k tokens')))).toBeNull();
   });
 });
 

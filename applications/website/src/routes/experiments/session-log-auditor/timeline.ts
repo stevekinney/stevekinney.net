@@ -13,10 +13,10 @@ export const dayOf = (timestamp: string | null): string | null => {
 const DAY_MILLISECONDS = 86_400_000;
 
 /** Past this many days, the timeline only shows days that had failures. */
-export const MAXIMUM_FILLED_DAYS = 1_100;
+const MAXIMUM_FILLED_DAYS = 1_100;
 
 /** Every day from `first` to `last`, inclusive, or just the two when the range is too long. */
-export const daysBetween = (first: string, last: string): string[] => {
+const daysBetween = (first: string, last: string): string[] => {
   const start = Date.parse(`${first}T00:00:00Z`);
   const end = Date.parse(`${last}T00:00:00Z`);
   const count = Math.round((end - start) / DAY_MILLISECONDS) + 1;

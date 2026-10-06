@@ -24,7 +24,6 @@
     onCalibrated: (calibration: Calibration) => void;
     onDiscard: () => void;
     onUseBaseline: (tokens: number) => void;
-    onOpenPriceTable: () => void;
   };
 
   const {
@@ -36,7 +35,6 @@
     onCalibrated,
     onDiscard,
     onUseBaseline,
-    onOpenPriceTable,
   }: Props = $props();
 
   let progress = $state<{ current: number; total: number } | null>(null);
@@ -202,8 +200,9 @@
       <ul class="space-y-2 text-sm {bodyClasses}">
         <li>
           {#if calibration.modelMatch}
-            The latest turn ran <code class={codeClasses}>{calibration.modelId}</code>, which
-            matches {calibration.modelMatch.name} in the price table.
+            The latest turn ran
+            <code class="{codeClasses} [overflow-wrap:anywhere]">{calibration.modelId}</code>, which
+            is {calibration.modelMatch.name}.
           {:else}
             <span class="inline-flex items-start gap-2">
               <TriangleAlert
@@ -211,16 +210,10 @@
                 class="mt-0.5 size-4 flex-none text-amber-600 dark:text-amber-400"
               />
               <span>
-                The latest turn ran <code class={codeClasses}>{calibration.modelId}</code>, which
-                isn’t in the price table, so the model selection is unchanged.
-                <button
-                  type="button"
-                  onclick={onOpenPriceTable}
-                  class="focus-visible:outline-primary-600 text-primary-700 dark:text-primary-300 cursor-pointer underline underline-offset-2 focus-visible:outline-2"
-                >
-                  Open the price table
-                </button>
-                to add it.
+                The latest turn ran
+                <code class="{codeClasses} [overflow-wrap:anywhere]">{calibration.modelId}</code>,
+                which isn’t one of the Claude models priced here, so the model selection is
+                unchanged.
               </span>
             </span>
           {/if}

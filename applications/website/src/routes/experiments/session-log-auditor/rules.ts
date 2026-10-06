@@ -1,5 +1,5 @@
 /**
- * The editable rule table that sorts error clusters into categories. Rules run
+ * The rule table that sorts error clusters into categories. Rules run
  * in order and the first match wins. A pattern is plain text, matched without
  * regard to case; one rule can list several patterns separated by `|`.
  */
@@ -92,50 +92,3 @@ export const classify = (texts: readonly string[], rules: readonly Rule[]): Clas
 export const categoriesOf = (rules: readonly Rule[]): string[] => [
   ...new Set([...rules.map((rule) => rule.category.trim()).filter(Boolean), UNCLASSIFIED]),
 ];
-
-const isRecord = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
-
-const MAXIMUM_RULES = 100;
-const MAXIMUM_FIELD_LENGTH = 300;
-
-export type ParsedRules = { rules: Rule[] } | { error: string };
-
-/** Reads a rule table from JSON text: `{ "rules": [...] }` or the bare array. */
-export const parseRules = (text: string): ParsedRules => {
-  let value: unknown;
-  try {
-    value = JSON.parse(text);
-  } catch {
-    return { error: 'That file isn’t valid JSON.' };
-  }
-
-  const entries = Array.isArray(value) ? value : isRecord(value) ? value.rules : null;
-  if (!Array.isArray(entries)) return { error: 'Expected a "rules" list.' };
-  if (entries.length > MAXIMUM_RULES) {
-    return { error: `A rule table can hold up to ${MAXIMUM_RULES} rules.` };
-  }
-
-  const rules: Rule[] = [];
-  for (const [index, entry] of entries.entries()) {
-    const position = `Rule ${index + 1}`;
-    if (!isRecord(entry)) return { error: `${position} isn’t an object.` };
-
-    const fields = ['pattern', 'category', 'why'] as const;
-    const read = fields.map((field) =>
-      typeof entry[field] === 'string' ? (entry[field] as string).trim() : '',
-    );
-    const [pattern, category, why] = read;
-    if (!pattern || !category) return { error: `${position} needs a pattern and a category.` };
-    if (read.some((field) => field.length > MAXIMUM_FIELD_LENGTH)) {
-      return { error: `${position} has a field over ${MAXIMUM_FIELD_LENGTH} characters.` };
-    }
-
-    rules.push({ id: `rule-${index + 1}`, pattern, category, why });
-  }
-
-  return { rules };
-};
-
-export const serializeRules = (rules: readonly Rule[]): string =>
-  `${JSON.stringify({ rules: rules.map(({ pattern, category, why }) => ({ pattern, category, why })) }, null, 2)}\n`;

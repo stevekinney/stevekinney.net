@@ -1,4 +1,4 @@
-import { formatCompactTokenCount as formatTokens, formatCost } from '$lib/experiments/format';
+import { formatCompactTokenCount as formatTokens } from '$lib/experiments/format';
 
 import type { Evaluation } from './economics';
 
@@ -14,34 +14,33 @@ export const formatMinutes = (minutes: number): string => `${formatMinuteCount(m
 export const formatPercent = (fraction: number): string =>
   `${Number((fraction * 100).toFixed(1))}%`;
 
-/** `45 min vs 60 solo (1.33× faster)`, or `73.5 min vs 60 solo (1.23× slower)`. */
-export const wallClockText = (evaluation: Evaluation): string => {
-  const { fanMinutes, soloMinutes, speedup } = evaluation;
-  const comparison = `${formatMinutes(fanMinutes)} vs ${formatMinuteCount(soloMinutes)} solo`;
+const speedText = (evaluation: Evaluation): string => {
+  const { fanMinutes, soloMinutes, speedup, slower } = evaluation;
 
-  if (speedup === null) return `${comparison} (no work to speed up)`;
   // With no solo time, integration alone makes it slower, by no finite multiple.
-  if (evaluation.slower && soloMinutes === 0) return `${comparison} (slower)`;
-  if (evaluation.slower)
-    return `${comparison} (${formatMultiplier(fanMinutes / soloMinutes)} slower)`;
-  if (formatMultiplier(speedup) === '1×') return `${comparison} (no faster)`;
+  if (slower)
+    return soloMinutes === 0 ? 'slower' : `${formatMultiplier(fanMinutes / soloMinutes)} slower`;
+  if (speedup === null || formatMultiplier(speedup) === '1×') return 'no faster';
 
-  return `${comparison} (${formatMultiplier(speedup)} faster)`;
+  return `${formatMultiplier(speedup)} faster`;
 };
 
-/** `608K vs 370K (1.64×)`. */
-export const tokensText = (evaluation: Evaluation): string => {
-  const { fan, solo, tokenMultiplier } = evaluation;
-  const comparison = `${formatTokens(fan.total)} vs ${formatTokens(solo.total)}`;
+/** The answer in one line: `4 workers: 1.33× faster, 1.53× the cost`. */
+export const answerText = (evaluation: Evaluation): string => {
+  if (evaluation.workers === 1) return '1 worker is just the solo session.';
+  if (evaluation.speedup === null && !evaluation.slower) return 'There’s no work to speed up.';
 
-  return tokenMultiplier === null
-    ? comparison
-    : `${comparison} (${formatMultiplier(tokenMultiplier)})`;
+  const cost =
+    evaluation.costMultiplier === null
+      ? ''
+      : `, ${formatMultiplier(evaluation.costMultiplier)} the cost`;
+
+  return `${evaluation.workers} workers: ${speedText(evaluation)}${cost}`;
 };
 
-/** `$1.38 vs $0.90`. */
-export const costText = (evaluation: Evaluation): string =>
-  `${formatCost(evaluation.fanCost)} vs ${formatCost(evaluation.soloCost)}`;
+/** `45 min instead of 60, and 608K tokens instead of 370K.` */
+export const detailText = (evaluation: Evaluation): string =>
+  `${formatMinutes(evaluation.fanMinutes)} instead of ${formatMinuteCount(evaluation.soloMinutes)}, and ${formatTokens(evaluation.fan.total)} tokens instead of ${formatTokens(evaluation.solo.total)}.`;
 
 /** The worker counts that tie for fastest, as `3 or 4`, `3, 4, or 5`, or `32`. */
 export const formatWorkerList = (workers: readonly number[]): string => {
@@ -52,47 +51,20 @@ export const formatWorkerList = (workers: readonly number[]): string => {
   return `${workers.slice(0, -1).join(', ')}, or ${workers.at(-1)}`;
 };
 
-const ORDINAL_WORDS = [
-  '',
-  'first',
-  'second',
-  'third',
-  'fourth',
-  'fifth',
-  'sixth',
-  'seventh',
-  'eighth',
-  'ninth',
-  'tenth',
-];
-
-const ordinal = (value: number): string => {
-  if (value < ORDINAL_WORDS.length) return ORDINAL_WORDS[value];
-
-  const remainder = value % 100;
-  if (remainder >= 11 && remainder <= 13) return `${value}th`;
-
-  return `${value}${{ 1: 'st', 2: 'nd', 3: 'rd' }[value % 10] ?? 'th'}`;
-};
-
-/**
- * Which worker count is fastest, in words. When counts tie, the extra workers
- * buy nothing, and the sentence says so.
- */
+/** Which worker count is fastest, in words, and the ceiling no worker count can pass. */
 export const bestWorkersText = (evaluation: Evaluation): string => {
-  const { best } = evaluation;
-  const minutes = formatMinutes(best.minutes);
+  const { best, ceiling } = evaluation;
+  const limit =
+    ceiling === null
+      ? 'With no serial work, there’s no ceiling.'
+      : `However many workers you add, it’s never faster than ${formatMultiplier(ceiling)}.`;
 
   if (best.tied.length === 32) {
     return 'Every worker count from 1 to 32 takes the same time, so adding workers buys nothing.';
   }
-  if (best.tied.length > 1) {
-    const extra = best.tied.slice(1).map(ordinal);
-    const workers =
-      extra.length === 1 ? `the ${extra[0]} worker buys` : `the ${extra.join(', ')} workers buy`;
 
-    return `Fastest at ${formatWorkerList(best.tied)} workers (${minutes}): ${workers} nothing.`;
-  }
+  const count = formatWorkerList(best.tied);
+  const noun = best.tied.length === 1 && best.workers === 1 ? 'worker' : 'workers';
 
-  return `Fastest at ${best.workers} ${best.workers === 1 ? 'worker' : 'workers'} (${minutes}).`;
+  return `Fastest at ${count} ${noun} (${formatMinutes(best.minutes)}). ${limit}`;
 };

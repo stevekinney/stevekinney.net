@@ -1,66 +1,23 @@
 import { describe, expect, it } from 'vitest';
 
-import modelPricingData from '$lib/experiments/model-pricing.toml';
-import { parseModelPricingCatalog } from '$lib/experiments/model-pricing-schema';
-import { analyze, emptyFilters } from './analysis';
-import type { Filters } from './analysis';
-import type { AuditData } from './audit-data';
+import { analyze, verdictOf } from './analysis';
 import { clusterErrors } from './clusters';
-import { comparePeriods, halves } from './compare';
-import { costHistogram, costliestSessions } from './cost';
-import { readFixtures, readLinesByFile } from './fixture-reader';
-import { findPreset, presets } from './presets';
-import { toPriceRows } from './pricing';
-import { defaultRules } from './rules';
+import { readFixtures } from './fixture-reader';
+import { defaultRules, UNCLASSIFIED } from './rules';
+import { readSample } from './sample';
 import { failuresByDay } from './timeline';
 
-const prices = toPriceRows(parseModelPricingCatalog(modelPricingData).models);
-
-const run = (data: AuditData, filters: Partial<Filters> = {}) =>
-  analyze({
-    data,
-    rules: defaultRules,
-    prices,
-    filters: { ...emptyFilters, ...filters },
-    marks: [],
-  });
-
-const readPreset = (id: string): AuditData => {
-  const preset = findPreset(id);
-  if (!preset) throw new Error(`No preset ${id}`);
-
-  return readLinesByFile(
-    Object.fromEntries(preset.files().map((file) => [file.path, file.text.split('\n')])),
-  );
-};
-
 describe('analyze with the fixtures', () => {
-  const analysis = run(readFixtures());
+  const analysis = analyze(readFixtures());
 
-  it('fills the overview tiles from code', () => {
-    expect(analysis.overview).toMatchObject({
+  it('counts the sessions, the failures, and the floor’s share in code', () => {
+    expect(analysis).toMatchObject({
       sessions: 2,
-      turns: 4,
-      subagentTurns: 1,
-      toolCalls: 5,
       failures: 5,
-      failureShare: 1,
       floorFailures: 3,
-      askFailures: 0,
-      unpricedTurns: 1,
-      compactions: { manual: 1, auto: 0, other: 0, medianRatio: 12_969 / 312_693 },
+      floorShare: 0.6,
+      floorSessions: 2,
     });
-    expect(analysis.overview.floorShare).toBe(0.6);
-  });
-
-  it('bills the duplicated response once', () => {
-    // $0.114 for the deduplicated Opus turn, plus the subagent's Haiku turn and the second session's Opus turn.
-    const haiku = (10 * 1 + 5_000 * 0.1 + 2_000 * 2 + 300 * 5) / 1_000_000;
-    const opus = (50 * 4 + 20_000 * 0.2 + 1_000 * 5 + 800 * 20) / 1_000_000;
-
-    expect(analysis.overview.cost).toBeCloseTo(0.114 + haiku + opus, 12);
-    expect(analysis.cost.unpricedModels).toEqual(['claude-opus-5']);
-    expect(analysis.cost.assumedFiveMinuteTurns).toBe(1);
   });
 
   it('ranks the timeout cluster first, across both sessions', () => {
@@ -72,158 +29,35 @@ describe('analyze with the fixtures', () => {
       exitCodes: [1],
     });
   });
+});
 
-  it('lists the versions and the filter choices', () => {
-    expect(analysis.versions).toEqual([{ version: '3.1.2', sessions: 2 }]);
-    expect(analysis.options).toMatchObject({
-      branches: ['feature/search', 'main'],
-      firstDay: '2026-09-02',
-      lastDay: '2026-09-12',
-    });
+describe('verdictOf', () => {
+  it.each([
+    ['floor: missing tool', 'floor'],
+    ['floor: permissions', 'floor'],
+    ['floor or task (ask)', 'floor or task'],
+    ['harness', 'harness'],
+    [UNCLASSIFIED, 'task'],
+  ])('calls %s %s', (category, verdict) => {
+    expect(verdictOf(category)).toBe(verdict);
   });
 });
 
-describe('filters', () => {
-  const data = readFixtures();
+describe('the sample', () => {
+  const data = readSample();
+  const analysis = analyze(data);
 
-  it('narrows every panel to a branch', () => {
-    const analysis = run(data, { branch: 'feature/search' });
-
-    expect(analysis.overview).toMatchObject({ sessions: 1, turns: 2, failures: 1 });
-    expect(analysis.compactions).toEqual([]);
+  it('reads cleanly, with every failure quotable', () => {
+    expect(data.sessions).toHaveLength(24);
+    expect(data.skippedLines).toBe(0);
+    expect(data.errors.every((error) => error.quote !== null)).toBe(true);
   });
 
-  it('narrows to a date range', () => {
-    expect(run(data, { from: '2026-09-10' }).overview.sessions).toBe(1);
-    expect(run(data, { to: '2026-09-02' }).overview.failures).toBe(4);
-  });
-
-  it('narrows to a model, a tool, a category, and a search', () => {
-    expect(run(data, { model: 'claude-haiku-4-5' }).overview.turns).toBe(1);
-    expect(run(data, { tool: 'unknown' }).overview.failures).toBe(1);
-    expect(run(data, { tool: 'unknown' }).overview.failureShare).toBe(1);
-    expect(run(data, { category: 'floor: shell option' }).clusters).toHaveLength(1);
-    expect(run(data, { search: 'PATHSPEC' }).clusters.map((cluster) => cluster.tool)).toEqual([
-      'Bash',
-    ]);
-  });
-});
-
-describe('the model filter in a session with two models', () => {
-  const sessionId = 'bbbbbbbb-0000-4000-8000-000000000001';
-  const usage = { input_tokens: 10, output_tokens: 20 };
-  const line = (fields: object): string =>
-    JSON.stringify({ sessionId, cwd: '/work/app', gitBranch: 'main', ...fields });
-  const call = (id: string, name: string) => ({ type: 'tool_use', id, name, input: {} });
-  const result = (id: string, isError: boolean) => ({
-    type: 'tool_result',
-    tool_use_id: id,
-    is_error: isError,
-    content: isError ? 'Error: no such file' : 'ok',
-  });
-  const data = readLinesByFile({
-    [`projects/-work-app/${sessionId}.jsonl`]: [
-      line({
-        type: 'assistant',
-        timestamp: '2026-09-03T10:00:00.000Z',
-        message: {
-          id: 'msg_opus',
-          model: 'claude-opus-4-1',
-          content: [call('toolu_opus_1', 'Read'), call('toolu_opus_2', 'Bash')],
-          usage,
-        },
-      }),
-      line({
-        type: 'user',
-        timestamp: '2026-09-03T10:00:01.000Z',
-        message: { role: 'user', content: [result('toolu_opus_1', true)] },
-      }),
-      line({
-        type: 'assistant',
-        timestamp: '2026-09-03T10:01:00.000Z',
-        isSidechain: true,
-        message: {
-          id: 'msg_haiku',
-          model: 'claude-haiku-4-5',
-          content: [call('toolu_haiku', 'Grep')],
-          usage,
-        },
-      }),
-      line({
-        type: 'user',
-        timestamp: '2026-09-03T10:01:01.000Z',
-        isSidechain: true,
-        message: { role: 'user', content: [result('toolu_haiku', false)] },
-      }),
-    ],
-  });
-
-  it('counts only the tool calls and failures the chosen model issued', () => {
-    expect(run(data).overview).toMatchObject({ turns: 2, toolCalls: 3, failures: 1 });
-    expect(run(data, { model: 'claude-haiku-4-5' }).overview).toMatchObject({
-      turns: 1,
-      toolCalls: 1,
-      failures: 0,
-    });
-    expect(run(data, { model: 'claude-opus-4-1' }).overview).toMatchObject({
-      turns: 1,
-      toolCalls: 2,
-      failures: 1,
-    });
-  });
-
-  it('records the issuing model on each tool call and failure', () => {
-    expect(data.toolCalls.map(({ name, model }) => [name, model])).toEqual([
-      ['Read', 'claude-opus-4-1'],
-      ['Bash', 'claude-opus-4-1'],
-      ['Grep', 'claude-haiku-4-5'],
-    ]);
-    expect(data.errors.map(({ tool, model }) => [tool, model])).toEqual([
-      ['Read', 'claude-opus-4-1'],
-    ]);
-  });
-});
-
-describe('the presets', () => {
-  it('reads every preset without skipping anything it didn’t mean to', () => {
-    for (const preset of presets) {
-      const data = readPreset(preset.id);
-
-      expect(data.sessions.length).toBeGreaterThan(0);
-      expect(data.errors.every((error) => error.quote !== null)).toBe(true);
-    }
-  });
-
-  it('ranks the four-session cluster above the 200-retry one', () => {
-    const analysis = run(readPreset('retry-storm'));
-
-    expect(
-      analysis.clusters.map(({ signature, sessions, occurrences }) => [
-        signature,
-        sessions,
-        occurrences,
-      ]),
-    ).toEqual([
-      ['zsh: command not found: pnpm', 4, 4],
-      ['Error: connect ECONNREFUSED <n>:<n>', 3, 202],
-    ]);
-  });
-
-  it('stops the timeout failures on September 1 in the fixed floor preset', () => {
-    const analysis = run(readPreset('floor-fixed'));
+  it('stops the timeout failures before September 1, and the floor is most of the failures', () => {
     const timeout = analysis.clusters.find((cluster) => cluster.signature.endsWith('timeout'));
 
     expect(timeout?.lastSeen?.slice(0, 10)).toBe('2026-08-29');
-    expect(analysis.overview.floorShare).toBeGreaterThan(0.5);
-    expect(analysis.overview.compactions.manual).toBe(1);
-    expect(analysis.cost.unpricedModels).toEqual(['claude-opus-5']);
-  });
-
-  it('flags the timeout cluster as back after zero in the regression preset', () => {
-    const analysis = run(readPreset('regression'));
-    const timeout = analysis.clusters.find((cluster) => cluster.signature.endsWith('timeout'));
-
-    expect(timeout && analysis.returns[timeout.key]).toBe('2026-09-10');
+    expect(analysis.floorShare).toBeGreaterThan(0.5);
   });
 });
 
@@ -238,36 +72,5 @@ describe('failuresByDay', () => {
       counts: { 'floor: missing tool': 1, 'floor: shell option': 1, unclassified: 2 },
     });
     expect(timeline[5]).toEqual({ day: '2026-09-07', counts: {}, total: 0 });
-  });
-});
-
-describe('comparePeriods', () => {
-  it('sorts clusters into appeared, disappeared, and changed', () => {
-    const clusters = run(readPreset('floor-fixed')).clusters;
-    const { a, b } = halves('2026-08-17', '2026-09-27');
-    const comparison = comparePeriods(clusters, a, b, 0.5);
-
-    expect(a).toEqual({ from: '2026-08-17', to: '2026-09-06' });
-    expect(b).toEqual({ from: '2026-09-07', to: '2026-09-27' });
-    expect(comparison.disappeared.map((change) => change.signature)).toContain(
-      'zsh: command not found: timeout',
-    );
-    expect(comparison.appeared.map((change) => change.signature)).toEqual([
-      'zsh: permission denied: ./scripts/deploy.sh',
-    ]);
-  });
-});
-
-describe('cost panels', () => {
-  it('bins session costs from zero and lists the costliest first', () => {
-    expect(costHistogram([0.05, 0.12, 0.31, 0.95], 4)).toEqual([
-      { from: 0, to: 0.5, count: 3 },
-      { from: 0.5, to: 1, count: 1 },
-    ]);
-
-    const sessions = run(readFixtures()).cost.sessions;
-    expect(costliestSessions(sessions, 1)[0].sessionId).toBe(
-      'aaaaaaaa-0000-4000-8000-000000000001',
-    );
   });
 });

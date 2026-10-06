@@ -12,10 +12,10 @@ type StrategyStyle = {
 };
 
 /**
- * Each strategy's name and colors. Blue, orange, green, and pink hold their
+ * Each strategy's name and colors. Blue, orange, and green hold their
  * contrast against both the light and the dark background. The names carry
  * the meaning, so color is never the only signal: lines are labeled at their
- * ends and the table names the best strategy in words.
+ * ends and the verdict names the best strategy in words.
  */
 export const strategyStyles: Record<StrategyId, StrategyStyle> = {
   keep: {
@@ -36,22 +36,13 @@ export const strategyStyles: Record<StrategyId, StrategyStyle> = {
     swatch: 'bg-orange-600 dark:bg-orange-400',
     dash: undefined,
   },
-  clear: {
-    name: 'Clear now',
-    shortName: 'Clear',
-    stroke: 'stroke-green-700 dark:stroke-green-400',
-    fill: 'fill-green-700 dark:fill-green-400',
-    text: 'fill-green-800 dark:fill-green-300',
-    swatch: 'bg-green-700 dark:bg-green-400',
-    dash: undefined,
-  },
-  later: {
-    name: 'Compact later',
-    shortName: 'Later',
-    stroke: 'stroke-pink-600 dark:stroke-pink-400',
-    fill: 'fill-pink-600 dark:fill-pink-400',
-    text: 'fill-pink-700 dark:fill-pink-300',
-    swatch: 'bg-pink-600 dark:bg-pink-400',
+  switch: {
+    name: 'Switch model',
+    shortName: 'Switch',
+    stroke: 'stroke-green-600 dark:stroke-green-400',
+    fill: 'fill-green-600 dark:fill-green-400',
+    text: 'fill-green-700 dark:fill-green-300',
+    swatch: 'bg-green-600 dark:bg-green-400',
     dash: '7 4',
   },
 };

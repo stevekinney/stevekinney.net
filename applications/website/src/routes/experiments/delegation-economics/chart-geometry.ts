@@ -51,22 +51,3 @@ export const workersAt = (offset: number, plotLeft: number, plotWidth: number): 
 
   return Math.min(MAXIMUM_WORKERS, Math.max(1, workers));
 };
-
-/**
- * The left edge for a tooltip beside `anchor`: to its right when it fits, else
- * to its left, and always held inside `[minimum, maximum − width]`, so a
- * tooltip near either edge can never widen a narrow page.
- */
-export const placeTooltip = (
-  anchor: number,
-  width: number,
-  minimum: number,
-  maximum: number,
-  gap = 10,
-): number => {
-  const right = anchor + gap;
-  const preferred = right + width <= maximum ? right : anchor - gap - width;
-  const furthest = Math.max(minimum, maximum - width);
-
-  return Math.min(Math.max(minimum, preferred), furthest);
-};

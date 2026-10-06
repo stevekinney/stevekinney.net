@@ -75,3 +75,27 @@ Rules shape the session. Skills run a workflow.
 Auto memory is Claude-written and can help carry preferences forward, but it
 should not become the only place important project behavior lives. If an auto
 memory captures a real team decision, move that decision into a versioned file.
+
+## Writing It Down Isn't Enforcing It
+
+Everything on this page so far can only _ask_. Claude reads `CLAUDE.md`, weighs it against everything else in the context window, and usually does what it says. Usually. A long session, a compaction, or a task that seems to pull the other way, and "Never read `.env` files" becomes a suggestion that lost an argument.
+
+That's fine for most of what belongs in `CLAUDE.md`. "Run `bun run lint` and the closest test before reporting completion" is a judgment call, and prose is the right place for judgment calls. It's not fine for the rules that have to hold every time. Those need something that can _refuse_.
+
+I think of it as a ladder. The bottom rungs ask: something you said in chat, auto memory, project instructions, and skills. The top rungs refuse: [permission rules](/courses/ai-development/claude-code-permissions), [hooks](/courses/ai-development/claude-code-hooks), required checks in continuous integration, and the operating system itself.
+
+| Mechanism                           | Who triggers it                                                          | Can it refuse?                                                                       |
+| ----------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| Prompt in chat                      | You, once                                                                | No, and compaction can summarize it away                                             |
+| `CLAUDE.md` and `.claude/rules`     | Claude Code loads them at session start, or when matching files are read | No                                                                                   |
+| Skill                               | Claude, when it decides the skill is relevant, or you, by invoking it    | No, and it has to activate first                                                     |
+| Permission deny rule                | Claude Code, on every matching tool call                                 | Yes. The call never runs, whatever the model wants.                                  |
+| Hook                                | Claude Code, every time its event fires                                  | Yes, on events that can block, such as `PreToolUse`. Exit code `2` stops the action. |
+| Required CI check                   | Your CI, on every pull request                                           | Yes, for everyone, humans included                                                   |
+| Sandbox, network rules, credentials | The operating system                                                     | Yes. The agent can't use a credential it never had.                                  |
+
+The useful question for every line in your `CLAUDE.md` is: which rung does this one need? Formatting belongs in the formatter, wired to a `PostToolUse` hook so it runs after every edit instead of whenever Claude remembers. "Never read `.env` files" belongs in a deny rule such as `Read(./.env*)`. "Don't push to `main`" belongs in branch protection. "Don't touch production" belongs in the credentials: the agent shouldn't have them.
+
+Even the refusing rungs have edges, so pick the one that matches the risk. A `Read` deny rule covers Claude's file tools, not every shell command that could print the same file, which is why secrets ultimately belong behind the sandbox or out of the environment entirely. And a hook only refuses on the event it's attached to.
+
+If you want to see how your own file holds up, [paste it into this checker](/experiments/mechanism-picker). It tags each line as one that can stay a request or one that should be a permission rule, a hook, or a required check. The heuristics are crude, but the question isn't: if it matters, make it executable.

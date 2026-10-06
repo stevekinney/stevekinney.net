@@ -19,7 +19,6 @@
 
 <FileDropZone
   title="Drop Claude Code or Codex session files here"
-  class="h-full"
   draggingTitle="Drop to read the session"
   accept=".jsonl"
   keepFile={isSessionFile}
@@ -46,5 +45,10 @@
       >.
     </li>
     <li>Both folders are hidden. In the macOS file picker, press ⌘⇧. to show them.</li>
+    <li>
+      On Windows, <code>~</code> is your user folder. Paste
+      <code>%USERPROFILE%\<wbr />.claude\<wbr />projects</code> or
+      <code>%USERPROFILE%\<wbr />.codex\<wbr />sessions</code> into the file picker's address bar.
+    </li>
   </ul>
 </FileDropZone>

@@ -1,9 +1,0 @@
-{
-  "version": 1,
-  "models": [
-    { "id": "opus-5-5", "name": "Opus 5.5", "input": 6, "output": 30, "preservesCache": true },
-    { "id": "sonnet-5", "name": "Sonnet 5", "input": 2, "output": 10, "preservesCache": false },
-    { "id": "broken", "name": "Missing prices" }
-  ],
-  "efforts": [{ "id": "max", "factor": 3, "sourced": true }]
-}

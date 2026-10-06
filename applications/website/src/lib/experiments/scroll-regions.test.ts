@@ -21,7 +21,7 @@ const regions = Object.entries(sources).flatMap(([file, source]) =>
 
 describe('scrollable regions in the experiments', () => {
   it('finds the regions it checks', () => {
-    expect(regions.length).toBeGreaterThan(20);
+    expect(regions.length).toBeGreaterThan(3);
   });
 
   it.each(regions)('$file has a region a keyboard can reach', ({ tag }) => {

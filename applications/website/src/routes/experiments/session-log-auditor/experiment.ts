@@ -1,8 +1,8 @@
 import type { ExperimentMetadata } from '$lib/experiments/registry';
 
 export const experiment: ExperimentMetadata = {
-  title: 'Session Log Auditor',
+  title: 'Is It the Model, or Your Machine?',
   description:
-    'Drop in your Claude Code session transcripts and count what actually goes wrong: recurring tool failures clustered by session, how many come from your environment rather than the model, what the sessions cost, and whether the problems you fixed stay fixed.',
+    'Drop in your Claude Code session transcripts and find the failures that keep coming back, ranked by sessions affected, and how many come from your environment rather than the model.',
   added: '2026-10-04',
 };

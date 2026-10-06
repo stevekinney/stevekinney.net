@@ -1,29 +1,31 @@
 <script lang="ts">
+  import { ShieldCheck } from '@lucide/svelte';
   import { onMount } from 'svelte';
 
-  import type { SourceFile } from '$lib/experiments/dropped-files';
-  import { formatTokenCount } from '$lib/experiments/format';
   import SEO from '$lib/components/seo.svelte';
+  import type { SourceFile } from '$lib/experiments/dropped-files';
+  import FileDropZone from '$lib/experiments/file-drop-zone.svelte';
+  import { formatTokenCount } from '$lib/experiments/format';
   import { url } from '$lib/metadata';
   import { buildBreadcrumbSchema } from '$lib/structured-data';
 
-  import { analyze, emptyFilters } from './analysis';
-  import type { Filters } from './analysis';
+  import { analyze } from './analysis';
   import type { AuditData } from './audit-data';
-  import { parseMarks, serializeMarks } from './control-rows';
-  import type { FixMark } from './control-rows';
+  import ClustersTable from './clusters-table.svelte';
   import { experiment } from './experiment';
-  import { bodyClasses, headingClasses } from './field-styles';
-  import IntakePanel from './intake-panel.svelte';
+  import {
+    bodyClasses,
+    buttonClasses,
+    codeClasses,
+    headingClasses,
+    linkButtonClasses,
+  } from './field-styles';
   import { createLatestRequest } from './latest-request';
-  import LazySection from './lazy-section.svelte';
-  import PredictionCard from './prediction-card.svelte';
-  import { presetSummaries } from './preset-list';
-  import type { PriceRow } from './pricing';
-  import { isAbortError, readSessionFiles } from './read-sessions';
+  import { isAbortError, isSessionFile, readSessionFiles } from './read-sessions';
   import type { ReadProgress } from './read-sessions';
   import { defaultRules } from './rules';
-  import type { Rule } from './rules';
+  import { readSample, SAMPLE_NOTICE } from './sample';
+  import TimelinePanel from './timeline-panel.svelte';
 
   const { data } = $props();
 
@@ -32,226 +34,255 @@
     { name: experiment.title, url: `${url}/experiments/session-log-auditor` },
   ]);
 
-  const MARKS_KEY = 'session-log-auditor:fix-marks';
+  // The page opens on the sample, so the answer is there before anything is dropped.
+  const sample = readSample();
 
-  const sharedPrices = (): PriceRow[] => data.prices.map((row) => ({ ...row }));
-
-  // One state object for everything a person sets. The records themselves are
-  // large and never edited, so they sit beside it as a raw value.
-  const auditor = $state({
-    rules: defaultRules.map((rule) => ({ ...rule })) as Rule[],
-    prices: sharedPrices(),
-    filters: { ...emptyFilters } as Filters,
-    marks: [] as FixMark[],
-    guess: 50,
-    revealed: false,
-    presetId: null as string | null,
-    presetNotice: null as string | null,
-    busy: false,
-    progress: null as ReadProgress | null,
-    status: null as string | null,
-    error: null as string | null,
-    ready: false,
-  });
-  let records = $state.raw<AuditData | null>(null);
+  let records = $state.raw<AuditData>(sample);
+  let busy = $state(false);
+  let progress = $state<ReadProgress | null>(null);
+  let status = $state<string | null>(null);
+  let error = $state<string | null>(null);
   let controller: AbortController | null = null;
 
-  // The one render path: every panel draws from this.
-  const analysis = $derived(
-    records
-      ? analyze({
-          data: records,
-          rules: auditor.rules,
-          prices: auditor.prices,
-          filters: auditor.filters,
-          marks: auditor.marks,
-        })
+  const isSample = $derived(records === sample);
+  const analysis = $derived(analyze(records));
+  const floorPercent = $derived(
+    analysis.floorShare === null ? null : Math.round(analysis.floorShare * 100),
+  );
+
+  const percent = $derived(
+    progress && progress.total > 0
+      ? Math.min(100, Math.round((progress.read / progress.total) * 100))
+      : 0,
+  );
+  const progressText = $derived(
+    progress
+      ? `Reading file ${formatTokenCount(progress.file)} of ${formatTokenCount(progress.files)}, ${percent}%`
       : null,
   );
 
-  // Every way of loading sessions starts a request, and only the newest one is read.
+  const plural = (count: number, noun: string): string =>
+    `${formatTokenCount(count)} ${noun}${count === 1 ? '' : 's'}`;
+
+  // A folder drop can still be walking when a file is chosen, and only the newest one is read.
   const requests = createLatestRequest();
 
   const readFiles = async (files: SourceFile[]): Promise<void> => {
     controller?.abort();
     const current = new AbortController();
     controller = current;
-    auditor.busy = true;
-    auditor.error = null;
-    auditor.status = null;
-    auditor.progress = null;
+    busy = true;
+    error = null;
+    status = null;
+    progress = null;
 
     try {
       if (files.length === 0) {
-        auditor.error = 'No .jsonl files there. Claude Code’s transcripts end in .jsonl.';
+        error = 'No .jsonl files there. Claude Code’s transcripts end in .jsonl.';
 
         return;
       }
 
       const result = await readSessionFiles(files, {
         signal: current.signal,
-        onProgress: (progress) => (auditor.progress = progress),
+        onProgress: (next) => (progress = next),
       });
-      records = result;
-      auditor.filters = { ...emptyFilters };
-      auditor.revealed = false;
 
-      const unrecognized = result.files.filter((file) => !file.recognized).length;
-      auditor.status = [
-        `Read ${formatTokenCount(result.files.length)} file${result.files.length === 1 ? '' : 's'}`,
-        `${formatTokenCount(result.sessions.length)} session${result.sessions.length === 1 ? '' : 's'}`,
-        result.skippedLines > 0
-          ? `skipped ${formatTokenCount(result.skippedLines)} malformed lines`
-          : '',
-        unrecognized > 0
-          ? `${formatTokenCount(unrecognized)} files didn’t look like transcripts`
-          : '',
+      status = [
+        `Read ${plural(result.files.length, 'file')}`,
+        plural(result.sessions.length, 'session'),
+        result.skippedLines > 0 ? `skipped ${plural(result.skippedLines, 'malformed line')}` : '',
       ]
         .filter(Boolean)
         .join(', ')
         .concat('.');
+
       if (result.sessions.length === 0) {
-        auditor.error = 'Nothing in those files looked like a Claude Code session.';
-      }
-    } catch (error) {
-      if (isAbortError(error)) {
-        if (controller === current) auditor.status = 'Cancelled. Nothing new was loaded.';
+        error = 'Nothing in those files looked like a Claude Code session.';
       } else {
-        auditor.error = `Couldn’t read those files: ${error instanceof Error ? error.message : String(error)}`;
+        records = result;
+      }
+    } catch (caught) {
+      if (isAbortError(caught)) {
+        if (controller === current) status = 'Cancelled. Nothing new was loaded.';
+      } else {
+        error = `Couldn’t read those files: ${caught instanceof Error ? caught.message : String(caught)}`;
       }
     } finally {
       if (controller === current) {
-        auditor.busy = false;
+        busy = false;
         controller = null;
       }
     }
   };
 
   const handleFiles = (files: Promise<SourceFile[]>): void => {
-    auditor.presetId = null;
-    auditor.presetNotice = null;
     void requests.follow(files, readFiles, () => {
-      auditor.error = 'Couldn’t open what was dropped. Try choosing the files instead.';
+      error = 'Couldn’t open what was dropped. Try choosing the files instead.';
     });
   };
 
-  const handlePaste = (text: string): void => {
-    auditor.presetId = null;
-    auditor.presetNotice = null;
+  const showSample = (): void => {
     requests.start();
-    const name = 'pasted.jsonl';
-    void readFiles([{ file: new File([text], name), path: name }]);
+    controller?.abort();
+    records = sample;
+    status = null;
+    error = null;
   };
 
-  const handlePreset = async (id: string): Promise<void> => {
-    const isCurrent = requests.start();
-    auditor.presetId = id;
-    auditor.presetNotice = presetSummaries.find((summary) => summary.id === id)?.notice ?? null;
-
-    // The generators load only when a preset is chosen.
-    const { findPreset } = await import('./presets');
-    const preset = findPreset(id);
-    if (!preset || !isCurrent()) return;
-
-    await readFiles(
-      preset.files().map(({ path, text }) => ({
-        file: new File([text], path.split('/').at(-1) ?? path),
-        path,
-      })),
-    );
-  };
-
-  const setMarks = (marks: FixMark[]): void => {
-    auditor.marks = marks;
-    try {
-      localStorage.setItem(MARKS_KEY, serializeMarks(marks));
-    } catch {
-      // Storage is a convenience; the marks still work for this visit, and export keeps them.
-    }
-  };
-
-  onMount(() => {
-    try {
-      const saved = localStorage.getItem(MARKS_KEY);
-      const parsed = saved ? parseMarks(saved) : null;
-      if (parsed && 'marks' in parsed) auditor.marks = parsed.marks;
-    } catch {
-      // Storage can be blocked. Start with no marks.
-    }
-    auditor.ready = true;
-
-    return () => controller?.abort();
-  });
+  onMount(() => () => controller?.abort());
 </script>
 
 <SEO title={data.title} description={data.description} {jsonLd} />
 
-<div class="space-y-10">
+<div class="space-y-12">
   <header class="max-w-3xl space-y-3">
     <h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">
-      What actually goes wrong in your agent sessions?
+      Is it the model, or your machine?
     </h1>
     <p class="text-lg text-slate-600 dark:text-slate-300">
-      When a session goes badly, it’s tempting to blame the model. Often it’s the floor: a missing
-      command, a shell option, a flag the installed CLI doesn’t accept. A smarter model doesn’t fix
-      any of those. This page reads your session transcripts and counts, in code, which failures
-      keep coming back, how many come from your environment, what the sessions cost, and whether the
-      problems you fixed stay fixed.
+      When an agent session goes badly, it’s tempting to blame the model. Often it’s the floor: a
+      missing command, a shell option, a type definition that isn’t installed. A smarter model won’t
+      fix any of those. This page reads your session transcripts and finds the failures that keep
+      coming back.
     </p>
   </header>
 
-  <section aria-labelledby="intake-heading" class="space-y-4">
-    <h2 id="intake-heading" class={headingClasses}>Your sessions</h2>
-    <IntakePanel
-      ready={auditor.ready}
-      busy={auditor.busy}
-      progress={auditor.progress}
-      status={auditor.status}
-      error={auditor.error}
-      presets={presetSummaries}
-      presetId={auditor.presetId}
-      presetNotice={auditor.presetNotice}
+  <section aria-labelledby="answer-heading" class="max-w-3xl space-y-5">
+    <div class="space-y-2" data-testid="verdict">
+      {#if isSample}
+        <p
+          class="inline-block rounded bg-slate-100 px-2 py-0.5 text-xs font-semibold tracking-wide text-slate-700 uppercase dark:bg-slate-800 dark:text-slate-200"
+          data-testid="sample-label"
+        >
+          Sample data
+        </p>
+      {/if}
+      <h2 id="answer-heading" class="text-2xl font-bold text-slate-900 dark:text-white">
+        {#if floorPercent === null}
+          No failed tool calls in {plural(analysis.sessions, 'session')}.
+        {:else}
+          <span data-testid="floor-share">{floorPercent}%</span> of failures came from the floor.
+        {/if}
+      </h2>
+      {#if floorPercent !== null}
+        <p class={bodyClasses}>
+          {plural(analysis.floorFailures, 'failed tool call')} out of {formatTokenCount(
+            analysis.failures,
+          )}, in {formatTokenCount(analysis.floorSessions)} of {plural(
+            analysis.sessions,
+            'session',
+          )}, came from the environment rather than the work. Fix those once and they stop for every
+          model.
+        </p>
+      {/if}
+      {#if isSample}
+        <p class={bodyClasses} data-testid="sample-notice">{SAMPLE_NOTICE}</p>
+      {:else}
+        <button type="button" class={linkButtonClasses} onclick={showSample}>
+          Show the sample again
+        </button>
+      {/if}
+    </div>
+
+    <p
+      class="flex items-start gap-3 rounded-lg border border-emerald-300 bg-emerald-50 p-3 text-sm text-emerald-950 dark:border-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-100"
+    >
+      <ShieldCheck aria-hidden="true" class="mt-0.5 size-5 flex-none" />
+      <span>
+        <strong>Everything stays on your machine.</strong> Transcripts hold your source code and maybe
+        secrets, so this page reads them in this tab and never sends them anywhere.
+      </span>
+    </p>
+
+    <FileDropZone
+      title="Drop your session transcripts or whole folders here"
+      draggingTitle="Drop to read these sessions"
+      accept=".jsonl"
+      folders
+      captureWindowDrops
+      keepFile={isSessionFile}
+      fileButtonLabel="Choose files"
+      folderButtonLabel="Choose a folder"
+      {busy}
+      progress={progressText}
+      {status}
       onFiles={handleFiles}
-      onPaste={handlePaste}
-      onPreset={(id) => void handlePreset(id)}
-      onCancel={() => controller?.abort()}
-    />
+    >
+      Claude Code keeps one <code class={codeClasses}>.jsonl</code> file per session in
+      <code class="{codeClasses} [overflow-wrap:anywhere]">~/.claude/projects/</code>. Drop that
+      folder, or one project inside it. Subagent transcripts in a
+      <code class={codeClasses}>subagents</code> folder count toward the session they sit beside.
+    </FileDropZone>
+
+    {#if busy}
+      <div class="flex flex-wrap items-center gap-3" data-testid="read-progress">
+        <progress
+          max="100"
+          value={percent}
+          aria-label="Reading transcripts"
+          class="accent-primary-600 h-2 min-w-0 flex-1"
+        ></progress>
+        <button type="button" class={buttonClasses} onclick={() => controller?.abort()}>
+          Cancel
+        </button>
+      </div>
+    {/if}
+
+    {#if error}
+      <p role="alert" class="text-sm text-red-700 dark:text-red-400">{error}</p>
+    {/if}
   </section>
 
-  {#if analysis && records}
-    <PredictionCard
-      guess={auditor.guess}
-      revealed={auditor.revealed}
-      overview={analysis.overview}
-      ready={auditor.ready}
-      onGuess={(guess) => (auditor.guess = guess)}
-      onReveal={() => (auditor.revealed = true)}
-    />
+  <section aria-labelledby="clusters-heading" class="space-y-4">
+    <h2 id="clusters-heading" class={headingClasses}>The failures that keep coming back</h2>
+    <ClustersTable clusters={analysis.clusters} />
+  </section>
 
-    {#if auditor.revealed}
-      <LazySection
-        name="the breakdown"
-        load={() => import('./results-panels.svelte')}
-        props={{
-          analysis,
-          records,
-          filters: auditor.filters,
-          rules: auditor.rules,
-          prices: auditor.prices,
-          defaultPrices: data.prices,
-          pricesUpdated: data.pricesUpdated,
-          marks: auditor.marks,
-          onFilters: (filters: Filters) => (auditor.filters = filters),
-          onRules: (rules: Rule[]) => (auditor.rules = rules),
-          onPrices: (prices: PriceRow[]) => (auditor.prices = prices),
-          onMarks: setMarks,
-        }}
-      />
-    {/if}
-  {:else}
-    <p class="max-w-3xl {bodyClasses}">
-      Drop your transcripts, or pick one of the made-up sets above, and the audit starts with a
-      question for you.
+  <section aria-labelledby="timeline-heading" class="space-y-4">
+    <div class="space-y-1">
+      <h2 id="timeline-heading" class={headingClasses}>Failures per day</h2>
+      <p class={bodyClasses}>Stacked by category, so a fix shows up as a cliff.</p>
+    </div>
+    <TimelinePanel timeline={analysis.timeline} categories={analysis.categories} />
+  </section>
+
+  <section aria-labelledby="notes-heading" class="max-w-3xl space-y-4">
+    <h2 id="notes-heading" class={headingClasses}>Reading the result</h2>
+    <div class="space-y-3 {bodyClasses}">
+      <p>
+        Failures are grouped by tool and by the line that names the error, with numbers, paths, and
+        names swapped for placeholders, so the same failure in different sessions lands in one row.
+        Rows are ranked by sessions affected, not occurrences: one session retrying a dead database
+        200 times is one bad session, while a missing command that hits a session a day is a habit.
+      </p>
+      <p>
+        <strong>Floor</strong> means your environment: fix it once, in the repository or the
+        machine, and it stops for every model. <strong>Harness</strong> means the tool call was
+        refused before anything ran. <strong>Task</strong> is everything the rules don’t match, such
+        as a failing test, which is the work itself and the model’s to fix.
+        <strong>Floor or task</strong> could be either; the examples usually tell you which.
+      </p>
+      <p>
+        When you fix something on the floor, its color should drop out of the chart on the day you
+        fixed it and stay gone. If it comes back, the fix didn’t stick.
+      </p>
+    </div>
+
+    <h3 class="font-semibold text-slate-900 dark:text-white">The rules</h3>
+    <p class={bodyClasses}>
+      Each cluster gets the first category whose text appears in its error, ignoring case. Anything
+      no rule matches is the task.
     </p>
-  {/if}
+    <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-200" data-testid="rules-list">
+      {#each defaultRules as rule (rule.id)}
+        <li>
+          <strong>{rule.category}</strong>:
+          {#each rule.pattern.split('|') as pattern, index (pattern)}{index > 0 ? ', ' : ''}<code
+              class={codeClasses}>{pattern.trim()}</code
+            >{/each}. {rule.why}
+        </li>
+      {/each}
+    </ul>
+  </section>
 </div>

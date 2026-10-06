@@ -69,7 +69,10 @@ export type SizedFileReport = {
 };
 
 type AssetsReport = {
+  /** The largest JS file any page loads up front. */
   largestClientChunk: SizedFileReport | null;
+  /** The largest JS file loaded only on demand, such as an experiment's editor. */
+  largestLazyClientChunk: SizedFileReport | null;
   mainStylesheet: SizedFileReport | null;
   largestEnhancementChunk: SizedFileReport | null;
 };

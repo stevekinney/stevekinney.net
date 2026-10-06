@@ -10,9 +10,11 @@
     options: Option[];
     onChange: (value: string) => void;
     hint?: string;
+    /** Until the page hydrates, a click would be lost. */
+    disabled?: boolean;
   };
 
-  const { id, label, value, options, onChange, hint }: Props = $props();
+  const { id, label, value, options, onChange, hint, disabled = false }: Props = $props();
 </script>
 
 <div class="space-y-1.5">
@@ -30,8 +32,9 @@
         id="{id}-{option.value}"
         type="button"
         aria-pressed={value === option.value}
+        {disabled}
         onclick={() => onChange(option.value)}
-        class="focus-visible:outline-primary-600 flex-1 cursor-pointer rounded-md px-2 py-1.5 text-sm font-medium text-slate-700 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-1 aria-pressed:bg-white aria-pressed:text-slate-900 aria-pressed:shadow-sm aria-pressed:ring-1 aria-pressed:ring-slate-300 dark:text-slate-300 dark:hover:bg-slate-700 dark:aria-pressed:bg-slate-600 dark:aria-pressed:text-white dark:aria-pressed:ring-slate-500"
+        class="focus-visible:outline-primary-600 flex-1 cursor-pointer rounded-md px-2 py-1.5 text-sm font-medium text-slate-700 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-1 disabled:cursor-not-allowed aria-pressed:bg-white aria-pressed:text-slate-900 aria-pressed:shadow-sm aria-pressed:ring-1 aria-pressed:ring-slate-300 dark:text-slate-300 dark:hover:bg-slate-700 dark:aria-pressed:bg-slate-600 dark:aria-pressed:text-white dark:aria-pressed:ring-slate-500"
       >
         {option.label}
       </button>

@@ -4,11 +4,8 @@
   import BarChart from './bar-chart.svelte';
   import type { Bar } from './bar-chart.svelte';
   import { categoryStyle } from './category-styles';
-  import { toCsv } from './digest';
-  import { downloadText } from './download';
   import {
     bodyClasses,
-    buttonClasses,
     cellClasses,
     headCellClasses,
     tableClasses,
@@ -33,24 +30,10 @@
         key: category,
         label: category,
         value: day.counts[category] ?? 0,
-        fill: categoryStyle(category, categories).fill,
+        fill: categoryStyle(category).fill,
       })),
     })),
   );
-
-  const exportCsv = (): void =>
-    downloadText(
-      'failures-per-day.csv',
-      toCsv(
-        ['Day', ...present, 'Total'],
-        timeline.map((day) => [
-          day.day,
-          ...present.map((category) => day.counts[category] ?? 0),
-          day.total,
-        ]),
-      ),
-      'text/csv',
-    );
 </script>
 
 {#if timeline.length === 0}
@@ -62,7 +45,7 @@
         <li class="flex items-center gap-1.5">
           <span
             aria-hidden="true"
-            class="inline-block size-2.5 rounded-sm {categoryStyle(category, categories).swatch}"
+            class="inline-block size-2.5 rounded-sm {categoryStyle(category).swatch}"
           ></span>
           {category}
         </li>
@@ -71,7 +54,6 @@
     <BarChart
       {bars}
       testId="timeline-chart"
-      integer
       label="Failures per day, stacked by category. The failures per day table below has the same numbers."
       formatValue={(value) => formatTokenCount(Math.round(value))}
     />
@@ -79,8 +61,7 @@
       <summary class="cursor-pointer text-sm font-semibold text-slate-700 dark:text-slate-200">
         Failures per day as a table
       </summary>
-      <div class="mt-3 space-y-2">
-        <button type="button" class={buttonClasses} onclick={exportCsv}>Download as CSV</button>
+      <div class="mt-3">
         <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
         <div
           class="{tableRegionClasses} max-h-96"

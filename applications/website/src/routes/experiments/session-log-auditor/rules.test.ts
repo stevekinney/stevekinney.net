@@ -1,14 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  categoriesOf,
-  classify,
-  defaultRules,
-  isFloorCategory,
-  parseRules,
-  serializeRules,
-  UNCLASSIFIED,
-} from './rules';
+import { categoriesOf, classify, defaultRules, isFloorCategory, UNCLASSIFIED } from './rules';
 
 const categoryOf = (text: string): string => classify([text], defaultRules).category;
 
@@ -80,22 +72,5 @@ describe('categoriesOf', () => {
       'harness',
       UNCLASSIFIED,
     ]);
-  });
-});
-
-describe('parseRules', () => {
-  it('reads back what serializeRules writes', () => {
-    const parsed = parseRules(serializeRules(defaultRules));
-
-    expect('rules' in parsed && parsed.rules.map((rule) => rule.pattern)).toEqual(
-      defaultRules.map((rule) => rule.pattern),
-    );
-  });
-
-  it('explains what’s wrong with a bad table', () => {
-    expect(parseRules('nope')).toEqual({ error: 'That file isn’t valid JSON.' });
-    expect(parseRules('{"rules":[{"pattern":"x"}]}')).toEqual({
-      error: 'Rule 1 needs a pattern and a category.',
-    });
   });
 });

@@ -1,0 +1,5 @@
+interface:
+  display_name: PDF forms
+  brand_color: '#2563EB'
+policy:
+  allow_implicit_invocation: false

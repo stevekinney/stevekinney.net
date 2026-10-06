@@ -65,23 +65,5 @@ export const scale =
   (value: number): number =>
     max === min ? (start + end) / 2 : start + ((value - min) / (max - min)) * (end - start);
 
-/**
- * Which values to draw when there are too many to show one dot each: evenly
- * spaced through the sorted values, so the spread on screen matches the data.
- * Returns indices into `values`.
- */
-export const thin = (values: readonly number[], limit: number): number[] => {
-  const order = values.map((_, index) => index);
-  if (values.length <= limit) return order;
-
-  order.sort((first, second) => values[first] - values[second]);
-  const picked: number[] = [];
-  for (let slot = 0; slot < limit; slot += 1) {
-    picked.push(order[Math.round((slot * (values.length - 1)) / (limit - 1))]);
-  }
-
-  return picked;
-};
-
 /** A steady vertical offset from −1 to 1 for the n-th dot, so equal values don't hide each other. */
 export const jitter = (index: number): number => ((index * 0.618_033_988_75) % 1) * 2 - 1;

@@ -1,14 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  countClassifications,
   lintInstructions,
   MAXIMUM_CHECKED_CHARACTERS,
   notEnglishReason,
   splitInstructions,
-  summarize,
 } from './lint';
-import { classificationLabels, cloneRules, defaultRules, parseWordList } from './lint-rules';
+import { classificationLabels, defaultRules } from './lint-rules';
 
 const sample = [
   '- Maintain high quality code.',
@@ -51,25 +49,6 @@ describe('acceptance 2: the sample CLAUDE.md', () => {
     expect(items[3].rung).toBe('hook');
   });
 
-  it('counts one of each across the five categories', () => {
-    const counts = countClassifications(items);
-
-    expect(counts).toMatchObject({
-      vague: 1,
-      'must-hold': 1,
-      'good-fact': 1,
-      deterministic: 1,
-      'stale-prone': 1,
-      'skill-candidate': 0,
-      pointer: 0,
-      unknown: 0,
-      'no-match': 0,
-    });
-    expect(summarize(items)).toBe(
-      '5 lines: 1 must-hold rule written as a request, 1 that doesn’t change a decision, 0 skill candidates, 1 good fact, 1 stale-prone, 1 deterministic.',
-    );
-  });
-
   it('shows the rule that fired for every line', () => {
     expect(items[0].rule).toContain('“high quality”');
     expect(items[1].rule).toContain('“never”');
@@ -86,9 +65,6 @@ describe('acceptance 2: the sample CLAUDE.md', () => {
 describe('edge cases', () => {
   it('returns nothing for an empty file', () => {
     expect(lint('')).toEqual([]);
-    expect(summarize(lint(''))).toBe(
-      '0 lines: 0 must-hold rules written as requests, 0 that don’t change a decision, 0 skill candidates, 0 good facts, 0 stale-prone, 0 deterministic.',
-    );
   });
 
   it('returns nothing for a file of only headings and code blocks', () => {
@@ -347,15 +323,14 @@ describe('the other rules', () => {
     ).toBe(false);
   });
 
-  it('follows edited rules', () => {
-    const rules = cloneRules();
+  it('follows the rules it is given', () => {
+    const rules = structuredClone(defaultRules);
     rules.vague.enabled = false;
-    rules.deterministic.tools = parseWordList('Prettier, prettier, , biome');
+    rules.deterministic.tools = ['prettier', 'biome'];
 
     const items = lintInstructions(sample, rules);
     expect(items[0].primary).toBe('no-match');
     expect(items[3].primary).toBe('deterministic');
-    expect(rules.deterministic.tools).toEqual(['prettier', 'biome']);
     expect(defaultRules.vague.enabled).toBe(true);
   });
 });

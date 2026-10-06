@@ -1,9 +1,12 @@
 import { describe, expect, test } from 'bun:test';
+import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 
 import type { CourseContentsData } from '@stevekinney/utilities/content-types';
 
 import type { ContentValidationIssue } from './types.ts';
-import { optionalStringArray, validateCourseContents } from './validation.ts';
+import { isExperimentRoute, optionalStringArray, validateCourseContents } from './validation.ts';
 
 const collect = (
   contents: CourseContentsData | undefined,
@@ -166,5 +169,27 @@ describe('optionalStringArray', () => {
         message: "Invalid 'npmPackages' frontmatter.",
       },
     ]);
+  });
+});
+
+describe('isExperimentRoute', () => {
+  const routesRoot = mkdtempSync(path.join(tmpdir(), 'experiment-routes-'));
+  mkdirSync(path.join(routesRoot, 'experiments', 'model-calculator'), { recursive: true });
+  writeFileSync(path.join(routesRoot, 'experiments', '+page.svelte'), '');
+  writeFileSync(path.join(routesRoot, 'experiments', 'model-calculator', '+page.svelte'), '');
+
+  test('accepts the index and an experiment whose route folder has a page', () => {
+    expect(isExperimentRoute('/experiments', routesRoot)).toBe(true);
+    expect(isExperimentRoute('/experiments/model-calculator', routesRoot)).toBe(true);
+  });
+
+  test('rejects an experiment that does not exist', () => {
+    expect(isExperimentRoute('/experiments/loop-governor', routesRoot)).toBe(false);
+  });
+
+  test('rejects anything outside the experiments routes', () => {
+    expect(isExperimentRoute('/writing/model-calculator', routesRoot)).toBe(false);
+    expect(isExperimentRoute('/experiments/model-calculator/extra', routesRoot)).toBe(false);
+    expect(isExperimentRoute('/experiments/../courses', routesRoot)).toBe(false);
   });
 });

@@ -5,7 +5,7 @@
  */
 export type CategoryStyle = { fill: string; swatch: string };
 
-const known: Record<string, CategoryStyle> = {
+const known: Record<string, CategoryStyle> & { unclassified: CategoryStyle } = {
   'floor: missing tool': {
     fill: 'fill-amber-500 dark:fill-amber-400',
     swatch: 'bg-amber-500 dark:bg-amber-400',
@@ -40,20 +40,6 @@ const known: Record<string, CategoryStyle> = {
   },
 };
 
-const extra: CategoryStyle[] = [
-  { fill: 'fill-teal-600 dark:fill-teal-400', swatch: 'bg-teal-600 dark:bg-teal-400' },
-  { fill: 'fill-lime-600 dark:fill-lime-400', swatch: 'bg-lime-600 dark:bg-lime-400' },
-  { fill: 'fill-indigo-600 dark:fill-indigo-400', swatch: 'bg-indigo-600 dark:bg-indigo-400' },
-  { fill: 'fill-yellow-700 dark:fill-yellow-300', swatch: 'bg-yellow-700 dark:bg-yellow-300' },
-  { fill: 'fill-pink-600 dark:fill-pink-400', swatch: 'bg-pink-600 dark:bg-pink-400' },
-];
-
-/** The style for a category; a category the person made up gets one by its position. */
-export const categoryStyle = (category: string, categories: readonly string[]): CategoryStyle => {
-  if (known[category]) return known[category];
-
-  const custom = categories.filter((entry) => !known[entry]);
-  const index = Math.max(0, custom.indexOf(category));
-
-  return extra[index % extra.length];
-};
+/** The style for a category, or the unclassified one for a category the rules don't name. */
+export const categoryStyle = (category: string): CategoryStyle =>
+  known[category] ?? known.unclassified;

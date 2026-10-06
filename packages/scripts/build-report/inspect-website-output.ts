@@ -11,6 +11,7 @@ import {
   websiteVercelStaticRoot,
 } from '../content-paths.ts';
 
+import { findEagerClientFiles, readClientManifest } from './client-chunks.ts';
 import type { SizedFile } from './types.ts';
 
 const htmlFileMatcher = (filePath: string): boolean => filePath.endsWith('.html');
@@ -104,6 +105,27 @@ export const getLargestFile = async (
   );
 };
 
+/**
+ * Whether a client file is only ever loaded on demand, through `import()` in a
+ * component, according to the build's manifest. Without a manifest, or for a
+ * file the manifest doesn't list, the answer is no, so the stricter up-front
+ * budget applies.
+ */
+const createLazyClientFileMatcher = async (): Promise<(filePath: string) => boolean> => {
+  const manifest = await readClientManifest(
+    path.resolve(websiteSvelteKitClientRoot, '.vite', 'manifest.json'),
+  );
+  if (!manifest) return () => false;
+
+  const eager = findEagerClientFiles(manifest);
+  const listed = new Set(Object.values(manifest).map((chunk) => chunk.file));
+
+  return (filePath) => {
+    const file = path.relative(websiteSvelteKitClientRoot, filePath).split(path.sep).join('/');
+    return listed.has(file) && !eager.has(file);
+  };
+};
+
 const resolveWebsiteHtmlOutputRoot = async (): Promise<string | null> =>
   findFirstDirectoryWithMatchingFile([websiteBuildRoot, websiteVercelStaticRoot], htmlFileMatcher);
 
@@ -112,6 +134,7 @@ export type WebsiteOutputInspection = {
   buildHtmlPageCount: number;
   prerenderedHtmlPageCount: number;
   largestClientChunk: SizedFile | null;
+  largestLazyClientChunk: SizedFile | null;
   mainStylesheet: SizedFile | null;
   largestEnhancementChunk: SizedFile | null;
 };
@@ -129,9 +152,14 @@ export const inspectWebsiteOutput = async (): Promise<WebsiteOutputInspection> =
     path.resolve(websiteRoot, '.svelte-kit', 'output', 'prerendered', 'pages'),
     htmlFileMatcher,
   );
+  const isLazyClientFile = await createLazyClientFileMatcher();
   const largestClientChunk = await getLargestFile(
     path.resolve(websiteSvelteKitClientRoot, '_app', 'immutable'),
-    (filePath) => filePath.endsWith('.js'),
+    (filePath) => filePath.endsWith('.js') && !isLazyClientFile(filePath),
+  );
+  const largestLazyClientChunk = await getLargestFile(
+    path.resolve(websiteSvelteKitClientRoot, '_app', 'immutable'),
+    (filePath) => filePath.endsWith('.js') && isLazyClientFile(filePath),
   );
   const mainStylesheet = await getLargestFile(
     path.resolve(websiteSvelteKitClientRoot, '_app', 'immutable', 'assets'),
@@ -148,6 +176,7 @@ export const inspectWebsiteOutput = async (): Promise<WebsiteOutputInspection> =
     buildHtmlPageCount,
     prerenderedHtmlPageCount,
     largestClientChunk,
+    largestLazyClientChunk,
     mainStylesheet,
     largestEnhancementChunk,
   };

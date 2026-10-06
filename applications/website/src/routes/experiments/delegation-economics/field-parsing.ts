@@ -1,4 +1,4 @@
-import { formatCompactTokenCount as formatTokens, parseTokenCount } from '$lib/experiments/format';
+import { parseTokenCount } from '$lib/experiments/format';
 
 import { formatPercent } from './display';
 import { clampTo } from './scenario';
@@ -11,9 +11,7 @@ export const parseTokenField = (text: string, range: NumberRange): number | null
   return count === null ? null : clampTo(range, count);
 };
 
-export const formatTokenField = (tokens: number): string => formatTokens(tokens);
-
-/** A plain number such as `60`, `2.5`, or `3.5×`, held to the box's limits. Empty is the minimum. */
+/** A plain number such as `60`, `2.5`, or `3 min`, held to the box's limits. Empty is the minimum. */
 export const parseNumberField = (text: string, range: NumberRange): number | null => {
   const normalized = text
     .trim()

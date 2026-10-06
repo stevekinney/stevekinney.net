@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { AuditError } from './audit-data';
-import { clusterErrors, clusterKey, MAXIMUM_EXAMPLES, matchesSearch } from './clusters';
+import { clusterErrors, clusterKey, MAXIMUM_EXAMPLES } from './clusters';
 import type { Cluster } from './clusters';
 import { fixtureLines, readFixtures } from './fixture-reader';
 import { defaultRules } from './rules';
@@ -162,20 +162,5 @@ describe('verbatim examples (acceptance check 5)', () => {
     };
 
     expect(unverifiedQuotes(clusters, altered)).toEqual([`${example.file}:${example.line}`]);
-  });
-});
-
-describe('matchesSearch', () => {
-  it('finds a cluster by its signature, tool, or any message', () => {
-    const [cluster] = clusterErrors(
-      [failure('one', "Cannot find module 'left-pad'")],
-      defaultRules,
-    );
-
-    expect(matchesSearch(cluster, 'cannot find')).toBe(true);
-    expect(matchesSearch(cluster, 'LEFT-PAD')).toBe(true);
-    expect(matchesSearch(cluster, 'bash')).toBe(true);
-    expect(matchesSearch(cluster, 'timeout')).toBe(false);
-    expect(matchesSearch(cluster, '  ')).toBe(true);
   });
 });

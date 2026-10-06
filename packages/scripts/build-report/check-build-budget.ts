@@ -15,8 +15,11 @@ const REPORT_PATH = path.resolve(
 );
 
 // Thresholds are set at ~40% above current actuals so routine changes don't trip them.
-// Current actuals: largestClientChunk ~30 kB, mainStylesheet ~176 kB.
+// Current actuals: largestClientChunk ~30 kB, largestLazyClientChunk ~600 kB, mainStylesheet ~176 kB.
 const LARGEST_CLIENT_CHUNK_LIMIT = 50_000; // 50 kB uncompressed
+// A chunk loaded only through `import()`, such as the Markdown editor and validators the skill
+// and agent editor experiments load after the page renders. No page pays for it up front.
+const LARGEST_LAZY_CLIENT_CHUNK_LIMIT = 850_000; // 850 kB uncompressed
 const MAIN_STYLESHEET_LIMIT = 250_000; // 250 kB uncompressed
 
 let report: BuildReport;
@@ -39,6 +42,14 @@ if (chunkBytes > LARGEST_CLIENT_CHUNK_LIMIT) {
   );
 }
 
+const lazyChunkBytes = report.assets.largestLazyClientChunk?.bytes ?? 0;
+if (lazyChunkBytes > LARGEST_LAZY_CLIENT_CHUNK_LIMIT) {
+  violations.push(
+    `Largest on-demand client JS chunk: ${lazyChunkBytes} bytes exceeds limit of ${LARGEST_LAZY_CLIENT_CHUNK_LIMIT} bytes` +
+      ` (${report.assets.largestLazyClientChunk?.path ?? 'unknown'})`,
+  );
+}
+
 const cssBytes = report.assets.mainStylesheet?.bytes ?? 0;
 if (cssBytes > MAIN_STYLESHEET_LIMIT) {
   violations.push(
@@ -56,5 +67,7 @@ if (violations.length > 0) {
 }
 
 console.log(
-  `Build budget check passed: JS chunk ${chunkBytes} bytes (<= ${LARGEST_CLIENT_CHUNK_LIMIT}), CSS ${cssBytes} bytes (<= ${MAIN_STYLESHEET_LIMIT}).`,
+  `Build budget check passed: JS chunk ${chunkBytes} bytes (<= ${LARGEST_CLIENT_CHUNK_LIMIT}), ` +
+    `on-demand JS chunk ${lazyChunkBytes} bytes (<= ${LARGEST_LAZY_CLIENT_CHUNK_LIMIT}), ` +
+    `CSS ${cssBytes} bytes (<= ${MAIN_STYLESHEET_LIMIT}).`,
 );

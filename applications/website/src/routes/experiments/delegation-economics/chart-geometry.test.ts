@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  formatAxisMultiplier,
-  niceCeiling,
-  placeTooltip,
-  speedupAxis,
-  workersAt,
-} from './chart-geometry';
+import { formatAxisMultiplier, niceCeiling, speedupAxis, workersAt } from './chart-geometry';
 import { speedupCurve } from './economics';
 import type { EconomicsInputs } from './economics';
 
@@ -20,11 +14,7 @@ const inputs: EconomicsInputs = {
   uniqueTokens: 300_000,
   outputTokens: 5_000,
   reportTokens: 2_000,
-  sharedPrefix: false,
-  mode: 'subagents',
-  teamMultiplier: 3.5,
-  planMultiplier: 7,
-  prices: { input: 2, cachedInput: 0.2, output: 10 },
+  prices: { input: 2, output: 10 },
 };
 
 describe('speedupAxis', () => {
@@ -61,17 +51,6 @@ describe('workersAt', () => {
     expect(workersAt(40 + 30, 40, 310)).toBe(4);
     expect(workersAt(-100, 40, 310)).toBe(1);
     expect(workersAt(10_000, 40, 310)).toBe(32);
-  });
-});
-
-describe('placeTooltip', () => {
-  it('sits right of the anchor when it fits, else left, and never outside the bounds', () => {
-    expect(placeTooltip(100, 150, 0, 360)).toBe(110);
-    expect(placeTooltip(300, 150, 0, 360)).toBe(140);
-    // On a narrow chart, a tooltip with no room on either side is held inside it.
-    expect(placeTooltip(180, 200, 0, 300)).toBe(0);
-    expect(placeTooltip(180, 200, 40, 300)).toBe(40);
-    expect(placeTooltip(5, 400, 0, 300)).toBe(0);
   });
 });
 

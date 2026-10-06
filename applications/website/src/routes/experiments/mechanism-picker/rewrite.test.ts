@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { formatRewrite, isComplete, startRewrite } from './rewrite';
+import { formatRewrite, startRewrite } from './rewrite';
 
 describe('the When / do / verify rewrite', () => {
   it('starts with the line as the action and blanks for the rest', () => {
@@ -8,7 +8,6 @@ describe('the When / do / verify rewrite', () => {
 
     expect(parts).toEqual({ trigger: '', action: 'maintain high quality code', result: '' });
     expect(formatRewrite(parts)).toBe('When ____, maintain high quality code, then verify ____.');
-    expect(isComplete(parts)).toBe(false);
   });
 
   it('keeps an acronym’s capital letter', () => {
@@ -25,6 +24,5 @@ describe('the When / do / verify rewrite', () => {
     expect(formatRewrite(parts)).toBe(
       'When editing invoice serialization, update the contract fixture, then verify that `pnpm test:billing` passes.',
     );
-    expect(isComplete(parts)).toBe(true);
   });
 });

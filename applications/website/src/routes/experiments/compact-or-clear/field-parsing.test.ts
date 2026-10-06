@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import {
   formatPercent,
   formatSummary,
-  parseDecimalField,
   parseSummaryField,
   parseTokenField,
   parseTurnsField,
@@ -22,7 +21,7 @@ describe('parseTokenField', () => {
     expect(parseTokenField('900m', ranges.contextNow)).toBe(10_000_000);
     expect(parseTokenField('5', ranges.contextNow)).toBe(1_000);
     expect(parseTokenField('lots', ranges.contextNow)).toBeNull();
-    expect(parseTokenField('', ranges.reread)).toBe(0);
+    expect(parseTokenField('', ranges.baseline)).toBe(0);
   });
 });
 
@@ -38,14 +37,6 @@ describe('parseTurnsField', () => {
     expect(parseTurnsField('2.5')).toBeNull();
     expect(parseTurnsField('ten')).toBeNull();
     expect(parseTurnsField('')).toBeNull();
-  });
-});
-
-describe('parseDecimalField', () => {
-  it('accepts decimals within the limits', () => {
-    expect(parseDecimalField('3.5', ranges.charsPerToken)).toBe(3.5);
-    expect(parseDecimalField('0.2', ranges.charsPerToken)).toBe(1);
-    expect(parseDecimalField('x', ranges.charsPerToken)).toBeNull();
   });
 });
 

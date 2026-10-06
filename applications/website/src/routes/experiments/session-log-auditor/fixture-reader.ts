@@ -6,7 +6,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { claudeCodeAdapter } from './audit-data';
+import { readLinesByFile } from './audit-data';
 import type { AuditData } from './audit-data';
 
 export const FIXTURE_ROOT = fileURLToPath(
@@ -23,19 +23,6 @@ export const fixturePaths = (directory = FIXTURE_ROOT): string[] =>
 /** A fixture's lines, as written. */
 export const fixtureLines = (path: string): string[] =>
   readFileSync(join(FIXTURE_ROOT, path), 'utf8').split('\n');
-
-/** Reads files given as `path → lines` through the Claude Code adapter. */
-export const readLinesByFile = (files: Record<string, readonly string[]>): AuditData => {
-  const reader = claudeCodeAdapter.createReader();
-
-  for (const [path, lines] of Object.entries(files)) {
-    const file = reader.readFile(path);
-    lines.forEach((line) => file.addLine(line));
-    file.finish();
-  }
-
-  return reader.finish();
-};
 
 /** Reads every fixture through the Claude Code adapter. */
 export const readFixtures = (): AuditData =>

@@ -2,8 +2,24 @@ import { describe, expect, it } from 'vitest';
 
 import type { Calibration } from './calibrate';
 import { calibrationPatch, discardPatch, mergeBackup } from './import-state';
-import { defaultModels } from './pricing';
-import { defaultScenario } from './scenario';
+import type { ModelPrice } from './pricing';
+import { createScenario } from './scenario';
+
+const sonnet: ModelPrice = {
+  id: 'claude-sonnet-5-5',
+  name: 'Claude Sonnet 5.5',
+  input: 2,
+  cachedInput: 0.2,
+  cacheWrite5m: 2.5,
+  cacheWrite1h: 4,
+  output: 10,
+  identifiers: ['claude-sonnet-5-5'],
+};
+
+const defaultScenario = createScenario({
+  defaultModelId: 'claude-opus-5-5',
+  defaultSwitchId: 'claude-sonnet-5-5',
+});
 
 const calibration = (overrides: Partial<Calibration> = {}): Calibration => ({
   files: 1,
@@ -16,8 +32,8 @@ const calibration = (overrides: Partial<Calibration> = {}): Calibration => ({
   inputPerTurn: 4_200,
   inputPairs: 39,
   pairsAcrossCompaction: 0,
-  modelId: 'claude-sonnet-5',
-  modelMatch: defaultModels.find((model) => model.id === 'sonnet-5') ?? null,
+  modelId: 'claude-sonnet-5-5',
+  modelMatch: sonnet,
   lastTimestamp: null,
   importedAt: 0,
   summaryPercent: 4.1,
@@ -35,7 +51,7 @@ describe('calibrationPatch', () => {
       outputPerTurn: 900,
       inputPerTurn: 4_200,
       summaryPercent: 4.1,
-      modelId: 'sonnet-5',
+      modelId: 'claude-sonnet-5-5',
       warm: false,
     });
     expect(Object.keys(imported).sort()).toEqual(Object.keys(patch).sort());
@@ -81,7 +97,7 @@ describe('discarding an import', () => {
       outputPerTurn: 2_000,
       inputPerTurn: 5_000,
       summaryPercent: 5,
-      modelId: 'opus-5',
+      modelId: 'claude-opus-5-5',
     });
   });
 

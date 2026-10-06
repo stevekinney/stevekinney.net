@@ -14,12 +14,9 @@
   type Props = {
     projection: Projection;
     turns: number;
-    /** The turn whose tooltip is held open, or null. */
-    pinnedTurn: number | null;
-    onPin: (turn: number | null) => void;
   };
 
-  const { projection, turns, pinnedTurn, onPin }: Props = $props();
+  const { projection, turns }: Props = $props();
 
   const HEIGHT = 340;
   const MARGIN_TOP = 14;
@@ -45,7 +42,7 @@
   const bottom = $derived(margin.top + plotHeight);
 
   const lines = $derived(
-    (['keep', 'compact', 'clear', 'later'] as const).flatMap((id) => {
+    (['keep', 'compact', 'switch'] as const).flatMap((id) => {
       const values = projection[id];
 
       return values ? [{ id, values, style: strategyStyles[id] }] : [];
@@ -84,8 +81,7 @@
     (
       [
         ['compact', projection.compactCrossover],
-        ['clear', projection.clearCrossover],
-        ['later', projection.laterCrossover],
+        ['switch', projection.switchCrossover],
       ] as const
     ).flatMap(([id, turn]) => {
       const values = projection[id];
@@ -96,7 +92,7 @@
     }),
   );
 
-  const activeTurn = $derived(pinnedTurn ?? hoverTurn);
+  const activeTurn = $derived(hoverTurn);
 
   const readings = $derived(
     activeTurn === null
@@ -152,9 +148,6 @@
     } else if (event.key === 'Home' || event.key === 'End') {
       event.preventDefault();
       hoverTurn = event.key === 'Home' ? 0 : turns;
-    } else if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      onPin(pinnedTurn === current ? null : current);
     }
   };
 
@@ -183,7 +176,7 @@
     bind:clientWidth={measuredWidth}
     role="slider"
     tabindex="0"
-    aria-label="Cumulative spend by turn. Arrow keys move between turns, and Enter pins one. The projected spend table has the same numbers."
+    aria-label="Cumulative spend by turn. Arrow keys move between turns."
     aria-valuemin={0}
     aria-valuemax={turns}
     aria-valuenow={activeTurn ?? 0}
@@ -194,13 +187,8 @@
     onpointermove={(event) => (hoverTurn = turnAt(event))}
     onpointerdown={(event) => (hoverTurn = turnAt(event))}
     onpointerleave={() => (hoverTurn = null)}
-    onclick={(event) => {
-      const turn = turnAt(event);
-
-      onPin(pinnedTurn === turn ? null : turn);
-    }}
     onkeydown={handleKeydown}
-    onfocus={() => (hoverTurn ??= pinnedTurn ?? 0)}
+    onfocus={() => (hoverTurn ??= 0)}
     onblur={() => (hoverTurn = null)}
   >
     <svg
@@ -348,9 +336,7 @@
         style:width="{TOOLTIP_WIDTH}px"
       >
         <p class="font-semibold">
-          Turn {activeTurn}{activeTurn === 0 ? ' (up front only)' : ''}{pinnedTurn === activeTurn
-            ? ', pinned'
-            : ''}
+          Turn {activeTurn}{activeTurn === 0 ? ' (up front only)' : ''}
         </p>
         <dl class="mt-1 space-y-0.5 tabular-nums">
           {#each readings as reading (reading.id)}
@@ -365,16 +351,7 @@
   </div>
 
   <p class="text-sm text-slate-600 dark:text-slate-300">
-    Hover or use the arrow keys to read a turn. Click a turn, or press Enter, to pin it and mark its
-    row in the table.
-    {#if pinnedTurn !== null}
-      <button
-        type="button"
-        onclick={() => onPin(null)}
-        class="focus-visible:outline-primary-600 text-primary-700 dark:text-primary-300 cursor-pointer underline underline-offset-2 focus-visible:outline-2"
-      >
-        Unpin turn {pinnedTurn}
-      </button>
-    {/if}
+    Hover or use the arrow keys to read a turn. A dot marks the turn each move first costs no more
+    than keeping going.
   </p>
 </div>

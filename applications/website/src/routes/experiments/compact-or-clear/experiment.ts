@@ -1,8 +1,8 @@
 import type { ExperimentMetadata } from '$lib/experiments/registry';
 
 export const experiment: ExperimentMetadata = {
-  title: 'Compact or Clear',
+  title: 'Keep Going, Compact, or Switch Models?',
   description:
-    'Project what keeping going, compacting, and clearing cost from where your coding session is now, and see after how many turns each choice pays for itself.',
+    'See whether compacting a big context or switching to a cheaper model pays for itself before your coding session ends.',
   added: '2026-10-04',
 };

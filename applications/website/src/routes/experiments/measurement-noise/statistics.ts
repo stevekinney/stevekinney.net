@@ -1,4 +1,4 @@
-import { normalQuantile, tQuantile, twoSidedP } from './t-distribution';
+import { tQuantile, twoSidedP } from './t-distribution';
 
 /** The confidence level every interval on the page uses. */
 export const CONFIDENCE = 0.95;
@@ -25,15 +25,6 @@ export const variance = (values: readonly number[]): number => {
 };
 
 export const standardDeviation = (values: readonly number[]): number => Math.sqrt(variance(values));
-
-export const median = (values: readonly number[]): number => {
-  if (values.length === 0) return Number.NaN;
-
-  const sorted = [...values].sort((first, second) => first - second);
-  const middle = Math.floor(sorted.length / 2);
-
-  return sorted.length % 2 === 1 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
-};
 
 /**
  * A t interval for a difference. `degenerate` means the standard error is zero,
@@ -135,54 +126,6 @@ export const pairedTest = (a: readonly number[], b: readonly number[]): PairedTe
       differenceDeviation / Math.sqrt(differences.length),
       differences.length - 1,
     ),
-  };
-};
-
-export type Proportion = {
-  successes: number;
-  total: number;
-  rate: number;
-  lower: number;
-  upper: number;
-};
-
-const zFor = (confidence: number): number => normalQuantile(1 - (1 - confidence) / 2);
-
-/** A rate with its Wilson score interval, which stays inside 0 to 1 even at 0 or n successes. */
-export const wilsonInterval = (successes: number, total: number): Proportion | null => {
-  if (total <= 0) return null;
-
-  const z = zFor(CONFIDENCE);
-  const rate = successes / total;
-  const z2 = z * z;
-  const center = (rate + z2 / (2 * total)) / (1 + z2 / total);
-  const half =
-    (z / (1 + z2 / total)) * Math.sqrt((rate * (1 - rate)) / total + z2 / (4 * total * total));
-
-  return {
-    successes,
-    total,
-    rate,
-    lower: Math.max(0, center - half),
-    upper: Math.min(1, center + half),
-  };
-};
-
-/**
- * Newcombe's hybrid score interval for the difference of two rates, A − B,
- * built from each group's Wilson interval. It behaves well with small counts,
- * where the textbook normal interval can stray past ±1.
- */
-export const rateDifference = (
-  a: Proportion,
-  b: Proportion,
-): { difference: number; lower: number; upper: number } => {
-  const difference = a.rate - b.rate;
-
-  return {
-    difference,
-    lower: difference - Math.sqrt((a.rate - a.lower) ** 2 + (b.upper - b.rate) ** 2),
-    upper: difference + Math.sqrt((a.upper - a.rate) ** 2 + (b.rate - b.lower) ** 2),
   };
 };
 

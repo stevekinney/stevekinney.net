@@ -24,5 +24,18 @@
     "src/**/*",
     "svelte.config.ts",
     "vite.config.ts"
+  ],
+  // An exclude here replaces the one in .svelte-kit/tsconfig.json, so it repeats that list.
+  // Claude Code workflow scripts (*.workflow.js) use top-level `return` and runtime globals,
+  // so they aren't modules TypeScript can check.
+  "exclude": [
+    "node_modules/**",
+    "src/service-worker.js",
+    "src/service-worker/**/*.js",
+    "src/service-worker.ts",
+    "src/service-worker/**/*.ts",
+    "src/service-worker.d.ts",
+    "src/service-worker/**/*.d.ts",
+    "**/*.workflow.js"
   ]
 }

@@ -12,15 +12,15 @@ With an LLM, you pay for two things:
 - **Input tokens**: what you send in. (A _token_ is a chunk of text a model reads or writes, usually a word or part of one.)
 - **Output tokens**: what the model sends back.
 
-Here's the nuance. Every request the harness sends to the model carries the entire conversation so far _and_ the new text. A _turn_ is one response to a message you send, and one turn can involve many requests, because the agent goes back to the model after each tool result. So the whole history is resent per request, not per turn. That's why a long session costs more than a short one.
+Every request the harness sends to the model carries the entire conversation so far _and_ the new text. A _turn_ (one response to a message you send) can involve many requests, because the agent goes back to the model after each tool result. So the whole history is resent per request, not per turn. That's why a long session costs more than a short one.
 
-**Prompt caching** lets the provider remember the part of your input it has already processed, so it charges a fraction of the normal input price for reading those messages back. Writing the cache in the first place costs a bit more than normal input on Claude: about 1.25× for the five-minute cache and 2× for the one-hour cache. There are plenty of ways to accidentally opt out of the savings, and a growing conversation still means a growing bill. Caching makes context cheaper, not free. The Claude Code documentation on [prompt caching](https://code.claude.com/docs/en/prompt-caching) and [managing costs](https://code.claude.com/docs/en/costs) goes deeper.
+**Prompt caching** lets the provider remember the part of your input it has already processed, so it charges a fraction of the normal input price for reading those messages back. Writing the cache in the first place costs a bit more than normal input on Claude: about 1.25× for the five-minute cache and 2× for the one-hour cache. It's easy to accidentally opt out of the savings, and a growing conversation still means a growing bill. Caching makes context cheaper, not free. The Claude Code documentation on [prompt caching](https://code.claude.com/docs/en/prompt-caching) and [managing costs](https://code.claude.com/docs/en/costs) goes deeper.
 
 ### What invalidates the cache
 
 - **Switching models**: The cache is typically bound to one model. Switch, and you start over.
-- **Waiting too long**: A cache entry expires after a stretch of inactivity, and that stretch is an hour—_sometimes_. An hour is the default for your main conversation on a Claude subscription, within your plan's included usage. With an API key, usage credits (pay-as-you-go billing that starts once you pass your plan's limit), or a cloud provider, it's five minutes. Everything outside the main conversation gets five minutes even on a subscription, including subagents (helper agents the main agent hands work to), workflows, teammates, forks (copies of a conversation), and compaction (replacing the conversation so far with a summary). For compaction, the five minutes covers the entries its own summarization request writes. That request _reads_ your main conversation's cache, so that cache's lifetime decides whether a compaction is cheap. Setting `subagentPromptCacheTtl` to `1h` in your Claude Code settings extends all of those, despite the name, though one-hour writes cost more. Coming back the next morning? It's gone either way.
-- **Changing effort levels, sometimes**: Changing effort (how hard the model thinks) used to invalidate the cache. With Fable 5.1, Opus 5.5, and Sonnet 5.5, you can now change it without invalidating, with an API key or a Claude subscription. That doesn't hold if you reach Claude through Amazon Bedrock, Google Cloud's Agent Platform, or a self-hosted Claude apps gateway (a proxy your organization runs between developers and the API), or if you've set `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` or have a HIPAA configuration. If none of that sounds like you, skip it.
+- **Waiting too long**: A cache entry expires after a stretch of inactivity, and that stretch is an hour—_sometimes_. You get an hour for your main conversation on a Claude subscription, within your plan's included usage. With an API key, usage credits (pay-as-you-go billing past your plan's limit), or a cloud provider, it's five minutes. Everything outside the main conversation gets five minutes even on a subscription: subagents (helper agents the main agent hands work to), workflows, teammates, forks (copies of a conversation), and compaction (replacing the conversation so far with a summary). Compaction's summarization request _reads_ your main conversation's cache, though, so the main cache's lifetime decides whether a compaction is cheap. Setting `subagentPromptCacheTtl` to `1h` in your Claude Code settings extends all of those, despite the name, though one-hour writes cost more. Coming back the next morning? It's gone either way.
+- **Changing effort levels, sometimes**: Changing effort (how hard the model thinks) used to invalidate the cache. With Fable 5.1, Opus 5.5, and Sonnet 5.5 on an API key or a Claude subscription, it no longer does. That doesn't hold if you reach Claude through Amazon Bedrock, Google Cloud's Agent Platform, or a self-hosted Claude apps gateway (a proxy your organization runs between developers and the API), or if you've set `CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS` or have a HIPAA configuration. If none of that sounds like you, skip it.
 
 ## Model costs
 
@@ -53,7 +53,7 @@ Prices are in dollars per million tokens. "Cached input" is the price of _readin
 > [!NOTE] Prices and model names move quickly
 > These are October 2026 numbers. Treat the ratios as the lesson, not the exact figures.
 
-Compare the two input columns. For Claude Fable 5.1, cached input costs $0.25 where uncached costs $10.00. That gap is why a warm cache matters.
+Compare the two input columns. Claude Fable 5.1 charges $0.25 for cached input and $10.00 for uncached. That gap is why a warm cache matters.
 
 ### Choosing the right model
 
@@ -64,18 +64,18 @@ High-level, somewhat hand-wavy advice:
 - **Bounded, high-volume transformations**: Luna or Haiku.
 - **Mixed media workflows** (tasks that mix text with images, audio, or video): Gemini.
 
-What do I mean by "bounded, high-volume transformations"? Classification, extraction, routing, tagging, short summaries, and narrowly scoped coding or research subtasks. The ideal assignment has clear instructions and a cheaply checkable result. "Extract the relevant fields and identify their source passages" beats "Determine which of these conflicting sources is ultimately correct."
+By "bounded, high-volume transformations," I mean classification, extraction, routing, tagging, short summaries, and narrowly scoped coding or research subtasks: clear instructions and a cheaply checkable result. "Extract the relevant fields and identify their source passages" beats "Determine which of these conflicting sources is ultimately correct."
 
 To pick a model per workflow stage, see [Configuring Subagents](subagent-configuration.md).
 
 ## Leveraging existing research
 
-- **Fork a conversation**: Do all of your stable research up front, then fork that conversation (copy it at its current point) into the various tasks you want to do. In Claude Code, `/branch` moves you into a copy, and `/subtask` runs a side task in a subagent that starts with a copy. Each branch shares the same history and cached prefix. [Subagents](subagents.md) covers when forking beats starting fresh.
-- **Durable research**: Dedicate a session to research and capture the results somewhere durable, even a text file. I use [Obsidian](https://obsidian.md) as my second brain, a personal notes system, which lets me audit and tweak it.
+- **Fork a conversation**: Do your stable research up front, then fork that conversation (copy it at its current point) into each task. In Claude Code, `/branch` moves you into a copy, and `/subtask` runs a side task in a subagent that starts with a copy. Each branch shares the same history and cached prefix. [Subagents](subagents.md) covers when forking beats starting fresh.
+- **Durable research**: Dedicate a session to research and capture the results somewhere durable, even a text file. I use [Obsidian](https://obsidian.md) as my second brain (a personal notes system), which lets me audit and tweak the research.
 
 ## Tasting notes on workflow economics
 
-- A long session costs more per request than a short one, but a long, stable session _may_ be cheaper than many cold starts (new sessions that each rebuild the same context from an empty cache). Compare it against the restarts.
+- A long session costs more per request than a short one, but a long, stable session _may_ be cheaper than many cold starts (new sessions that each rebuild the same context from an empty cache).
 - Fresh workers (subagents that start from an empty context) buy isolation but can repeat context costs.
 - Dynamic routing (picking a model per task automatically) can cut model cost while losing cache reuse.
 - Don't be religious about this. Switching from Astra to Luna saves more than the cache you discard.

@@ -161,18 +161,29 @@
                   In session
                 </span>
               {/if}
+              {#if row.model.maximumPromptTokens !== undefined && exceedsPromptLimit(row.model)}
+                {@const warning = `This price covers prompts up to ${formatCompactTokenCount(row.model.maximumPromptTokens)} tokens. The session sent larger ones, which cost more.`}
+                <span class="group relative inline-flex">
+                  <button
+                    type="button"
+                    aria-label={warning}
+                    class="focus-visible:outline-primary-600 inline-flex cursor-help rounded text-amber-700 focus-visible:outline-2 focus-visible:outline-offset-2 dark:text-amber-300"
+                  >
+                    <TriangleAlert aria-hidden="true" class="size-4" />
+                  </button>
+                  <span
+                    role="tooltip"
+                    aria-hidden="true"
+                    class="pointer-events-none invisible absolute top-1/2 left-full z-10 ml-2 w-56 -translate-y-1/2 rounded-md bg-slate-900 px-2.5 py-1.5 text-xs font-normal text-white opacity-0 shadow-lg transition-opacity group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100 dark:bg-slate-100 dark:text-slate-900"
+                  >
+                    {warning}
+                  </span>
+                </span>
+              {/if}
             </span>
             <span class="block text-xs text-slate-500 dark:text-slate-400">
               {row.model.provider}
             </span>
-            {#if row.model.maximumPromptTokens !== undefined && exceedsPromptLimit(row.model)}
-              <span class="mt-1 flex items-start gap-1 text-xs text-amber-800 dark:text-amber-300">
-                <TriangleAlert aria-hidden="true" class="mt-px size-3.5 flex-none" />
-                This price covers prompts up to {formatCompactTokenCount(
-                  row.model.maximumPromptTokens,
-                )} tokens. The session sent larger ones, which cost more.
-              </span>
-            {/if}
           </th>
           <td class={numericCell}>{formatPrice(row.model.input)}</td>
           <td class={numericCell}>{formatPrice(row.model.cachedInput)}</td>

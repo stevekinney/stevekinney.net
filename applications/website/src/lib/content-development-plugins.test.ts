@@ -162,9 +162,9 @@ describe('contentDevelopmentPlugins', () => {
     });
 
     expect(addedPaths).toEqual([
-      path.join(contentDirectory, '**', '*'),
+      contentDirectory,
       contentDependencyPath,
-      path.join(enhancementSourceDirectory, '**', '*'),
+      enhancementSourceDirectory,
       enhancementDependencyPath,
       playgroundDependencyPath,
       sharedBuildDependencyPath,

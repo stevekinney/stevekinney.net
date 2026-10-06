@@ -35,9 +35,6 @@ export type SessionWriter = {
     content: string | { type: 'text'; text: string }[],
     isError: boolean,
   ) => SessionWriter;
-  compact: (trigger: 'manual' | 'auto', preTokens: number, postTokens: number) => SessionWriter;
-  /** Writes a raw line, such as a malformed one. */
-  raw: (line: string) => SessionWriter;
   lines: () => string[];
   text: () => string;
 };
@@ -118,23 +115,6 @@ export const createSessionWriter = (
           },
         }),
       );
-
-      return writer;
-    },
-    compact: (trigger, preTokens, postTokens) => {
-      lines.push(
-        JSON.stringify({
-          type: 'system',
-          subtype: 'compact_boundary',
-          ...common(),
-          compactMetadata: { trigger, preTokens, postTokens },
-        }),
-      );
-
-      return writer;
-    },
-    raw: (line) => {
-      lines.push(line);
 
       return writer;
     },

@@ -3,8 +3,8 @@
 
   import { formatNumber } from './display';
   import { fieldClasses, hintClasses, labelClasses } from './field-styles';
-  import { parseField, ranges } from './scenario';
-  import type { NumericField } from './scenario';
+  import { parseField, ranges } from './model';
+  import type { NumericField } from './model';
 
   type Props = {
     field: NumericField;
@@ -28,8 +28,8 @@
 
   const invalid = $derived(parseField(field, text) === null);
 
-  // A preset or a loaded listing changes the value from outside. Show it,
-  // unless the person is in the middle of typing in this box.
+  // Show a value set from outside, unless the person is in the middle of
+  // typing in this box.
   $effect(() => {
     const next = formatNumber(value);
 

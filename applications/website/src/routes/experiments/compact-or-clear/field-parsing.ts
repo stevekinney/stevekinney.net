@@ -18,14 +18,6 @@ export const parseTurnsField = (text: string): number | null => {
   return clampTo(ranges.turns, Number(normalized));
 };
 
-/** Characters per token, which can be fractional. */
-export const parseDecimalField = (text: string, range: NumberRange): number | null => {
-  const normalized = text.trim();
-  if (!/^(\d+(\.\d*)?|\.\d+)$/.test(normalized)) return null;
-
-  return clampTo(range, Number(normalized));
-};
-
 /**
  * The summary box takes either a percentage or a token count. `5` and `5%`
  * are percentages. A number over 100 without a percent sign, or anything with

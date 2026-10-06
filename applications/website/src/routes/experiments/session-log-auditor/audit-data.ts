@@ -281,3 +281,16 @@ export const claudeCodeAdapter: SessionLogAdapter = {
     };
   },
 };
+
+/** Reads files given as `path → lines` through the Claude Code adapter, all at once. */
+export const readLinesByFile = (files: Record<string, readonly string[]>): AuditData => {
+  const reader = claudeCodeAdapter.createReader();
+
+  for (const [path, lines] of Object.entries(files)) {
+    const file = reader.readFile(path);
+    lines.forEach((line) => file.addLine(line));
+    file.finish();
+  }
+
+  return reader.finish();
+};

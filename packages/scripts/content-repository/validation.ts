@@ -16,6 +16,7 @@ import {
   coursesRoot,
   projectsRoot,
   resolveRepositoryPath,
+  websiteRoutesRoot,
   websiteStaticRoot,
   writingRoot,
 } from '../content-paths.ts';
@@ -161,6 +162,20 @@ const validateHeadingAnchor = (
   }
 };
 
+/**
+ * Experiments are ordinary SvelteKit routes rather than content, so a link to one is
+ * valid when its route folder has a page.
+ */
+export const isExperimentRoute = (
+  routePath: string,
+  routesRoot: string = websiteRoutesRoot,
+): boolean => {
+  const match = /^\/experiments(?:\/([a-z0-9-]+))?$/.exec(routePath);
+  if (!match) return false;
+
+  return existsSync(path.join(routesRoot, 'experiments', match[1] ?? '', '+page.svelte'));
+};
+
 const validateRootLink = (
   file: string,
   urlPath: string,
@@ -177,6 +192,7 @@ const validateRootLink = (
   if (normalized.startsWith('/llms')) return;
 
   if (routePaths.has(normalized)) return;
+  if (isExperimentRoute(normalized)) return;
 
   if (normalized.startsWith('/writing/')) {
     issues.push({

@@ -4,13 +4,16 @@ export const variants = cva(
   [
     'font-semibold',
     'border',
-    'rounded',
+    'rounded-md',
     'shadow-sm',
     'inline-flex',
     'items-center',
     'justify-center',
     'cursor-pointer',
     'gap-1.5',
+    // Icons default to 24px, which would make a button with one taller than a text-only sibling.
+    '[&>svg]:size-4',
+    '[&>svg]:flex-none',
     'focus-visible:outline',
     'focus-visible:outline-2',
     'focus-visible:outline-offset-2',

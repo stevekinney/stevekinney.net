@@ -66,14 +66,8 @@
     {@html data.contentHtml}
   </div>
 
-  {#if data.modified}
-    <p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">
-      Last modified on <Date date={data.modified} />.
-    </p>
-  {/if}
-
   {#if prevLesson || nextLesson}
-    <nav aria-label="Lesson navigation" class="flex justify-between gap-4 border-t pt-6">
+    <nav aria-label="Lesson navigation" class="flex justify-between gap-4">
       <div>
         {#if prevLesson}
           <a
@@ -99,6 +93,12 @@
         {/if}
       </div>
     </nav>
+  {/if}
+
+  {#if data.modified}
+    <p class="my-6 text-right text-sm text-slate-500 dark:text-gray-400">
+      Last modified on <Date date={data.modified} />.
+    </p>
   {/if}
 </div>
 

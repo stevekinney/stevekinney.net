@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { parentSessionOf } from './audit-data';
-import { readFixtures, readLinesByFile } from './fixture-reader';
+import { parentSessionOf, readLinesByFile } from './audit-data';
+import { readFixtures } from './fixture-reader';
 import { createSessionWriter } from './synthetic-sessions';
 
 const FIRST = 'aaaaaaaa-0000-4000-8000-000000000001';

@@ -1,6 +1,6 @@
 import { findRung, rungIds } from './ladder';
 import type { RungId } from './ladder';
-import { classificationLabels, classifications } from './lint-rules';
+import { classifications } from './lint-rules';
 import type { Classification, LintRules, RuleClassification } from './lint-rules';
 
 /** How much of a line the rules read. Anything past it is reported, not checked. */
@@ -565,40 +565,4 @@ export const lintInstructions = (source: string, rules: LintRules): LintItem[] =
       truncated,
     };
   });
-};
-
-export type LintCounts = Record<Classification, number>;
-
-export const countClassifications = (items: readonly LintItem[]): LintCounts => {
-  const counts = Object.fromEntries(
-    Object.keys(classificationLabels).map((key) => [key, 0]),
-  ) as LintCounts;
-  for (const item of items) counts[item.primary] += 1;
-
-  return counts;
-};
-
-const plural = (count: number, one: string, many: string): string =>
-  `${count} ${count === 1 ? one : many}`;
-
-/** The one-sentence summary, such as "5 lines: 1 must-hold rule written as a request, …". */
-export const summarize = (items: readonly LintItem[]): string => {
-  const counts = countClassifications(items);
-  const parts = [
-    plural(
-      counts['must-hold'],
-      'must-hold rule written as a request',
-      'must-hold rules written as requests',
-    ),
-    `${counts.vague} that ${counts.vague === 1 ? 'doesn’t' : 'don’t'} change a decision`,
-    plural(counts['skill-candidate'], 'skill candidate', 'skill candidates'),
-    plural(counts['good-fact'], 'good fact', 'good facts'),
-    `${counts['stale-prone']} stale-prone`,
-    `${counts.deterministic} deterministic`,
-  ];
-  if (counts.pointer > 0) parts.push(plural(counts.pointer, 'pointer', 'pointers'));
-  if (counts.unknown > 0) parts.push(`${counts.unknown} unknown`);
-  if (counts['no-match'] > 0) parts.push(`${counts['no-match']} with no rule match`);
-
-  return `${plural(items.length, 'line', 'lines')}: ${parts.join(', ')}.`;
 };

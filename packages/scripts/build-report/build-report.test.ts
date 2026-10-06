@@ -4,6 +4,7 @@ import path from 'node:path';
 
 import { afterEach, describe, expect, test } from 'bun:test';
 
+import { findEagerClientFiles } from './client-chunks.ts';
 import {
   countFilesIfDirectoryExists,
   findFirstDirectoryWithMatchingFile,
@@ -142,5 +143,40 @@ describe('getLargestFile', () => {
       : null;
 
     expect(largestEnhancementChunk).toBeNull();
+  });
+});
+
+describe('findEagerClientFiles', () => {
+  test('keeps entries and their static imports, and leaves out chunks only reached by import()', () => {
+    const eager = findEagerClientFiles({
+      'app.js': { file: 'entry/app.js', isEntry: true, imports: ['_shared.js'] },
+      'nodes/1.js': {
+        file: 'nodes/1.js',
+        isEntry: true,
+        imports: ['_shared.js', '_layout.js'],
+        dynamicImports: ['editor.svelte'],
+      },
+      '_shared.js': { file: 'chunks/shared.js' },
+      '_layout.js': { file: 'chunks/layout.js', imports: ['_shared.js'] },
+      'editor.svelte': { file: 'chunks/editor.js', isDynamicEntry: true, imports: ['_vendor.js'] },
+      '_vendor.js': { file: 'chunks/vendor.js' },
+    });
+
+    expect([...eager].sort()).toEqual([
+      'chunks/layout.js',
+      'chunks/shared.js',
+      'entry/app.js',
+      'nodes/1.js',
+    ]);
+  });
+
+  test('counts a chunk as eager when any entry imports it statically, even if another loads it lazily', () => {
+    const eager = findEagerClientFiles({
+      'nodes/1.js': { file: 'nodes/1.js', isEntry: true, dynamicImports: ['_shared.js'] },
+      'nodes/2.js': { file: 'nodes/2.js', isEntry: true, imports: ['_shared.js'] },
+      '_shared.js': { file: 'chunks/shared.js' },
+    });
+
+    expect(eager.has('chunks/shared.js')).toBe(true);
   });
 });

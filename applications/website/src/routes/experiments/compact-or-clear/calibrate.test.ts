@@ -3,7 +3,20 @@ import { describe, expect, it } from 'vitest';
 import { createTranscriptReader } from '$lib/experiments/claude-code-transcript';
 
 import { assessCache, calibrate, formatElapsed, median } from './calibrate';
-import { defaultModels } from './pricing';
+import type { ModelPrice } from './pricing';
+
+const models: ModelPrice[] = [
+  {
+    id: 'claude-opus-5-5',
+    name: 'Claude Opus 5.5',
+    input: 4,
+    cachedInput: 0.2,
+    cacheWrite5m: 5,
+    cacheWrite1h: 8,
+    output: 20,
+    identifiers: ['claude-opus-5-5'],
+  },
+];
 
 const NOW = Date.parse('2026-10-04T12:00:00.000Z');
 
@@ -12,7 +25,7 @@ const assistant = (
   timestamp: string,
   usage: { input?: number; read?: number; write?: number; output?: number },
   extra: Record<string, unknown> = {},
-  model = 'claude-opus-5',
+  model = 'claude-opus-5-5',
   sessionId = 'session-1',
 ): string =>
   JSON.stringify({
@@ -55,7 +68,7 @@ const read = (files: Record<string, string[]>) => {
 };
 
 const calibrateLines = (lines: string[], now = NOW) => {
-  const result = calibrate(read({ 'session.jsonl': lines }), defaultModels, now);
+  const result = calibrate(read({ 'session.jsonl': lines }), models, now);
   if (!result.calibration) throw new Error(result.message);
 
   return result.calibration;
@@ -146,7 +159,7 @@ describe('calibrate', () => {
         '2026-10-04T10:00:00.000Z',
         { read: 10_000, output: 100 },
         {},
-        'claude-opus-5',
+        'claude-opus-5-5',
         's1',
       ),
       assistant(
@@ -154,7 +167,7 @@ describe('calibrate', () => {
         '2026-10-04T10:01:00.000Z',
         { read: 500_000, output: 100 },
         {},
-        'claude-opus-5',
+        'claude-opus-5-5',
         's2',
       ),
     ]);
@@ -216,7 +229,7 @@ describe('calibrate', () => {
   });
 
   it('matches the latest turn’s model against the price table', () => {
-    expect(calibrateLines(lines).modelMatch?.name).toBe('Opus 5');
+    expect(calibrateLines(lines).modelMatch?.name).toBe('Claude Opus 5.5');
 
     const unmatched = calibrateLines([
       assistant(
@@ -246,11 +259,11 @@ describe('calibrate', () => {
         '2026-10-04T10:01:00.000Z',
         { read: 10_000, output: 100 },
         {},
-        'claude-sonnet-5',
+        'claude-opus-5-5',
       ),
     ]);
 
-    expect(calibration.modelMatch?.name).toBe('Sonnet 5');
+    expect(calibration.modelMatch?.name).toBe('Claude Opus 5.5');
   });
 
   it('reports lines that could not be read without failing the import', () => {
@@ -267,7 +280,7 @@ describe('calibrate', () => {
 
 describe('a transcript with nothing to measure', () => {
   const message = (lines: string[]): string | null =>
-    calibrate(read({ 'session.jsonl': lines }), defaultModels, NOW).message;
+    calibrate(read({ 'session.jsonl': lines }), models, NOW).message;
 
   it('says there are no assistant responses', () => {
     expect(

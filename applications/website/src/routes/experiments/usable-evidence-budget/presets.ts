@@ -4,11 +4,9 @@ export type Preset = {
   id: string;
   name: string;
   scenario: Scenario;
-  /** What to notice about this scenario. */
+  /** What to notice about this scenario, in one line. */
   notice: string;
 };
-
-export const customNotice = 'Custom scenario. Pick a preset above to get back to a worked example.';
 
 export const presets: readonly Preset[] = [
   {
@@ -81,17 +79,15 @@ export const presets: readonly Preset[] = [
   },
 ];
 
-export const findPreset = (id: string | null | undefined): Preset | undefined =>
-  presets.find((preset) => preset.id === id);
+const scenarioOf = (id: string): Scenario => {
+  const preset = presets.find((candidate) => candidate.id === id);
+  if (!preset) throw new Error(`There is no preset called ${id}.`);
 
-/** The preset whose numbers match a scenario exactly, if there is one. */
-export const presetMatching = (scenario: Scenario): Preset | undefined =>
-  presets.find(
-    (preset) =>
-      preset.scenario.capacity === scenario.capacity &&
-      preset.scenario.instructions === scenario.instructions &&
-      preset.scenario.history === scenario.history &&
-      preset.scenario.tools === scenario.tools &&
-      preset.scenario.generation === scenario.generation &&
-      preset.scenario.margin === scenario.margin,
-  );
+  return preset.scenario;
+};
+
+/** The pair the page's headline compares: the same setup with tool search off and on. */
+export const toolSearchComparison = {
+  off: scenarioOf('mcp-heavy'),
+  on: scenarioOf('tool-search'),
+} as const;

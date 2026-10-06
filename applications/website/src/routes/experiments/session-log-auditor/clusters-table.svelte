@@ -3,20 +3,15 @@
 
   import { formatTokenCount } from '$lib/experiments/format';
 
+  import { verdictOf } from './analysis';
+  import type { Verdict } from './analysis';
   import { categoryStyle } from './category-styles';
   import type { Cluster } from './clusters';
-  import { isCalendarDate, QUIET_DAYS, upsertMark } from './control-rows';
-  import type { ControlRow, FixMark } from './control-rows';
-  import { toCsv } from './digest';
-  import { downloadText } from './download';
   import {
     bodyClasses,
-    buttonClasses,
     cellClasses,
     codeClasses,
-    fieldClasses,
     headCellClasses,
-    labelClasses,
     linkButtonClasses,
     tableClasses,
     tableRegionClasses,
@@ -25,90 +20,40 @@
   import { floorExplainers } from './floor-explainers';
   import { dayOf } from './timeline';
 
-  type Props = {
-    clusters: Cluster[];
-    categories: string[];
-    marks: FixMark[];
-    controlRows: ControlRow[];
-    returns: Record<string, string>;
-    lastDay: string | null;
-    onMarks: (marks: FixMark[]) => void;
+  type Props = { clusters: Cluster[] };
+
+  const { clusters }: Props = $props();
+
+  const PAGE = 15;
+
+  // Class names written out in full so Tailwind finds them.
+  const badgeClasses: Record<Verdict, string> = {
+    floor: 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200',
+    'floor or task': 'bg-sky-100 text-sky-900 dark:bg-sky-950 dark:text-sky-200',
+    harness: 'bg-violet-100 text-violet-900 dark:bg-violet-950 dark:text-violet-200',
+    task: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200',
   };
-
-  const { clusters, categories, marks, controlRows, returns, lastDay, onMarks }: Props = $props();
-
-  const PAGE = 25;
 
   let expanded = $state<Record<string, true>>({});
   let showAll = $state(false);
-  let drafts = $state<Record<string, string>>({});
 
   const visible = $derived(showAll ? clusters : clusters.slice(0, PAGE));
-  const marksByKey = $derived(new Map(marks.map((mark) => [mark.key, mark])));
-  const rowsByKey = $derived(new Map(controlRows.map((row) => [row.mark.key, row])));
 
   const toggle = (key: string): void => {
     if (expanded[key]) delete expanded[key];
     else expanded[key] = true;
   };
-
-  const regressionDay = (cluster: Cluster): string | null =>
-    rowsByKey.get(cluster.key)?.firstReturn ?? returns[cluster.key] ?? null;
-
-  const saveMark = (cluster: Cluster): void => {
-    const date = drafts[cluster.key] ?? '';
-    if (!isCalendarDate(date)) return;
-
-    onMarks(
-      upsertMark(marks, {
-        key: cluster.key,
-        tool: cluster.tool,
-        signature: cluster.signature,
-        date,
-      }),
-    );
-  };
-
-  const exportCsv = (): void =>
-    downloadText(
-      'session-clusters.csv',
-      toCsv(
-        [
-          'Signature',
-          'Tool',
-          'Category',
-          'Sessions affected',
-          'Occurrences',
-          'First seen',
-          'Last seen',
-          'Exit codes',
-        ],
-        clusters.map((cluster) => [
-          cluster.signature,
-          cluster.tool,
-          cluster.category,
-          cluster.sessions,
-          cluster.occurrences,
-          dayOf(cluster.firstSeen),
-          dayOf(cluster.lastSeen),
-          cluster.exitCodes.join(' '),
-        ]),
-      ),
-      'text/csv',
-    );
 </script>
 
 {#if clusters.length === 0}
-  <p class={bodyClasses}>No failed tool calls match these filters.</p>
+  <p class={bodyClasses}>No failed tool calls in these sessions.</p>
 {:else}
   <div class="space-y-3">
-    <div class="flex flex-wrap items-center justify-between gap-3">
-      <p class={bodyClasses}>
-        {formatTokenCount(clusters.length)} cluster{clusters.length === 1 ? '' : 's'}, ranked by
-        sessions affected, then occurrences. Open a row for its verbatim examples.
-      </p>
-      <button type="button" class={buttonClasses} onclick={exportCsv}>Download as CSV</button>
-    </div>
+    <p class={bodyClasses}>
+      {formatTokenCount(clusters.length)} cluster{clusters.length === 1 ? '' : 's'}, ranked by
+      sessions affected, then occurrences. Open a row for its verbatim examples and, for the floor,
+      a fix.
+    </p>
 
     <!-- svelte-ignore a11y_no_noninteractive_tabindex -->
     <div class={tableRegionClasses} role="region" aria-label="Top clusters table" tabindex="0">
@@ -116,18 +61,17 @@
         <thead>
           <tr>
             <th scope="col" class="{headCellClasses} min-w-64">Signature</th>
-            <th scope="col" class={headCellClasses}>Tool</th>
-            <th scope="col" class={headCellClasses}>Category</th>
+            <th scope="col" class={headCellClasses}>Whose problem</th>
             <th scope="col" class="{headCellClasses} text-right">Sessions affected</th>
             <th scope="col" class="{headCellClasses} text-right">Occurrences</th>
-            <th scope="col" class={headCellClasses}>First seen</th>
             <th scope="col" class={headCellClasses}>Last seen</th>
           </tr>
         </thead>
         <tbody>
           {#each visible as cluster, index (cluster.key)}
-            {@const style = categoryStyle(cluster.category, categories)}
-            {@const back = regressionDay(cluster)}
+            {@const style = categoryStyle(cluster.category)}
+            {@const verdict = verdictOf(cluster.category)}
+            {@const explainer = floorExplainers[cluster.category]}
             <tr data-testid="cluster-row">
               <th
                 scope="row"
@@ -150,22 +94,20 @@
                   />
                   <code class="font-mono text-xs {wrapAnywhere}">{cluster.signature}</code>
                 </button>
-                {#if back}
-                  <span
-                    class="mt-1 ml-5 inline-block rounded bg-red-100 px-1.5 py-0.5 text-xs font-semibold text-red-800 dark:bg-red-950 dark:text-red-200"
-                  >
-                    Regression: back on {back}
-                  </span>
-                  <span class="mt-0.5 ml-5 block text-xs text-slate-500 dark:text-slate-400">
-                    {rowsByKey.get(cluster.key)?.firstReturn
-                      ? 'After the date you marked it fixed.'
-                      : `After ${QUIET_DAYS} or more active days without it.`}
+                {#if explainer}
+                  <span class="mt-1 ml-5 block text-xs text-slate-600 dark:text-slate-300">
+                    {explainer.title}
                   </span>
                 {/if}
               </th>
-              <td class={cellClasses}><span class={wrapAnywhere}>{cluster.tool}</span></td>
               <td class={cellClasses}>
-                <span class="flex items-center gap-1.5 whitespace-nowrap">
+                <span
+                  class="inline-block rounded px-1.5 py-0.5 text-xs font-semibold {badgeClasses[
+                    verdict
+                  ]}"
+                  data-testid="verdict-badge">{verdict}</span
+                >
+                <span class="mt-1 flex items-center gap-1.5 text-xs whitespace-nowrap">
                   <span
                     aria-hidden="true"
                     class="inline-block size-2.5 flex-none rounded-sm {style.swatch}"
@@ -177,15 +119,12 @@
                 >{formatTokenCount(cluster.sessions)}</td
               >
               <td class="{cellClasses} text-right">{formatTokenCount(cluster.occurrences)}</td>
-              <td class="{cellClasses} whitespace-nowrap">{dayOf(cluster.firstSeen) ?? '—'}</td>
               <td class="{cellClasses} whitespace-nowrap">{dayOf(cluster.lastSeen) ?? '—'}</td>
             </tr>
             {#if expanded[cluster.key]}
-              {@const mark = marksByKey.get(cluster.key)}
-              {@const explainer = floorExplainers[cluster.category]}
               <tr id="cluster-details-{index}">
                 <td
-                  colspan="7"
+                  colspan="5"
                   class="{cellClasses} bg-slate-50/60 whitespace-normal dark:bg-slate-900/60"
                 >
                   <div
@@ -225,6 +164,9 @@
                           couldn’t be found word for word in their line, so they aren’t quoted.
                         </p>
                       {/if}
+                      <p class="text-sm text-slate-700 dark:text-slate-200">
+                        Tool: <span class={wrapAnywhere}>{cluster.tool}</span>
+                      </p>
                       {#if cluster.command}
                         <p class="text-sm text-slate-700 dark:text-slate-200">
                           First command: <code class="{codeClasses} {wrapAnywhere}"
@@ -242,61 +184,21 @@
                     </div>
 
                     {#if explainer}
-                      <details class="rounded-md border border-amber-300 p-3 dark:border-amber-700">
-                        <summary
-                          class="cursor-pointer text-sm font-semibold text-slate-900 dark:text-white"
-                        >
-                          Why might this be the floor?
-                        </summary>
+                      <div
+                        class="rounded-md border border-amber-300 p-3 dark:border-amber-700"
+                        data-testid="floor-explainer"
+                      >
+                        <h4 class="text-sm font-semibold text-slate-900 dark:text-white">
+                          Why this might be the floor
+                        </h4>
                         <div class="mt-2 space-y-2 text-sm text-slate-700 dark:text-slate-200">
-                          <p class="font-semibold">{explainer.title}</p>
                           <ul class="list-disc space-y-1 pl-5">
                             {#each explainer.examples as line (line)}<li>{line}</li>{/each}
                           </ul>
                           <p><strong>Fix pattern:</strong> {explainer.fix}</p>
                         </div>
-                      </details>
-                    {/if}
-
-                    <div class="space-y-2">
-                      <h4 class="font-semibold text-slate-900 dark:text-white">Control row</h4>
-                      {#if mark}
-                        <p class="text-sm text-slate-700 dark:text-slate-200">
-                          Marked fixed on {mark.date}.
-                          <button
-                            type="button"
-                            class={linkButtonClasses}
-                            onclick={() => onMarks(marks.filter((entry) => entry.key !== mark.key))}
-                          >
-                            Remove the mark
-                          </button>
-                        </p>
-                      {/if}
-                      <div class="flex flex-wrap items-end gap-2">
-                        <div class="space-y-1">
-                          <label for="fix-date-{index}" class={labelClasses}>
-                            Mark fixed on…
-                          </label>
-                          <input
-                            id="fix-date-{index}"
-                            type="date"
-                            value={drafts[cluster.key] ?? mark?.date ?? lastDay ?? ''}
-                            onchange={(event) => (drafts[cluster.key] = event.currentTarget.value)}
-                            class={fieldClasses}
-                          />
-                        </div>
-                        <button
-                          type="button"
-                          class={buttonClasses}
-                          onclick={() => {
-                            drafts[cluster.key] ??= mark?.date ?? lastDay ?? '';
-                            saveMark(cluster);
-                          }}
-                        >
-                          {mark ? 'Move the fix date' : 'Mark fixed'}
-                        </button>
                       </div>
-                    </div>
+                    {/if}
                   </div>
                 </td>
               </tr>
