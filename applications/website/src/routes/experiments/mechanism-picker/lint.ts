@@ -38,7 +38,10 @@ export type LintItem = {
   truncated: boolean;
 };
 
-const fence = /^\s{0,3}(```|~~~)/;
+// CommonMark: a fence is a run of three or more backticks or tildes. A backtick fence's
+// info string can't contain a backtick, and the closing fence has nothing after it.
+const fence = /^\s{0,3}(`{3,}|~{3,})(.*)$/;
+const closingFence = /^\s{0,3}(`{3,}|~{3,})[ \t]*$/;
 const heading = /^\s{0,3}(#{1,6})(\s+(.*?))?\s*#*\s*$/;
 const thematicBreak = /^\s{0,3}([-*_])(\s*\1){2,}\s*$/;
 const setextUnderline = /^\s{0,3}(=+|-+)\s*$/;
@@ -74,12 +77,16 @@ export const splitInstructions = (source: string): SourceLine[] => {
     const lineNumber = index + 1;
 
     if (fenceMarker !== null) {
-      if (trimmed.startsWith(fenceMarker)) fenceMarker = null;
+      // Only the same character, at least as many of it as opened the block, closes it.
+      const closing = closingFence.exec(line)?.[1];
+      if (closing && closing[0] === fenceMarker[0] && closing.length >= fenceMarker.length) {
+        fenceMarker = null;
+      }
       continue;
     }
 
     const fenceMatch = fence.exec(line);
-    if (fenceMatch) {
+    if (fenceMatch && !(fenceMatch[1][0] === '`' && fenceMatch[2].includes('`'))) {
       fenceMarker = fenceMatch[1];
       previousBlank = false;
       continue;

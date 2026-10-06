@@ -111,6 +111,43 @@ describe('edge cases', () => {
     expect(splitInstructions(text)).toEqual([]);
   });
 
+  it('keeps a longer fence open across a shorter one inside it', () => {
+    const text = [
+      'Before.',
+      '````md',
+      'Run this:',
+      '```sh',
+      'never run rm -rf /',
+      '```',
+      'Maintain high quality code.',
+      '````',
+      'After.',
+    ].join('\n');
+
+    expect(splitInstructions(text).map((line) => line.text)).toEqual(['Before.', 'After.']);
+  });
+
+  it('closes a tilde fence only on tildes at least as long as the opening run', () => {
+    const text = [
+      'Before.',
+      '~~~~',
+      '~~~',
+      'Maintain high quality code.',
+      '````',
+      'Never read .env files.',
+      '~~~~~',
+      'After.',
+    ].join('\n');
+
+    expect(splitInstructions(text).map((line) => line.text)).toEqual(['Before.', 'After.']);
+  });
+
+  it('does not close a fence on a line with text after the fence', () => {
+    const text = ['```', '```sh', 'Maintain high quality code.', '```', 'After.'].join('\n');
+
+    expect(splitInstructions(text).map((line) => line.text)).toEqual(['After.']);
+  });
+
   it('skips front matter and indented code', () => {
     const text = ['---', 'name: x', '---', 'Intro.', '', '    never read .env', 'After.'].join(
       '\n',
