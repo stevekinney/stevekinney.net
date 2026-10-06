@@ -9,6 +9,15 @@ import {
   projectDirectoryOf,
 } from './scopes';
 
+describe('working directories on Windows', () => {
+  it('compare without regard to case once a drive letter shows', () => {
+    expect(containsWorkingDirectory(['C:', 'repo', 'app'], ['c:', 'Repo', 'app', 'src'])).toBe(
+      true,
+    );
+    expect(containsWorkingDirectory(['repo', 'app'], ['Repo', 'app'])).toBe(false);
+  });
+});
+
 describe('guessAgentScope', () => {
   it('reads a home folder as the user scope', () => {
     expect(guessAgentScope('/Users/me/.claude/agents/a.md')).toBe('user');

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   defaultModels,
   matchModel,
+  MODEL_ID_PATTERN,
   modelLabel,
   modelsOffTheRatio,
   normalizeModelId,
@@ -148,11 +149,45 @@ describe('parsePriceTable', () => {
     });
   });
 
+  const onlyModel = (models: unknown[]) => {
+    const result = parsePriceTable(JSON.stringify(models));
+    if ('error' in result) throw new Error(result.error);
+
+    return result.models[0];
+  };
+
+  it('keeps an emoji whole when it is the sixtieth character of a name', () => {
+    const name = onlyModel([{ name: `${'a'.repeat(59)}😀b`, input: 1, output: 5 }]).name;
+
+    expect(name).toBe(`${'a'.repeat(59)}😀`);
+  });
+
+  it('caps a 200-character name at 60 characters, counting each emoji once', () => {
+    expect(
+      Array.from(onlyModel([{ name: 'x'.repeat(200), input: 1, output: 5 }]).name),
+    ).toHaveLength(60);
+    expect(onlyModel([{ name: '😀'.repeat(200), id: 'smile', input: 1, output: 5 }]).name).toBe(
+      '😀'.repeat(60),
+    );
+  });
+
+  it('trims a space left at the end of a shortened name', () => {
+    expect(onlyModel([{ name: `${'a'.repeat(59)} b`, input: 1, output: 5 }]).name).toBe(
+      'a'.repeat(59),
+    );
+  });
+
+  it.each(['x'.repeat(200), 'İ'.repeat(200), `${'a '.repeat(100)}`])(
+    'derives an ID a shared link can carry from a long name with no ID: %#',
+    (name) => {
+      expect(onlyModel([{ name, input: 1, output: 5 }]).id).toMatch(MODEL_ID_PATTERN);
+    },
+  );
+
   it.each([
     ['{"models":[{"id":"Opus_5.5","name":"A","input":1,"output":5}]}', 'lowercase letters'],
     ['{"models":[{"id":"has space","name":"A","input":1,"output":5}]}', 'lowercase letters'],
     [`{"models":[{"id":"${'a'.repeat(61)}","name":"A","input":1,"output":5}]}`, '60 characters'],
-    [`{"models":[{"name":"${'long '.repeat(20)}","input":1,"output":5}]}`, '60 characters'],
   ])('rejects an ID that a shared link could not carry: %#', (text, message) => {
     const result = parsePriceTable(text);
 

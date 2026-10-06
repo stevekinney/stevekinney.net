@@ -23,6 +23,15 @@ export const MAX_ROWS = 100_000;
 
 export const ROW_LIMIT_NOTE = `Read the first ${MAX_ROWS.toLocaleString('en-US')} rows only.`;
 
+/**
+ * The most a record whose quote hasn't closed may hold: 10,000 physical lines
+ * or a million characters (string length, so UTF-16 code units), whichever
+ * comes first. A real cell is never that long, and without a limit a stray
+ * quote early in a huge file would keep every line after it in memory.
+ */
+export const MAX_PENDING_LINES = 10_000;
+export const MAX_PENDING_CHARACTERS = 1_000_000;
+
 /** A table reader fed one line at a time. `push` returns false once it wants no more lines. */
 export type LineReader = {
   push: (line: string) => boolean;
@@ -134,6 +143,11 @@ export const createCsvReader = (): LineReader => {
   let pendingDelimiter: Delimiter = ',';
   let state: QuoteState = { quoted: false, cellBlank: true };
   let truncated = false;
+  let lineNumber = 0;
+  /** The line the pending record's quote opened on, and how many characters it holds. */
+  let pendingStart = 0;
+  let pendingCharacters = 0;
+  let error: string | null = null;
 
   const take = (record: string): void => {
     if (columns === null) {
@@ -156,8 +170,9 @@ export const createCsvReader = (): LineReader => {
 
   return {
     push: (line) => {
-      if (truncated) return false;
+      if (truncated || error !== null) return false;
       const text = line.endsWith('\r') ? line.slice(0, -1) : line;
+      lineNumber += 1;
 
       if (pending === null) {
         // The header's delimiter isn't known until its line is read.
@@ -167,7 +182,22 @@ export const createCsvReader = (): LineReader => {
 
       state = scanQuotes(pending === null ? text : `\n${text}`, state, pendingDelimiter);
       if (state.quoted) {
-        (pending ??= []).push(text);
+        if (pending === null) {
+          pending = [];
+          pendingStart = lineNumber;
+          pendingCharacters = 0;
+        }
+        // A newline joins each line after the first, so only those pay for one.
+        pendingCharacters += text.length + (pending.length > 0 ? 1 : 0);
+        if (pending.length >= MAX_PENDING_LINES || pendingCharacters > MAX_PENDING_CHARACTERS) {
+          // Stop rather than hold the rest of the file in memory waiting for a closing quote.
+          const lines = (lineNumber - pendingStart).toLocaleString('en-US');
+          error = `A quoted field never closes. The quote that opens on line ${pendingStart} is still open ${lines} lines later, so the file can’t be read. Check that line for a stray quote mark.`;
+          pending = null;
+
+          return false;
+        }
+        pending.push(text);
 
         return true;
       }
@@ -179,6 +209,8 @@ export const createCsvReader = (): LineReader => {
       return !truncated;
     },
     finish: () => {
+      if (error !== null) return { ok: false, error };
+
       if (pending !== null) {
         // A quote that never closed. Read its lines one at a time, so one bad
         // cell costs one row, which is reported, instead of the rest of the file.

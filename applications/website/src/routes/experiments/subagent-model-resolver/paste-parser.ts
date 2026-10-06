@@ -28,6 +28,23 @@ const forcePattern = /CLAUDE_CODE_SUBAGENT_MODEL_FORCE["']?\s*([=:])\s*["']?([^"
 const environmentPattern = /CLAUDE_CODE_SUBAGENT_MODEL(?!_FORCE)["']?\s*([=:])\s*["']?([^"',\s]*)/;
 const modelValuePattern = /^["']?([A-Za-z0-9._[\]-]+)["']?\s*$/;
 
+/**
+ * Drops a trailing YAML comment, as in `model: sonnet # keep reviews cheap`. A `#` inside quotes is
+ * part of the value, so a quoted value loses only what follows its closing quote.
+ */
+const stripComment = (text: string): string => {
+  const value = text.trim();
+  const quote = value[0];
+
+  if (quote === '"' || quote === "'") {
+    const end = value.indexOf(quote, 1);
+
+    return end !== -1 && /^\s+#/.test(value.slice(end + 1)) ? value.slice(0, end + 1) : value;
+  }
+
+  return value.replace(/\s+#.*$/, '');
+};
+
 const originOf = (separator: string): PastedValue['origin'] =>
   separator === '=' ? 'shell' : 'settings';
 
@@ -40,13 +57,7 @@ export const parseAgentLine = (line: string): PastedAgent | null => {
   const marker = line.lastIndexOf('model:');
   if (marker === -1) return null;
 
-  const valueMatch = modelValuePattern.exec(
-    // A trailing YAML comment, as in `model: sonnet # keep reviews cheap`, isn't part of the value.
-    line
-      .slice(marker + 'model:'.length)
-      .replace(/\s+#.*$/, '')
-      .trim(),
-  );
+  const valueMatch = modelValuePattern.exec(stripComment(line.slice(marker + 'model:'.length)));
   if (!valueMatch) return null;
 
   const prefix = line.slice(0, marker).trim().replace(/:$/, '').replace(/:\d+$/, '');

@@ -3,7 +3,7 @@
 
   import Button from '$lib/components/button';
 
-  import { MAX_SEED } from './bootstrap';
+  import { budgetNote, MAX_SEED } from './bootstrap';
   import type { BootstrapInterval } from './bootstrap';
   import { formatCount, formatInterval, intervalDecimals } from './display';
   import { bodyClasses, fieldClasses, labelClasses } from './field-styles';
@@ -53,8 +53,9 @@
 <div class="space-y-4">
   <p class="max-w-3xl {bodyClasses}">
     A second opinion that assumes nothing about the shape of the data: resample the tasks with
-    replacement 10,000 times, take the difference in medians each time, and keep the middle 95%. The
-    randomness comes from a seeded generator, so the same seed always gives the same interval.
+    replacement up to 10,000 times, take the difference in medians each time, and keep the middle
+    95%. The randomness comes from a seeded generator, so the same seed always gives the same
+    interval.
   </p>
 
   {#if view.status === 'not-applicable'}
@@ -120,6 +121,11 @@
             be used.)
           {/if}
         </p>
+        {#if budgetNote(view.result)}
+          <p class="text-slate-700 dark:text-slate-200" data-testid="bootstrap-budget">
+            {budgetNote(view.result)}
+          </p>
+        {/if}
         {#if view.previous && view.previous.seed !== view.result.seed}
           <p class="text-slate-700 dark:text-slate-200" data-testid="bootstrap-compare">
             {#if view.previous.lower === view.result.lower && view.previous.upper === view.result.upper}

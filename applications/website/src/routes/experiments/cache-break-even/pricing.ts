@@ -1,3 +1,5 @@
+import { truncateCharacters } from '$lib/experiments/truncate';
+
 import defaultPricingData from './default-pricing.json';
 
 /** One model's prices, in dollars per million tokens. */
@@ -145,7 +147,8 @@ export const parsePricingTable = (value: unknown): PricingParseResult => {
     }
 
     // Names are capped so any table the page accepts still fits in a share link.
-    const name = typeof entry.name === 'string' ? entry.name.trim().slice(0, MAX_NAME_LENGTH) : '';
+    const name =
+      typeof entry.name === 'string' ? truncateCharacters(entry.name, MAX_NAME_LENGTH) : '';
     const input = readPrice(entry.input);
     const output = readPrice(entry.output);
     if (!name || input === null || output === null) {
@@ -153,8 +156,10 @@ export const parsePricingTable = (value: unknown): PricingParseResult => {
       continue;
     }
 
-    const requestedId =
-      typeof entry.id === 'string' && slugify(entry.id) ? slugify(entry.id) : slugify(name);
+    // An ID is capped like a name, since the whole table has to fit in a share link.
+    const requestedId = (
+      typeof entry.id === 'string' && slugify(entry.id) ? slugify(entry.id) : slugify(name)
+    ).slice(0, MAX_NAME_LENGTH);
     // A name with nothing to slug gets a positional ID, and that ID is what takes the suffix.
     const baseId = requestedId || `model-${index + 1}`;
     let id = baseId;

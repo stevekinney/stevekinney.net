@@ -52,6 +52,8 @@ describe('buildOutcomes', () => {
     const rows = outcomesOf(findPreset('faster-more-rework')!.csv, {
       seed: 1,
       resamples: 10_000,
+      rows: 32,
+      sampledRows: 32,
       usable: 10_000,
       lower: -0.9,
       upper: -0.3,
@@ -70,6 +72,19 @@ describe('buildOutcomes', () => {
     expect(formatOutcomeInterval(cost)).toBe('[−$0.90, −$0.30]');
     expect(cost.aDetail).toBe('$19.20 over 15 accepted');
     expect(cost.note).toBe('Bootstrap, 10,000 resamples, seed 1.');
+  });
+
+  it('shows why there’s no cost interval for too many tasks, keeping the point estimate', () => {
+    const rows = outcomesOf(findPreset('faster-more-rework')!.csv, 'too-many-rows');
+    const cost = byId(rows, 'cost');
+
+    expect(formatValue(cost, cost.a)).toBe('$1.28');
+    expect(formatDifference(cost)).toBe('−$0.59');
+    expect(cost.lower).toBeNull();
+    expect(formatOutcomeInterval(cost)).toBe(
+      'Too many tasks to bootstrap cost per accepted result in the browser; the point estimate above uses every task.',
+    );
+    expect(outcomesToCsv(rows, ['A', 'B'])).toContain('Too many tasks to bootstrap');
   });
 
   it('says when the cost interval is still running', () => {

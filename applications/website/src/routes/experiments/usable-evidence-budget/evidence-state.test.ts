@@ -51,6 +51,34 @@ describe('addIntake with a folder skipped on a second drop', () => {
   });
 });
 
+describe('addIntake after a skipped folder is read', () => {
+  it('forgets the earlier skip of that folder', () => {
+    const first = addIntake(initialEvidence(), intake([file('project/a.md', 10)]), [
+      'project/node_modules',
+    ]);
+    const second = addIntake(first, intake([file('project/node_modules/pkg/index.js', 5)]));
+
+    expect(second.skipped.map((entry) => entry.path)).toEqual([]);
+  });
+
+  it('forgets only the skipped folders whose files it read, among thousands of each', () => {
+    const folders = Array.from({ length: 5_000 }, (_, index) => `repo/package-${index}/vendor`);
+    const first = addIntake(initialEvidence(), intake([]), folders);
+    // Read a file beneath every even folder, plus files in look-alike folders that share a prefix.
+    const read = folders.flatMap((folder, index) =>
+      index % 2 === 0
+        ? [file(`${folder}/deep/lib.js`, 1), file(`${folder}-copy/lib.js`, 1)]
+        : [file(`${folder}-copy/lib.js`, 1)],
+    );
+    const second = addIntake(first, intake(read));
+
+    expect(second.skipped.map((entry) => entry.path)).toEqual(
+      folders.filter((_, index) => index % 2 === 1).map((folder) => `${folder}/`),
+    );
+    expect(second.files).toHaveLength(read.length);
+  });
+});
+
 describe('addIntake', () => {
   it('appends new files and keeps earlier ones', () => {
     const state = addIntake(

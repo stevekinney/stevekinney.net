@@ -1,6 +1,8 @@
+import { truncateCharacters } from '$lib/experiments/truncate';
+
 import { clampLaterAfter, clampTo, defaultScenario, ranges } from './scenario';
 import type { Scenario } from './scenario';
-import { defaultModels, MODEL_ID_PATTERN, readPrice } from './pricing';
+import { defaultModels, MAXIMUM_NAME_LENGTH, MODEL_ID_PATTERN, readPrice } from './pricing';
 import type { ModelPrice } from './pricing';
 
 /**
@@ -107,7 +109,8 @@ export const decodeScenario = (query: string): SharedScenario | null => {
     scenario.laterAfter = clampLaterAfter(later, scenario.turns ?? defaultScenario.turns);
   }
 
-  const name = parameters.get('name')?.trim().slice(0, 60);
+  const rawName = parameters.get('name');
+  const name = rawName === null ? undefined : truncateCharacters(rawName, MAXIMUM_NAME_LENGTH);
   // A link is untrusted input, so its prices get the same bounds as an imported price table.
   const inputPrice = readPrice(decimal(parameters.get('inputPrice')));
   const outputPrice = readPrice(decimal(parameters.get('outputPrice')));

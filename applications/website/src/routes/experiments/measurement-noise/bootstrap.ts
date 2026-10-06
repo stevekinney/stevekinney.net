@@ -4,6 +4,14 @@
  */
 
 export const BOOTSTRAP_RESAMPLES = 10_000;
+/**
+ * The most index draws one bootstrap may make: rows × resamples. Ten thousand
+ * resamples of 100,000 rows is a billion draws, which keeps a laptop busy for
+ * about a minute, so a large file gets fewer resamples or a subsample instead.
+ */
+export const BOOTSTRAP_WORK_BUDGET = 20_000_000;
+/** Fewer resamples than this make the 2.5% and 97.5% percentiles too jumpy to trust. */
+export const MIN_BOOTSTRAP_RESAMPLES = 1_000;
 export const DEFAULT_SEED = 20_261_004;
 export const MAX_SEED = 4_294_967_295;
 
@@ -78,6 +86,10 @@ export const quantileSorted = (sorted: ArrayLike<number>, q: number): number => 
 export type BootstrapInterval = {
   seed: number;
   resamples: number;
+  /** Rows in the data, both conditions together. */
+  rows: number;
+  /** Rows the bootstrap resampled: fewer than `rows` when it ran on a seeded subsample. */
+  sampledRows: number;
   /** Resamples whose statistic could be computed, such as a cost per accepted with nothing accepted. */
   usable: number;
   lower: number;
@@ -96,16 +108,106 @@ export type BootstrapJob = {
   finish: () => BootstrapInterval;
 };
 
-type Statistic = (indicesA: Int32Array, indicesB: Int32Array) => number;
+export type BootstrapPlan = {
+  resamples: number;
+  /** How many of condition A's rows to resample. */
+  sampleA: number;
+  sampleB: number;
+};
 
-const createJob = (
-  sizeA: number,
-  sizeB: number,
+/**
+ * How much bootstrap the data can afford. Keeps 10,000 resamples while
+ * (rows A + rows B) × resamples fits `BOOTSTRAP_WORK_BUDGET`, then lowers the
+ * resamples, rounded down to a hundred, to no fewer than 1,000. Past that, it
+ * resamples a subsample of 20,000 rows: a condition that fits in half of it
+ * stays whole and the other gets the rest, and otherwise each keeps its share.
+ * Paired data is subsampled by task, so both sides keep the same tasks.
+ */
+export const planBootstrap = (sizeA: number, sizeB: number, paired = false): BootstrapPlan => {
+  const rows = sizeA + sizeB;
+  if (rows * BOOTSTRAP_RESAMPLES <= BOOTSTRAP_WORK_BUDGET) {
+    return { resamples: BOOTSTRAP_RESAMPLES, sampleA: sizeA, sampleB: sizeB };
+  }
+
+  const affordable = Math.floor(BOOTSTRAP_WORK_BUDGET / rows / 100) * 100;
+  if (affordable >= MIN_BOOTSTRAP_RESAMPLES) {
+    return { resamples: affordable, sampleA: sizeA, sampleB: sizeB };
+  }
+
+  const target = Math.floor(BOOTSTRAP_WORK_BUDGET / MIN_BOOTSTRAP_RESAMPLES);
+  if (paired) {
+    const tasks = Math.min(sizeA, Math.floor(target / 2));
+
+    return { resamples: MIN_BOOTSTRAP_RESAMPLES, sampleA: tasks, sampleB: tasks };
+  }
+
+  // A small condition stays whole, or its median would come from a handful of rows.
+  const half = Math.floor(target / 2);
+  if (sizeA <= half)
+    return { resamples: MIN_BOOTSTRAP_RESAMPLES, sampleA: sizeA, sampleB: target - sizeA };
+  if (sizeB <= half)
+    return { resamples: MIN_BOOTSTRAP_RESAMPLES, sampleA: target - sizeB, sampleB: sizeB };
+
+  const sampleA = Math.round((target * sizeA) / rows);
+
+  return { resamples: MIN_BOOTSTRAP_RESAMPLES, sampleA, sampleB: target - sampleA };
+};
+
+/**
+ * Picks `count` of the indices below `size` without replacement, with a
+ * partial Fisher–Yates shuffle. The same random stream gives the same picks.
+ */
+const pickIndices = (size: number, count: number, random: () => number): Int32Array => {
+  const indices = new Int32Array(size);
+  for (let index = 0; index < size; index += 1) indices[index] = index;
+  for (let index = 0; index < count; index += 1) {
+    const other = index + Math.floor(random() * (size - index));
+    const swap = indices[index];
+    indices[index] = indices[other];
+    indices[other] = swap;
+  }
+
+  return indices.subarray(0, count);
+};
+
+/**
+ * The rows a bootstrap resamples: all of them, or a subsample drawn from its
+ * own stream of the seed, so the resampling stream is the same either way.
+ */
+const subsample = <T>(
+  a: readonly T[],
+  b: readonly T[],
+  plan: BootstrapPlan,
   paired: boolean,
   seed: number,
-  resamples: number,
-  statistic: Statistic,
-): BootstrapJob => {
+): [readonly T[], readonly T[]] => {
+  if (plan.sampleA === a.length && plan.sampleB === b.length) return [a, b];
+
+  const random = createRandom((seed ^ 0x5bd1e995) >>> 0);
+  const indicesA = pickIndices(a.length, plan.sampleA, random);
+  const indicesB = paired ? indicesA : pickIndices(b.length, plan.sampleB, random);
+
+  return [Array.from(indicesA, (index) => a[index]), Array.from(indicesB, (index) => b[index])];
+};
+
+/** What to say next to an interval the budget cut down, or null when it ran in full. */
+export const budgetNote = (interval: BootstrapInterval): string | null => {
+  const count = (value: number): string => value.toLocaleString('en-US');
+  const rows = `to stay responsive on ${count(interval.rows)} rows.`;
+
+  if (interval.sampledRows < interval.rows) {
+    return `Bootstrapped with ${count(interval.resamples)} resamples on a seeded subsample of ${count(interval.sampledRows)} rows ${rows}`;
+  }
+  if (interval.resamples < BOOTSTRAP_RESAMPLES) {
+    return `Bootstrapped with ${count(interval.resamples)} resamples ${rows}`;
+  }
+
+  return null;
+};
+
+type Statistic = (indicesA: Int32Array, indicesB: Int32Array) => number;
+
+const checkSizes = (sizeA: number, sizeB: number, paired: boolean): void => {
   if (sizeA === 0 || sizeB === 0) {
     throw new RangeError('A bootstrap needs at least one value in each condition.');
   }
@@ -114,6 +216,18 @@ const createJob = (
       `Paired data needs the same number of values in each condition, not ${sizeA} and ${sizeB}.`,
     );
   }
+};
+
+const createJob = (
+  sizeA: number,
+  sizeB: number,
+  paired: boolean,
+  seed: number,
+  resamples: number,
+  rows: number,
+  statistic: Statistic,
+): BootstrapJob => {
+  checkSizes(sizeA, sizeB, paired);
 
   const random = createRandom(seed);
   const indicesA = new Int32Array(sizeA);
@@ -156,6 +270,8 @@ const createJob = (
       return {
         seed,
         resamples,
+        rows,
+        sampledRows: sizeA + sizeB,
         usable,
         lower: quantileSorted(sorted, 0.025),
         upper: quantileSorted(sorted, 0.975),
@@ -165,24 +281,42 @@ const createJob = (
 };
 
 /**
+ * Without an explicit resample count, the work budget picks the count and,
+ * for a large file, a seeded subsample. An explicit count keeps every row.
+ */
+const budgeted = <T>(
+  all: [readonly T[], readonly T[]],
+  paired: boolean,
+  seed: number,
+  resamples: number | undefined,
+): { a: readonly T[]; b: readonly T[]; resamples: number } => {
+  const [a, b] = all;
+  checkSizes(a.length, b.length, paired);
+  if (resamples !== undefined) return { a, b, resamples };
+
+  const plan = planBootstrap(a.length, b.length, paired);
+  const [sampleA, sampleB] = subsample(a, b, plan, paired, seed);
+
+  return { a: sampleA, b: sampleB, resamples: plan.resamples };
+};
+
+/**
  * A percentile interval for the difference in medians, A − B. Unpaired data
  * resamples each condition on its own; paired data, given as two arrays in
  * task order, resamples tasks. Throws a RangeError for an empty condition, or
  * for paired arrays of different lengths.
  */
 export const medianDifferenceJob = (
-  a: readonly number[],
-  b: readonly number[],
-  {
-    seed,
-    paired = false,
-    resamples = BOOTSTRAP_RESAMPLES,
-  }: { seed: number; paired?: boolean; resamples?: number },
+  allA: readonly number[],
+  allB: readonly number[],
+  { seed, paired = false, resamples }: { seed: number; paired?: boolean; resamples?: number },
 ): BootstrapJob => {
+  const { a, b, ...plan } = budgeted([allA, allB], paired, seed, resamples);
   const scratchA = new Float64Array(a.length);
   const scratchB = new Float64Array(b.length);
+  const rows = allA.length + allB.length;
 
-  return createJob(a.length, b.length, paired, seed, resamples, (indicesA, indicesB) => {
+  return createJob(a.length, b.length, paired, seed, plan.resamples, rows, (indicesA, indicesB) => {
     for (let index = 0; index < indicesA.length; index += 1) scratchA[index] = a[indicesA[index]];
     for (let index = 0; index < indicesB.length; index += 1) scratchB[index] = b[indicesB[index]];
 
@@ -192,12 +326,25 @@ export const medianDifferenceJob = (
 
 export type CostRecord = { cost: number; accepted: boolean };
 
-/** A percentile interval for the difference in cost per accepted result, A − B. */
+/**
+ * A percentile interval for the difference in cost per accepted result, A − B,
+ * or `'too-many-rows'` when the work budget would need a subsample. A
+ * subsample can leave out every accepted task in a condition, such as the one
+ * accepted task among 50,000, which would make the interval depend on the seed.
+ */
 export const costPerAcceptedJob = (
-  a: readonly CostRecord[],
-  b: readonly CostRecord[],
-  { seed, resamples = BOOTSTRAP_RESAMPLES }: { seed: number; resamples?: number },
-): BootstrapJob => {
+  allA: readonly CostRecord[],
+  allB: readonly CostRecord[],
+  { seed, resamples }: { seed: number; resamples?: number },
+): BootstrapJob | 'too-many-rows' => {
+  checkSizes(allA.length, allB.length, false);
+  if (resamples === undefined) {
+    const plan = planBootstrap(allA.length, allB.length);
+    if (plan.sampleA < allA.length || plan.sampleB < allB.length) return 'too-many-rows';
+  }
+
+  const { a, b, ...plan } = budgeted([allA, allB], false, seed, resamples);
+
   const ratio = (records: readonly CostRecord[], indices: Int32Array): number => {
     let cost = 0;
     let accepted = 0;
@@ -215,7 +362,8 @@ export const costPerAcceptedJob = (
     b.length,
     false,
     seed,
-    resamples,
+    plan.resamples,
+    allA.length + allB.length,
     (indicesA, indicesB) => ratio(a, indicesA) - ratio(b, indicesB),
   );
 };

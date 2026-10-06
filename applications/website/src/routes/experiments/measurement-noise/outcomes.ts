@@ -22,6 +22,8 @@ export type OutcomeRow = {
   available: boolean;
   /** Why a row has no figures, or how its interval was found. */
   note: string;
+  /** Shown in place of the interval when there's a reason it has none, such as too many rows. */
+  intervalNote: string;
   unit: 'minutes' | 'rate' | 'dollars';
   a: number | null;
   b: number | null;
@@ -35,7 +37,10 @@ export type OutcomeRow = {
 };
 
 /** Where the cost-per-accepted bootstrap is up to. */
-export type CostIntervalState = BootstrapInterval | 'running' | null;
+export type CostIntervalState = BootstrapInterval | 'running' | 'too-many-rows' | null;
+
+export const COST_TOO_MANY_ROWS =
+  'Too many tasks to bootstrap cost per accepted result in the browser; the point estimate above uses every task.';
 
 const blank = (
   id: OutcomeId,
@@ -49,6 +54,7 @@ const blank = (
   available,
   note,
   unit,
+  intervalNote: '',
   a: null,
   b: null,
   difference: null,
@@ -86,6 +92,7 @@ const meanRow = (
       : comparison.design === 'paired'
         ? `Paired t, ${comparison.valuesA.length} tasks.`
         : `Welch, ${comparison.valuesA.length} and ${comparison.valuesB.length} tasks.`,
+    intervalNote: '',
     unit: 'minutes',
     a: test.meanA,
     b: test.meanB,
@@ -118,6 +125,7 @@ const rateRow = (
     label,
     available: true,
     note: 'Wilson intervals for each rate; Newcombe’s for the gap.',
+    intervalNote: '',
     unit: 'rate',
     a: comparison.a.rate,
     b: comparison.b.rate,
@@ -146,7 +154,7 @@ const costRow = (
   const detail = (side: NonNullable<typeof a>): string =>
     `${formatDollars(side.totalCost)} over ${side.accepted} accepted`;
   const difference = a.value !== null && b.value !== null ? a.value - b.value : null;
-  const ready = interval !== null && interval !== 'running';
+  const ready = interval !== null && interval !== 'running' && interval !== 'too-many-rows';
 
   return {
     id: 'cost',
@@ -160,6 +168,7 @@ const costRow = (
           : ready
             ? `Bootstrap, ${interval.resamples.toLocaleString('en-US')} resamples, seed ${interval.seed}.`
             : 'Total cost divided by accepted tasks.',
+    intervalNote: difference !== null && interval === 'too-many-rows' ? COST_TOO_MANY_ROWS : '',
     unit: 'dollars',
     a: a.value,
     b: b.value,
@@ -237,7 +246,7 @@ export const formatDifference = (row: OutcomeRow): string => {
 };
 
 export const formatOutcomeInterval = (row: OutcomeRow): string => {
-  if (row.lower === null || row.upper === null) return '—';
+  if (row.lower === null || row.upper === null) return row.intervalNote || '—';
   if (row.unit === 'rate') {
     return `${formatInterval(row.lower * 100, row.upper * 100, 1)} pts`;
   }
@@ -270,7 +279,7 @@ export const outcomesToCsv = (rows: OutcomeRow[], labels: string[]): string => {
       round(row.difference),
       round(row.lower),
       round(row.upper),
-      row.note,
+      [row.note, row.intervalNote].filter(Boolean).join(' '),
     ]
       .map(csvCell)
       .join(','),

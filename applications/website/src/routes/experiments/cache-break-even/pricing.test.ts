@@ -96,6 +96,30 @@ describe('parsePricingTable', () => {
     expect(result.ok && result.table.models[0].name).toHaveLength(60);
   });
 
+  it('shortens a name by characters, keeping an emoji at the cut whole and trimming a space', () => {
+    const result = parsePricingTable({
+      models: [
+        { name: `${'a'.repeat(59)}😀b`, input: 1, output: 2 },
+        { name: '😀'.repeat(200), input: 1, output: 2 },
+        { name: `${'c'.repeat(59)} d`, input: 1, output: 2 },
+      ],
+    });
+
+    expect(result.ok && result.table.models.map((model) => model.name)).toEqual([
+      `${'a'.repeat(59)}😀`,
+      '😀'.repeat(60),
+      'c'.repeat(59),
+    ]);
+  });
+
+  it('shortens an ID too long to fit in a share link', () => {
+    const result = parsePricingTable({
+      models: [{ id: 'a'.repeat(5_000), name: 'Long', input: 1, output: 2 }],
+    });
+
+    expect(result.ok && result.table.models[0].id).toHaveLength(60);
+  });
+
   it('shows a very small price with its digits', () => {
     expect(formatPriceNumber(0.0000001)).toBe('0.0000001');
     expect(formatPriceNumber(0.8)).toBe('0.8');

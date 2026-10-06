@@ -169,6 +169,33 @@ describe('edge cases', () => {
     expect(lint(text).map((item) => item.text)).toEqual(['Before.', 'Quoted.', 'After.']);
   });
 
+  it('closes a fence opened inside a blockquote when the blockquote ends', () => {
+    // CommonMark: leaving the blockquote closes a fenced block that never closed inside it.
+    const text = [
+      'Before.',
+      '> ```sh',
+      '> never run rm -rf /',
+      'Never read .env files.',
+      '> > ~~~',
+      '> > quoted example',
+      '> Back to one level.',
+      '> ```',
+      '> still code',
+      '',
+      'After.',
+    ].join('\n');
+
+    expect(splitInstructions(text).map((line) => line.text)).toEqual([
+      'Before.',
+      'Never read .env files.',
+      'Back to one level.',
+      'After.',
+    ]);
+    expect(lint(text).find((item) => item.text === 'Never read .env files.')?.primary).toBe(
+      'must-hold',
+    );
+  });
+
   it('skips front matter and indented code', () => {
     const text = ['---', 'name: x', '---', 'Intro.', '', '    never read .env', 'After.'].join(
       '\n',
@@ -304,6 +331,20 @@ describe('the other rules', () => {
 
     expect(introduced.map((item) => item.primary)).toEqual(Array(6).fill('skill-candidate'));
     expect(headed.map((item) => item.primary)).toEqual(Array(6).fill('skill-candidate'));
+  });
+
+  it('keeps two sections with the same how-to heading apart', () => {
+    const section = ['## How to deploy', '- Build it.', '- Upload it.', '- Check it.'];
+    const items = lint([...section, '', ...section].join('\n'));
+
+    expect(items).toHaveLength(6);
+    expect(items.some((item) => item.primary === 'skill-candidate')).toBe(false);
+
+    // Text sections under repeated headings are counted apart too.
+    const prose = ['## How to deploy', 'Build it.', 'Upload it.', 'Check it.'];
+    expect(
+      lint([...prose, ...prose].join('\n')).some((item) => item.primary === 'skill-candidate'),
+    ).toBe(false);
   });
 
   it('follows edited rules', () => {

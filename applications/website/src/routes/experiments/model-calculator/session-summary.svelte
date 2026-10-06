@@ -160,7 +160,7 @@
       {/if}
       {#if unpricedModels.length > 0}
         <li>
-          The price list doesn't include <span class="font-mono text-xs"
+          The price list doesn't include <span class="font-mono text-xs [overflow-wrap:anywhere]"
             >{unpricedModels.join(', ')}</span
           >, so {unpricedModels.length === 1 ? 'its' : 'their'} cost as run is left out. Every token still
           counts in the comparison below.

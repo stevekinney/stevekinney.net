@@ -286,19 +286,25 @@ export const analyze = (
     rows.filter((row) =>
       endpoint === 'rework' ? row.rework !== null : measureOf(endpoint)(row) !== null,
     ).length;
+  // A mean needs two values to show how much tasks vary; a rate has a Wilson interval from one.
+  const minimum = endpoint === 'rework' ? 1 : 2;
   const thin = [
     [labels[0], counted(rowsA)],
     [labels[1], counted(rowsB)],
-  ].find(([, count]) => (count as number) < 2);
+  ].find(([, count]) => (count as number) < minimum);
 
   if (thin) {
     const [label, count] = thin as [string, number];
+    const needed =
+      endpoint === 'rework'
+        ? 'It takes at least one under each condition to compare rates.'
+        : 'It takes at least two under each condition to see how much tasks vary.';
 
     return {
       ...base,
       comparison: null,
       verdict: notMeasured(
-        `“${label}” has ${count === 0 ? 'no tasks' : 'only one task'} with ${what}. It takes at least two under each condition to see how much tasks vary.`,
+        `“${label}” has ${count === 0 ? 'no tasks' : 'only one task'} with ${what}. ${needed}`,
       ),
     };
   }
