@@ -36,6 +36,15 @@ describe('share links', () => {
     expect(decoded?.customModel).toEqual(edited);
   });
 
+  it('carries a cache-write price with edited prices', () => {
+    const standard = { ...sonnet, cacheWrite5m: 2.5 };
+    const edited = { ...standard, cacheWrite5m: 3 };
+    const encoded = encodeScenario(defaultScenario(sonnet.id), [edited], [standard]);
+
+    expect(encoded).toContain('writePrice=3');
+    expect(decodeScenario(encoded)?.customModel).toEqual(edited);
+  });
+
   it('holds untrusted values to the controls’ ranges and drops what doesn’t parse', () => {
     const decoded = decodeScenario(
       'workers=99&serial=7&minutes=abc&mode=swarm&model=Not%20An%20Id&inputPrice=-1',

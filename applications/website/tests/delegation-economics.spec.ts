@@ -113,12 +113,13 @@ test.describe('the defaults', () => {
     await expect(page.getByTestId('ceiling-label')).toHaveText('never faster than 2.5×');
   });
 
-  test('costs $1.27 when the workers share a cached prefix', async ({ page }) => {
+  test('costs $1.28 when the workers share a cached prefix', async ({ page }) => {
     await open(page);
     await skipPrediction(page);
     await page.getByRole('checkbox', { name: 'Workers share a cached prefix' }).check();
 
-    await expect(cost(page)).toContainText('$1.27 vs $0.90');
+    // The first worker writes 20K at the $2.50 cache-write price; the other three read 60K at $0.20.
+    await expect(cost(page)).toContainText('$1.28 vs $0.90');
     await expect(cost(page)).toContainText('3 workers read their spawn overhead from the cache.');
   });
 
@@ -488,6 +489,7 @@ test.describe('compare, share, and prices', () => {
       name: 'Claude Sonnet 5.5',
       input: 4,
       cachedInput: 0.2,
+      cacheWrite5m: 2.5,
       output: 10,
     });
   });

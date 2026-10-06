@@ -54,11 +54,15 @@ export const encodeScenario = (
       standard.name !== selected.name ||
       standard.input !== selected.input ||
       standard.cachedInput !== selected.cachedInput ||
+      standard.cacheWrite5m !== selected.cacheWrite5m ||
       standard.output !== selected.output)
   ) {
     parameters.set('name', selected.name);
     parameters.set('inputPrice', String(selected.input));
     parameters.set('cachedPrice', String(selected.cachedInput));
+    if (selected.cacheWrite5m !== undefined) {
+      parameters.set('writePrice', String(selected.cacheWrite5m));
+    }
     parameters.set('outputPrice', String(selected.output));
   }
 
@@ -92,9 +96,18 @@ export const decodeScenario = (query: string): SharedScenario | null => {
   const input = readPrice(decimal(parameters.get('inputPrice')));
   const cachedInput = readPrice(decimal(parameters.get('cachedPrice')));
   const output = readPrice(decimal(parameters.get('outputPrice')));
+  // A missing or unusable write price falls back to the input price, as for an imported table.
+  const cacheWrite5m = readPrice(decimal(parameters.get('writePrice')));
   const customModel: WorkerModel | null =
     scenario.modelId && name && input && cachedInput && output
-      ? { id: scenario.modelId, name, input, cachedInput, output }
+      ? {
+          id: scenario.modelId,
+          name,
+          input,
+          cachedInput,
+          ...(cacheWrite5m === null ? {} : { cacheWrite5m }),
+          output,
+        }
       : null;
 
   return Object.keys(scenario).length === 0 ? null : { scenario, customModel };

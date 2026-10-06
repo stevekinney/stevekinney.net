@@ -44,9 +44,10 @@
     <h3 id="explain-cost" class={headingClasses}>Cost</h3>
     <p>
       Cost is input tokens times the input price plus output tokens times the output price, added up
-      before dividing by a million. With a shared cached prefix, the first worker pays the input
-      price for its spawn overhead and every other worker pays the cached-input price for theirs.
-      Prices come from the site’s shared price table, and you can edit them.
+      before dividing by a million. With a shared cached prefix, the first worker writes its spawn
+      overhead to the cache at the five-minute cache-write price, or at the input price for a model
+      with none, and every other worker pays the cached-input price for theirs. Prices come from the
+      site’s shared price table, and you can edit them.
     </p>
   </section>
 

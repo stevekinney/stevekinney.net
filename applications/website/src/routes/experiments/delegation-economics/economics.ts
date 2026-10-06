@@ -14,7 +14,13 @@ export const TEAM_SIZE_WARNING = 16;
 
 export type Mode = 'subagents' | 'team' | 'plan';
 
-export type Prices = { input: number; cachedInput: number; output: number };
+export type Prices = {
+  input: number;
+  cachedInput: number;
+  /** Writing a five-minute cache entry. Without one, a write costs the input price. */
+  cacheWrite?: number;
+  output: number;
+};
 
 export type EconomicsInputs = {
   /** W: how long the task takes in one session, in minutes. */
@@ -219,24 +225,28 @@ export const fanTokens = (inputs: EconomicsInputs): TokenBreakdown => {
 
 /** Dollars for some tokens, summed in tokens × dollars before dividing by a million. */
 export const dollars = (
-  tokens: { input: number; cachedInput?: number; output: number },
+  tokens: { input: number; cachedInput?: number; cacheWrite?: number; output: number },
   prices: Prices,
 ): number =>
   (tokens.input * prices.input +
     (tokens.cachedInput ?? 0) * prices.cachedInput +
+    (tokens.cacheWrite ?? 0) * (prices.cacheWrite ?? prices.input) +
     tokens.output * prices.output) /
   TOKENS_PER_PRICE_UNIT;
 
-/**
- * With a shared prefix, the first worker writes the spawn overhead at the input
- * price and the other `n − 1` read it at the cached-input price.
- */
-export const cachedSpawnTokens = (inputs: EconomicsInputs): number => {
-  const n = wholeWorkers(inputs.workers);
-  if (!inputs.sharedPrefix || inputs.mode !== 'subagents' || n === 1) return 0;
+const sharesPrefix = (inputs: EconomicsInputs): boolean =>
+  inputs.sharedPrefix && inputs.mode === 'subagents' && wholeWorkers(inputs.workers) > 1;
 
-  return (n - 1) * nonNegative(inputs.spawnTokens);
-};
+/**
+ * With a shared prefix, the first worker writes the spawn overhead to the cache
+ * at the five-minute cache-write price.
+ */
+export const writtenSpawnTokens = (inputs: EconomicsInputs): number =>
+  sharesPrefix(inputs) ? nonNegative(inputs.spawnTokens) : 0;
+
+/** With a shared prefix, the other `n − 1` workers read the spawn overhead at the cached-input price. */
+export const cachedSpawnTokens = (inputs: EconomicsInputs): number =>
+  sharesPrefix(inputs) ? (wholeWorkers(inputs.workers) - 1) * nonNegative(inputs.spawnTokens) : 0;
 
 export const soloCost = (inputs: EconomicsInputs): number => {
   const solo = soloTokens(inputs);
@@ -247,9 +257,15 @@ export const soloCost = (inputs: EconomicsInputs): number => {
 export const fanCost = (inputs: EconomicsInputs): number => {
   const fan = fanTokens(inputs);
   const cached = cachedSpawnTokens(inputs);
+  const written = writtenSpawnTokens(inputs);
 
   return dollars(
-    { input: fan.input - cached, cachedInput: cached, output: fan.output },
+    {
+      input: fan.input - cached - written,
+      cachedInput: cached,
+      cacheWrite: written,
+      output: fan.output,
+    },
     inputs.prices,
   );
 };

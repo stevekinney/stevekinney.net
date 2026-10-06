@@ -27,6 +27,7 @@ describe('toWorkerPricing', () => {
       ]),
     );
     expect(Object.keys(pricing.models[0]).sort()).toEqual([
+      'cacheWrite5m',
       'cachedInput',
       'id',
       'input',
@@ -74,6 +75,24 @@ describe('price table files', () => {
     ).toEqual({
       models: [{ id: 'my-model-2', name: 'My Model 2', input: 1, cachedInput: 0.1, output: 5 }],
     });
+  });
+
+  it('keeps a cache-write price, and reads a table without one', () => {
+    expect(models.find((model) => model.name === 'Claude Sonnet 5.5')?.cacheWrite5m).toBe(2.5);
+    expect(
+      parsePriceTable('[{"name":"A","input":1,"cachedInput":0.1,"cacheWrite5m":1.25,"output":5}]'),
+    ).toEqual({
+      models: [{ id: 'a', name: 'A', input: 1, cachedInput: 0.1, cacheWrite5m: 1.25, output: 5 }],
+    });
+    expect(
+      parsePriceTable('[{"name":"A","input":1,"cachedInput":0.1,"cacheWrite5m":0,"output":5}]'),
+    ).toEqual({ error: 'A’s cacheWrite5m has to be a positive price in dollars per million.' });
+    expect(
+      pricesEqual(
+        models,
+        models.map((model) => ({ ...model, cacheWrite5m: 99 })),
+      ),
+    ).toBe(false);
   });
 
   it('explains what’s wrong with a bad file', () => {
