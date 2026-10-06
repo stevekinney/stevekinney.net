@@ -111,7 +111,7 @@
         value: formatNumber(figures.difference, pointDecimals),
         text:
           comparison.kind === 'mean'
-            ? `In this sample, ${labelA} averaged ${formatNumber(comparison.test.meanA, 1)} and ${labelB} ${formatNumber(comparison.test.meanB, 1)}: a gap of ${formatNumber(figures.difference, pointDecimals)} ${unit}, ${formatPercent(comparison.percent)} of ${labelA}’s mean. Positive means ${labelB} came out ahead in this sample. The interval says how much to trust that.`
+            ? `In this sample, ${labelA} averaged ${formatNumber(comparison.test.meanA, 1)} and ${labelB} ${formatNumber(comparison.test.meanB, 1)}: a gap of ${formatNumber(figures.difference, pointDecimals)} ${unit}${comparison.percent === null ? '' : `, ${formatPercent(comparison.percent)} of ${labelA}’s mean`}. Positive means ${labelB} came out ahead in this sample. The interval says how much to trust that.`
             : `${labelA}’s rework rate minus ${labelB}’s: ${formatNumber(figures.difference, pointDecimals)} percentage points. Positive means ${labelB} needed rework less often in this sample.`,
       },
       {

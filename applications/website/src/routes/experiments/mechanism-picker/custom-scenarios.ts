@@ -5,11 +5,21 @@ import type { Scenario } from './scenarios';
 export const MAXIMUM_CUSTOM_CARDS = 100;
 export const MAXIMUM_SCENARIO_LENGTH = 300;
 export const MAXIMUM_REASONING_LENGTH = 600;
+/** A deck can hold hundreds of thousands of entries, so reading stops a little past the card limit. */
+export const MAXIMUM_EXAMINED_ENTRIES = MAXIMUM_CUSTOM_CARDS + 20;
+/** Reasons kept one per entry. The rest are counted in a single closing line. */
+export const MAXIMUM_DECK_DIAGNOSTICS = 20;
 
 /** A card a learner wrote, as it's stored and shared. */
 export type CustomCard = { scenario: string; answer: MechanismId; reasoning: string };
 
-export type ImportResult = { cards: CustomCard[]; skipped: string[] };
+export type ImportResult = {
+  cards: CustomCard[];
+  /** Why entries were skipped: one line each for the first few, then a count of the rest. */
+  skipped: string[];
+  /** How many entries the file had, whether or not they were read. */
+  total: number;
+};
 
 const clean = (text: string, limit: number): string =>
   text.replace(/\s+/g, ' ').trim().slice(0, limit);
@@ -50,7 +60,7 @@ export const parseDeck = (json: string): ImportResult => {
   try {
     parsed = JSON.parse(json);
   } catch {
-    return { cards: [], skipped: ['The file isn’t valid JSON.'] };
+    return { cards: [], skipped: ['The file isn’t valid JSON.'], total: 0 };
   }
 
   const list = Array.isArray(parsed)
@@ -60,18 +70,35 @@ export const parseDeck = (json: string): ImportResult => {
         Array.isArray((parsed as { scenarios?: unknown }).scenarios)
       ? (parsed as { scenarios: unknown[] }).scenarios
       : null;
-  if (!list) return { cards: [], skipped: ['The file has no list of scenarios.'] };
+  if (!list) return { cards: [], skipped: ['The file has no list of scenarios.'], total: 0 };
 
   const cards: CustomCard[] = [];
   const skipped: string[] = [];
-  list.forEach((entry, index) => {
-    const card = readCard(entry, index + 1);
-    if (typeof card === 'string') skipped.push(card);
-    else if (cards.length < MAXIMUM_CUSTOM_CARDS) cards.push(card);
-    else skipped.push(`Card ${index + 1} is past the limit of ${MAXIMUM_CUSTOM_CARDS} cards.`);
-  });
+  let skippedCount = 0;
+  const skip = (reason: string): void => {
+    skippedCount += 1;
+    if (skipped.length < MAXIMUM_DECK_DIAGNOSTICS) skipped.push(reason);
+  };
 
-  return { cards, skipped };
+  const examined = Math.min(list.length, MAXIMUM_EXAMINED_ENTRIES);
+  for (let index = 0; index < examined; index += 1) {
+    const card = readCard(list[index], index + 1);
+    if (typeof card === 'string') skip(card);
+    else if (cards.length < MAXIMUM_CUSTOM_CARDS) cards.push(card);
+    else skip(`Card ${index + 1} is past the limit of ${MAXIMUM_CUSTOM_CARDS} cards.`);
+  }
+  skippedCount += list.length - examined;
+
+  const unlisted = skippedCount - skipped.length;
+  if (unlisted > 0) {
+    skipped.push(
+      unlisted === 1
+        ? '…and 1 more entry was skipped.'
+        : `…and ${unlisted.toLocaleString('en-US')} more entries were skipped.`,
+    );
+  }
+
+  return { cards, skipped, total: list.length };
 };
 
 /** Adds imported cards to a deck, leaving out exact duplicates and anything past the limit. */

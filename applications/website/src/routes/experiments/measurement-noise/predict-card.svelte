@@ -106,7 +106,7 @@
           </p>
           <p class="text-slate-700 dark:text-slate-200">
             {verdict.body}
-            {#if comparison && spread}
+            {#if comparison && comparison.percent !== null && spread}
               B’s mean is {formatPercent(comparison.percent)} lower, but these tasks run from {spread.low}
               to {spread.high} minutes, and with so few of them that spread swamps the gap.
             {/if}

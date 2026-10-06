@@ -144,8 +144,9 @@
 
     return compareMeans(rowsA, rowsB, dataset.labels, (row) => row.minutes, app.paired);
   });
+  // Minutes are always more than zero, but a percentage of A still needs A's mean to be nonzero.
   const measuredSpeedup = $derived(
-    timeComparison
+    timeComparison && timeComparison.percent !== null
       ? {
           percent: timeComparison.percent,
           lower: (timeComparison.test.lower / timeComparison.test.meanA) * 100,

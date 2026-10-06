@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { analyze } from './analysis';
 import { guessMapping } from './columns';
 import { buildDataset } from './dataset';
-import { parseCsv } from './parse-table';
+import { parseCsv, parsePasted } from './parse-table';
 import { findPreset } from './presets';
 import type { PresetId } from './presets';
 import { buildSummary } from './summary';
@@ -61,5 +61,29 @@ describe('buildSummary', () => {
 
     expect(summary).toContain('**No verdict.** This isn’t an outcome.');
     expect(summary).not.toMatch(/Distinguishable|Can’t tell|Not measured/);
+  });
+
+  it('keeps the absolute difference but drops the percentage when A’s mean is zero', () => {
+    const parsed = parsePasted(
+      [
+        'condition,task,minutes,review_minutes',
+        'A,one,30,0',
+        'A,two,40,0',
+        'B,one,31,4',
+        'B,two,42,6',
+      ].join('\n'),
+    );
+    if (!parsed.ok) throw new Error(parsed.error);
+    const mapping = guessMapping(parsed.table.columns);
+    const analysis = analyze(
+      buildDataset(parsed.table, mapping),
+      { minutes: true, rework: false, reviewMinutes: true },
+      { endpoint: 'review', preferPaired: true, alpha: 0.05, power: 0.8 },
+    );
+    const summary = buildSummary(analysis, 'Zero review');
+
+    expect(summary).toMatch(/- Difference: −5(\.0)? review minutes\n/);
+    expect(summary).toContain('- 95% interval:');
+    expect(summary).not.toContain('% of A');
   });
 });

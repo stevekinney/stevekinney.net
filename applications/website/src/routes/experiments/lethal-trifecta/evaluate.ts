@@ -204,42 +204,51 @@ const exitEdge = (node: GraphNode<ExitId>, state: TrifectaState): Edge => {
 
   if (!state.nodes[node.id]) return edge(node, 'absent', touchedBy);
 
-  const reopened = (): Edge =>
-    edge(node, 'live', touchedBy, {
-      note: `Default-deny egress is on, but the allowlist admits ${reopenedBy?.domain.host}. ${reopenedBy?.domain.reason}`,
-      phrase: `${node.phrase} to allowlisted ${reopenedBy?.domain.host}`,
-    });
+  // An allowlisted exfiltration domain reopens the network layer: the shell's own egress, or
+  // the whole process in a container. It doesn't undo a control on a particular exit, so each
+  // exit still goes through its own checks below.
+  const layerClosed = isNetwork && (wholeProcess || (deny && node.id === 'shell-network'));
+  const layerReopened = layerClosed && reopenedBy !== undefined;
 
-  if (wholeProcess && isNetwork) {
-    if (reopenedBy) return reopened();
+  /** A live edge, saying which allowlisted domain let it out when the network layer is closed. */
+  const open = (options: { note?: string; phrase?: string } = {}): Edge => {
+    if (!layerReopened || !reopenedBy) return edge(node, 'live', touchedBy, options);
 
-    return edge(node, 'cut', touchedBy, {
-      cuts: [{ control: 'container', label: 'Container with default-deny egress' }],
+    const { host, reason } = reopenedBy.domain;
+    const allowlistNote = `Default-deny egress is on, but the allowlist admits ${host}. ${reason}`;
+
+    return edge(node, 'live', touchedBy, {
+      note: options.note ? `${options.note} ${allowlistNote}` : allowlistNote,
+      phrase: `${options.phrase ?? node.phrase} to allowlisted ${host}`,
     });
+  };
+
+  if (layerClosed && !layerReopened) {
+    return wholeProcess
+      ? edge(node, 'cut', touchedBy, {
+          cuts: [{ control: 'container', label: 'Container with default-deny egress' }],
+        })
+      : edge(node, 'cut', touchedBy, {
+          cuts: [{ control: 'default-deny-egress', label: 'Default-deny egress' }],
+        });
   }
 
   switch (node.id) {
     case 'shell-network': {
-      if (deny) {
-        if (reopenedBy) return reopened();
-
-        return edge(node, 'cut', touchedBy, {
-          cuts: [{ control: 'default-deny-egress', label: 'Default-deny egress' }],
-        });
-      }
+      if (layerReopened) return open();
       if (controls['deny-curl']) {
-        return edge(node, 'live', touchedBy, {
+        return open({
           note: 'curl is denied. wget, python, node, and the rest are not.',
           phrase: 'the shell network, through any HTTP client but curl',
         });
       }
 
-      return edge(node, 'live', touchedBy);
+      return open();
     }
     case 'unsandboxed-shell': {
       if (controls['no-unsandboxed-retry']) {
         if (state.excludedNetworkCommand) {
-          return edge(node, 'live', touchedBy, {
+          return open({
             note: 'Retries are off, but an excluded command can reach the network outside the sandbox.',
             phrase: 'an excluded command outside the sandbox',
           });
@@ -250,14 +259,14 @@ const exitEdge = (node: GraphNode<ExitId>, state: TrifectaState): Edge => {
         });
       }
 
-      return edge(node, 'live', touchedBy);
+      return open();
     }
     case 'web-fetch':
       return controls['deny-web-fetch']
         ? edge(node, 'cut', touchedBy, {
             cuts: [{ control: 'deny-web-fetch', label: 'Web-fetch deny' }],
           })
-        : edge(node, 'live', touchedBy);
+        : open();
     case 'git-push':
     case 'public-comment': {
       if (platform)
@@ -267,8 +276,10 @@ const exitEdge = (node: GraphNode<ExitId>, state: TrifectaState): Edge => {
         ? edge(node, 'gated', touchedBy, {
             cuts: [{ control: 'publish-gate', label: 'Prompt on push and publish' }],
           })
-        : edge(node, 'live', touchedBy);
+        : open();
     }
+    case 'mcp-write':
+      return open();
     case 'deferred-execution':
       // core.fsmonitor is one vector. Git hooks and build scripts run later are others.
       return controls['fsmonitor-off']

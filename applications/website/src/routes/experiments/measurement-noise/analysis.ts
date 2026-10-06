@@ -35,8 +35,8 @@ export type MeanComparison = {
   /** Task names in the same order as the values, when paired. */
   tasks: string[];
   test: WelchTest | PairedTest;
-  /** The difference as a percentage of A's mean. */
-  percent: number;
+  /** The difference as a percentage of A's mean, or null when A's mean is zero and there's no such percentage. */
+  percent: number | null;
   /** The spread the planner should use: of each group (pooled), or of the differences when paired. */
   sigma: number;
 };
@@ -137,6 +137,14 @@ export const checkPairing = (rowsA: TaskRow[], rowsB: TaskRow[], labels: string[
   return { possible: true, tasks: seenA.size };
 };
 
+/** A difference as a percentage of A's mean, or null when A's mean is zero, as review minutes can be. */
+export const percentOfA = (difference: number, meanA: number): number | null => {
+  if (meanA === 0) return null;
+  const percent = (difference / meanA) * 100;
+
+  return Number.isFinite(percent) ? percent : null;
+};
+
 /** Compares a continuous outcome by mean, paired when allowed and asked for, otherwise Welch. */
 export const compareMeans = (
   rowsA: TaskRow[],
@@ -165,7 +173,7 @@ export const compareMeans = (
       valuesB,
       tasks,
       test,
-      percent: (test.difference / test.meanA) * 100,
+      percent: percentOfA(test.difference, test.meanA),
       sigma: test.differenceDeviation,
     };
   }
@@ -183,7 +191,7 @@ export const compareMeans = (
     valuesB,
     tasks: [],
     test,
-    percent: (test.difference / test.meanA) * 100,
+    percent: percentOfA(test.difference, test.meanA),
     sigma: Math.sqrt((variance(valuesA) + variance(valuesB)) / 2),
   };
 };

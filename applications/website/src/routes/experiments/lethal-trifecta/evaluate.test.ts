@@ -288,6 +288,70 @@ describe('edge cases', () => {
   });
 });
 
+describe('an allowlisted domain in a container with default-deny egress', () => {
+  const contained = (...on: ControlId[]): TrifectaState => ({
+    ...withControls(defaultState(), 'container', 'default-deny-egress', ...on),
+    allowlist: ['gist.github.com'],
+  });
+
+  it('reopens only the network layer, leaving every exit open without its own control', () => {
+    const evaluation = evaluate(contained());
+
+    expect(evaluation.edges['shell-network'].state).toBe('live');
+    expect(evaluation.edges['web-fetch'].state).toBe('live');
+    expect(evaluation.edges['web-fetch'].note).toContain('the allowlist admits gist.github.com');
+    expect(evaluation.edges['web-fetch'].phrase).toBe('a web fetch to allowlisted gist.github.com');
+  });
+
+  it('keeps the web-fetch deny', () => {
+    const edge = evaluate(contained('deny-web-fetch')).edges['web-fetch'];
+
+    expect(edge.state).toBe('cut');
+    expect(edge.cuts.map((cut) => cut.control)).toEqual(['deny-web-fetch']);
+  });
+
+  it('keeps unsandboxed retries off, unless an excluded command reaches the network', () => {
+    const state = contained('no-unsandboxed-retry');
+    expect(evaluate(state).edges['unsandboxed-shell'].state).toBe('cut');
+
+    state.excludedNetworkCommand = true;
+    expect(evaluate(state).edges['unsandboxed-shell'].state).toBe('live');
+  });
+
+  it('keeps the prompt on push and publish', () => {
+    const evaluation = evaluate(contained('publish-gate'));
+
+    expect(evaluation.edges['git-push'].state).toBe('gated');
+    expect(evaluation.edges['public-comment'].state).toBe('gated');
+  });
+
+  it('keeps the read-only token of a pull_request from a fork', () => {
+    const state = ciState({
+      trigger: 'pull_request',
+      botSuffixAuthorization: false,
+      credential: 'static',
+      defaultTokenCommits: false,
+    });
+    const evaluation = evaluate({
+      ...withControls(state, 'container', 'default-deny-egress'),
+      allowlist: ['gist.github.com'],
+    });
+
+    expect(evaluation.edges['git-push'].state).toBe('cut');
+    expect(evaluation.edges['public-comment'].state).toBe('cut');
+    expect(evaluation.edges['git-push'].cuts[0].label).toContain('read-only');
+  });
+
+  it('leaves only the shell network open with every exit control on', () => {
+    const evaluation = evaluate(
+      contained('deny-web-fetch', 'no-unsandboxed-retry', 'publish-gate'),
+    );
+
+    expect(evaluation.live.exits.map((edge) => edge.node.id)).toEqual(['shell-network']);
+    expect(evaluation.path?.exit.phrase).toBe('the shell network to allowlisted gist.github.com');
+  });
+});
+
 describe('CI scenarios', () => {
   it('pull_request_target keeps all three legs', () => {
     expect(evaluate(ciState()).exploitable).toBe(true);

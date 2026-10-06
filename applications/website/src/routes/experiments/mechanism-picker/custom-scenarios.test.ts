@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import {
   MAXIMUM_CUSTOM_CARDS,
+  MAXIMUM_DECK_DIAGNOSTICS,
+  MAXIMUM_EXAMINED_ENTRIES,
   MAXIMUM_SCENARIO_LENGTH,
   mergeDecks,
   parseDeck,
@@ -19,7 +21,7 @@ const card: CustomCard = {
 
 describe('custom decks', () => {
   it('round-trips through JSON', () => {
-    expect(parseDeck(serializeDeck([card]))).toEqual({ cards: [card], skipped: [] });
+    expect(parseDeck(serializeDeck([card]))).toEqual({ cards: [card], skipped: [], total: 1 });
   });
 
   it('reads a bare array, and answers given by name', () => {
@@ -61,6 +63,40 @@ describe('custom decks', () => {
     expect(result.cards).toHaveLength(MAXIMUM_CUSTOM_CARDS);
     expect(result.skipped).toHaveLength(3);
     expect(result.cards[0].scenario).toHaveLength(MAXIMUM_SCENARIO_LENGTH);
+  });
+
+  it('stops examining a huge deck, keeps the first diagnostics, and counts the rest', () => {
+    const result = parseDeck(JSON.stringify(Array.from({ length: 200_000 }, () => 4)));
+
+    expect(result.cards).toEqual([]);
+    expect(result.total).toBe(200_000);
+    expect(result.skipped).toHaveLength(MAXIMUM_DECK_DIAGNOSTICS + 1);
+    expect(MAXIMUM_DECK_DIAGNOSTICS).toBe(20);
+    expect(result.skipped[0]).toBe('Card 1 isn’t an object.');
+    expect(result.skipped[19]).toBe('Card 20 isn’t an object.');
+    expect(result.skipped.at(-1)).toBe('…and 199,980 more entries were skipped.');
+  });
+
+  it('counts unexamined entries past the margin as skipped, even valid ones', () => {
+    const valid = Array.from({ length: MAXIMUM_EXAMINED_ENTRIES + 5 }, (_, index) => ({
+      scenario: `Card ${index}`,
+      answer: 'hook',
+    }));
+    const result = parseDeck(JSON.stringify(valid));
+
+    expect(result.cards).toHaveLength(MAXIMUM_CUSTOM_CARDS);
+    expect(result.total).toBe(MAXIMUM_EXAMINED_ENTRIES + 5);
+    const unexplained =
+      MAXIMUM_EXAMINED_ENTRIES + 5 - MAXIMUM_CUSTOM_CARDS - MAXIMUM_DECK_DIAGNOSTICS;
+    expect(result.skipped.at(-1)).toBe(`…and ${unexplained} more entries were skipped.`);
+  });
+
+  it('says one more entry in the singular', () => {
+    const result = parseDeck(
+      JSON.stringify(Array.from({ length: MAXIMUM_DECK_DIAGNOSTICS + 1 }, () => 4)),
+    );
+
+    expect(result.skipped.at(-1)).toBe('…and 1 more entry was skipped.');
   });
 
   it('merges without duplicates', () => {
