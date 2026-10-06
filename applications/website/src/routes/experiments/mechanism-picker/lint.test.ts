@@ -333,6 +333,20 @@ describe('the other rules', () => {
     expect(headed.map((item) => item.primary)).toEqual(Array(6).fill('skill-candidate'));
   });
 
+  it('keeps two sections with the same how-to heading apart', () => {
+    const section = ['## How to deploy', '- Build it.', '- Upload it.', '- Check it.'];
+    const items = lint([...section, '', ...section].join('\n'));
+
+    expect(items).toHaveLength(6);
+    expect(items.some((item) => item.primary === 'skill-candidate')).toBe(false);
+
+    // Text sections under repeated headings are counted apart too.
+    const prose = ['## How to deploy', 'Build it.', 'Upload it.', 'Check it.'];
+    expect(
+      lint([...prose, ...prose].join('\n')).some((item) => item.primary === 'skill-candidate'),
+    ).toBe(false);
+  });
+
   it('follows edited rules', () => {
     const rules = cloneRules();
     rules.vague.enabled = false;

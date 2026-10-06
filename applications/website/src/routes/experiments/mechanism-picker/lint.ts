@@ -15,6 +15,11 @@ export type SourceLine = {
   indent: number;
   /** The nearest heading above the line, if any. */
   heading: string | null;
+  /**
+   * The line that heading is on, which tells two headings with the same text
+   * apart, such as two separate “How to deploy” sections.
+   */
+  headingLine: number | null;
 };
 
 export type RuleMatch = {
@@ -63,6 +68,7 @@ export const splitInstructions = (source: string): SourceLine[] => {
   let fenceDepth = 0;
   let inComment = false;
   let currentHeading: string | null = null;
+  let currentHeadingLine: number | null = null;
   let previousBlank = true;
   let previousWasCode = false;
   let previousWasList = false;
@@ -131,6 +137,7 @@ export const splitInstructions = (source: string): SourceLine[] => {
     const headingMatch = heading.exec(line);
     if (headingMatch) {
       currentHeading = headingMatch[3]?.trim() ?? '';
+      currentHeadingLine = lineNumber;
       previousBlank = false;
       previousWasList = false;
       continue;
@@ -142,6 +149,7 @@ export const splitInstructions = (source: string): SourceLine[] => {
       if (setextUnderline.test(line) && last && last.lineNumber === lineNumber - 1) {
         result.pop();
         currentHeading = last.text;
+        currentHeadingLine = last.lineNumber;
       }
       previousBlank = false;
       previousWasList = false;
@@ -169,7 +177,14 @@ export const splitInstructions = (source: string): SourceLine[] => {
     previousWasList = kind !== 'text' || (previousWasList && indent > 0);
     if (text === '') continue;
 
-    result.push({ lineNumber, text, kind, indent, heading: currentHeading });
+    result.push({
+      lineNumber,
+      text,
+      kind,
+      indent,
+      heading: currentHeading,
+      headingLine: currentHeadingLine,
+    });
   }
 
   return result;
@@ -275,7 +290,7 @@ const findProcedures = (lines: readonly SourceLine[], rules: LintRules): Map<num
     while (
       index < lines.length &&
       (lines[index].kind !== 'text' || lines[index].indent > 0) &&
-      lines[index].heading === lines[first].heading
+      lines[index].headingLine === lines[first].headingLine
     ) {
       index += 1;
     }
@@ -284,7 +299,7 @@ const findProcedures = (lines: readonly SourceLine[], rules: LintRules): Map<num
     const ordered = run.filter((line) => line.kind === 'ordered' && line.indent === 0).length;
     const intro = first > 0 ? lines[first - 1] : null;
     const introCue =
-      intro && intro.kind === 'text' && intro.heading === run[0].heading
+      intro && intro.kind === 'text' && intro.headingLine === run[0].headingLine
         ? findWord(intro.text, cues)
         : null;
     const headingCue = run[0].heading ? findWord(run[0].heading, cues) : null;
@@ -302,14 +317,16 @@ const findProcedures = (lines: readonly SourceLine[], rules: LintRules): Map<num
   }
 
   // A section whose heading names a procedure, such as "How to investigate a failed test".
-  const sections = new Map<string, SourceLine[]>();
+  // Sections are keyed by the heading's line, so two headings with the same text stay apart.
+  const sections = new Map<number, SourceLine[]>();
   for (const line of lines) {
-    if (!line.heading) continue;
-    const section = sections.get(line.heading) ?? [];
+    if (!line.heading || line.headingLine === null) continue;
+    const section = sections.get(line.headingLine) ?? [];
     section.push(line);
-    sections.set(line.heading, section);
+    sections.set(line.headingLine, section);
   }
-  for (const [title, section] of sections) {
+  for (const section of sections.values()) {
+    const title = section[0].heading ?? '';
     const cue = findWord(title, cues);
     if (!cue || section.length <= longerThan) continue;
 
