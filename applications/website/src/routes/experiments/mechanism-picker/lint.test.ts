@@ -169,6 +169,33 @@ describe('edge cases', () => {
     expect(lint(text).map((item) => item.text)).toEqual(['Before.', 'Quoted.', 'After.']);
   });
 
+  it('closes a fence opened inside a blockquote when the blockquote ends', () => {
+    // CommonMark: leaving the blockquote closes a fenced block that never closed inside it.
+    const text = [
+      'Before.',
+      '> ```sh',
+      '> never run rm -rf /',
+      'Never read .env files.',
+      '> > ~~~',
+      '> > quoted example',
+      '> Back to one level.',
+      '> ```',
+      '> still code',
+      '',
+      'After.',
+    ].join('\n');
+
+    expect(splitInstructions(text).map((line) => line.text)).toEqual([
+      'Before.',
+      'Never read .env files.',
+      'Back to one level.',
+      'After.',
+    ]);
+    expect(lint(text).find((item) => item.text === 'Never read .env files.')?.primary).toBe(
+      'must-hold',
+    );
+  });
+
   it('skips front matter and indented code', () => {
     const text = ['---', 'name: x', '---', 'Intro.', '', '    never read .env', 'After.'].join(
       '\n',

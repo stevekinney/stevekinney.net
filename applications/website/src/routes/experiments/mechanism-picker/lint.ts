@@ -59,6 +59,8 @@ export const splitInstructions = (source: string): SourceLine[] => {
   const lines = source.replace(/\r\n?/g, '\n').split('\n');
   const result: SourceLine[] = [];
   let fenceMarker: string | null = null;
+  /** How many blockquotes deep the open fence started, since leaving one closes the fence. */
+  let fenceDepth = 0;
   let inComment = false;
   let currentHeading: string | null = null;
   let previousBlank = true;
@@ -77,7 +79,13 @@ export const splitInstructions = (source: string): SourceLine[] => {
     const lineNumber = index + 1;
     // A fence inside a blockquote, such as `> ```` … `> ````, is still a fence, so
     // fences are found after the quote markers come off, the same as the line's text.
-    const unquoted = line.replace(blockquote, '');
+    const quotes = blockquote.exec(line)?.[0] ?? '';
+    const unquoted = line.slice(quotes.length);
+    const depth = quotes.split('>').length - 1;
+
+    // CommonMark: a line outside the blockquote a fence opened in, blank or not, ends the
+    // blockquote and the fence with it, so the line is read as ordinary text.
+    if (fenceMarker !== null && depth < fenceDepth) fenceMarker = null;
 
     if (fenceMarker !== null) {
       // Only the same character, at least as many of it as opened the block, closes it.
@@ -91,6 +99,7 @@ export const splitInstructions = (source: string): SourceLine[] => {
     const fenceMatch = fence.exec(unquoted);
     if (fenceMatch && !(fenceMatch[1][0] === '`' && fenceMatch[2].includes('`'))) {
       fenceMarker = fenceMatch[1];
+      fenceDepth = depth;
       previousBlank = false;
       continue;
     }
