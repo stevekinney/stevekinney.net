@@ -1,10 +1,15 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  BOOTSTRAP_RESAMPLES,
+  BOOTSTRAP_WORK_BUDGET,
+  budgetNote,
   costPerAcceptedJob,
   createRandom,
+  MIN_BOOTSTRAP_RESAMPLES,
   medianInPlace,
   medianDifferenceJob,
+  planBootstrap,
   quantileSorted,
   runInSlices,
   runToEnd,
@@ -119,6 +124,119 @@ describe('acceptance 5: the bootstrap', () => {
     expect(result.usable).toBeGreaterThan(1_000);
     expect(result.lower).toBe(-1);
     expect(result.upper).toBe(0);
+  });
+});
+
+describe('the bootstrap work budget', () => {
+  it('keeps 10,000 resamples while the work fits the budget', () => {
+    expect(planBootstrap(500, 500)).toEqual({ resamples: 10_000, sampleA: 500, sampleB: 500 });
+    expect(planBootstrap(1_000, 1_000)).toEqual({
+      resamples: 10_000,
+      sampleA: 1_000,
+      sampleB: 1_000,
+    });
+  });
+
+  it('reduces the resamples to fit, rounded down to a hundred', () => {
+    expect(planBootstrap(5_000, 5_000)).toEqual({
+      resamples: 2_000,
+      sampleA: 5_000,
+      sampleB: 5_000,
+    });
+    expect(planBootstrap(1_500, 1_000)).toEqual({
+      resamples: 8_000,
+      sampleA: 1_500,
+      sampleB: 1_000,
+    });
+    expect(planBootstrap(1_001, 1_000).resamples).toBe(9_900);
+  });
+
+  it('never drops below 1,000 resamples, subsampling the rows instead', () => {
+    expect(planBootstrap(50_000, 50_000)).toEqual({
+      resamples: 1_000,
+      sampleA: 10_000,
+      sampleB: 10_000,
+    });
+    // A condition that fits in half the subsample stays whole; the other gets the rest.
+    expect(planBootstrap(90_000, 10_000)).toEqual({
+      resamples: 1_000,
+      sampleA: 10_000,
+      sampleB: 10_000,
+    });
+    expect(planBootstrap(100_000, 5)).toEqual({ resamples: 1_000, sampleA: 19_995, sampleB: 5 });
+    expect(planBootstrap(1, 1_000_000)).toEqual({ resamples: 1_000, sampleA: 1, sampleB: 19_999 });
+    // When both are larger than that, each keeps its share of the rows.
+    expect(planBootstrap(60_000, 40_000)).toEqual({
+      resamples: 1_000,
+      sampleA: 12_000,
+      sampleB: 8_000,
+    });
+  });
+
+  it('subsamples paired data by task, the same tasks on both sides', () => {
+    expect(planBootstrap(60_000, 60_000, true)).toEqual({
+      resamples: 1_000,
+      sampleA: 10_000,
+      sampleB: 10_000,
+    });
+  });
+
+  it('stays within the budget and above the minimum for any size', () => {
+    for (const size of [2, 999, 1_000, 1_001, 9_999, 10_000, 20_000, 33_333, 100_000]) {
+      for (const paired of [false, true]) {
+        const plan = planBootstrap(size, size, paired);
+
+        expect((plan.sampleA + plan.sampleB) * plan.resamples).toBeLessThanOrEqual(
+          BOOTSTRAP_WORK_BUDGET,
+        );
+        expect(plan.resamples).toBeGreaterThanOrEqual(MIN_BOOTSTRAP_RESAMPLES);
+        expect(plan.resamples).toBeLessThanOrEqual(BOOTSTRAP_RESAMPLES);
+      }
+    }
+  });
+
+  it('bootstraps 100,000 rows on a seeded subsample, the same for the same seed', () => {
+    const random = createRandom(9);
+    const groupA = Array.from({ length: 50_000 }, () => 30 + random() * 40);
+    const groupB = Array.from({ length: 50_000 }, () => 25 + random() * 40);
+
+    const first = runToEnd(medianDifferenceJob(groupA, groupB, { seed: 4 }));
+    const second = runToEnd(medianDifferenceJob(groupA, groupB, { seed: 4 }));
+    const other = runToEnd(medianDifferenceJob(groupA, groupB, { seed: 5 }));
+
+    expect(first).toEqual(second);
+    expect(other).not.toEqual(first);
+    expect(first).toMatchObject({ resamples: 1_000, rows: 100_000, sampledRows: 20_000 });
+    expect(first.lower).toBeLessThan(5);
+    expect(first.upper).toBeGreaterThan(5);
+  });
+
+  it('subsamples cost records under the same budget', () => {
+    const records = Array.from({ length: 30_000 }, (_, index) => ({
+      cost: 1 + (index % 7),
+      accepted: index % 3 !== 0,
+    }));
+    const result = runToEnd(costPerAcceptedJob(records, records, { seed: 2 }));
+
+    expect(result).toMatchObject({ resamples: 1_000, rows: 60_000, sampledRows: 20_000 });
+  });
+
+  it('keeps an explicit resample count and every row', () => {
+    const result = runToEnd(medianDifferenceJob(a, b, { seed: 1, resamples: 50 }));
+
+    expect(result).toMatchObject({ resamples: 50, rows: 10, sampledRows: 10 });
+  });
+
+  it('describes a reduced bootstrap, and says nothing about a full one', () => {
+    const interval = { seed: 1, usable: 0, lower: 0, upper: 0 };
+
+    expect(budgetNote({ ...interval, resamples: 10_000, rows: 400, sampledRows: 400 })).toBeNull();
+    expect(budgetNote({ ...interval, resamples: 2_000, rows: 10_000, sampledRows: 10_000 })).toBe(
+      'Bootstrapped with 2,000 resamples to stay responsive on 10,000 rows.',
+    );
+    expect(budgetNote({ ...interval, resamples: 1_000, rows: 100_000, sampledRows: 20_000 })).toBe(
+      'Bootstrapped with 1,000 resamples on a seeded subsample of 20,000 rows to stay responsive on 100,000 rows.',
+    );
   });
 });
 

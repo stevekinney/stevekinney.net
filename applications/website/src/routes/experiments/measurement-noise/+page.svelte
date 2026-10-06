@@ -232,27 +232,26 @@
           dataKey === lastDataKey && prior && prior.seed !== seed ? prior : null;
         lastDataKey = dataKey;
         finishedKey = '';
+        // A large file gets fewer resamples, so the job sets the progress total.
+        const job = medianDifferenceJob(comparison.valuesA, comparison.valuesB, {
+          seed,
+          paired: comparison.design === 'paired',
+        });
         bootstrap = {
           status: 'running',
           completed: 0,
-          total: BOOTSTRAP_RESAMPLES,
+          total: job.total,
           result: null,
           previous,
           reason: null,
         };
 
-        const result = await runInSlices(
-          medianDifferenceJob(comparison.valuesA, comparison.valuesB, {
-            seed,
-            paired: comparison.design === 'paired',
-          }),
-          {
-            cancelled: () => id !== runId,
-            onProgress: (completed, total) => {
-              if (id === runId) bootstrap = { ...bootstrap, completed, total };
-            },
+        const result = await runInSlices(job, {
+          cancelled: () => id !== runId,
+          onProgress: (completed, total) => {
+            if (id === runId) bootstrap = { ...bootstrap, completed, total };
           },
-        );
+        });
         if (id !== runId || !result) return;
         bootstrap = { ...bootstrap, status: 'done', completed: result.resamples, result };
       }
