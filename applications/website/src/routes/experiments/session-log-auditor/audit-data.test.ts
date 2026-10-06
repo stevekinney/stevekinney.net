@@ -84,7 +84,7 @@ describe('the Claude Code adapter', () => {
     const data = readFixtures();
 
     expect(data.toolCalls.filter((call) => call.name === 'unknown')).toEqual([
-      { sessionId: FIRST, timestamp: '2026-09-02T10:01:00.000Z', name: 'unknown' },
+      { sessionId: FIRST, timestamp: '2026-09-02T10:01:00.000Z', name: 'unknown', model: null },
     ]);
     expect(data.errors.length).toBeLessThanOrEqual(data.toolCalls.length);
   });

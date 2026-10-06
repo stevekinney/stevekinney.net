@@ -95,5 +95,10 @@ export const toInputs = (scenario: Scenario, model: WorkerModel): EconomicsInput
   mode: scenario.mode,
   teamMultiplier: scenario.teamMultiplier,
   planMultiplier: scenario.planMultiplier,
-  prices: { input: model.input, cachedInput: model.cachedInput, output: model.output },
+  prices: {
+    input: model.input,
+    cachedInput: model.cachedInput,
+    ...(model.cacheWrite5m === undefined ? {} : { cacheWrite: model.cacheWrite5m }),
+    output: model.output,
+  },
 });

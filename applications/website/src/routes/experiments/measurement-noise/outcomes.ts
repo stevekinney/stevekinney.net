@@ -1,3 +1,5 @@
+import { csvCell } from '$lib/experiments/csv';
+
 import { compareMeans, compareRates, costPerAccepted, splitRows } from './analysis';
 import type { BootstrapInterval } from './bootstrap';
 import type { ColumnMapping } from './columns';
@@ -242,13 +244,6 @@ export const formatOutcomeInterval = (row: OutcomeRow): string => {
   if (row.unit === 'dollars') return `[${formatDollars(row.lower)}, ${formatDollars(row.upper)}]`;
 
   return `${formatInterval(row.lower, row.upper, intervalDecimals(row.lower, row.upper))} min`;
-};
-
-const csvCell = (value: string | number | null): string => {
-  if (value === null) return '';
-  const text = String(value);
-
-  return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 };
 
 /** The outcome table as CSV, with plain numbers so a spreadsheet can use them. */

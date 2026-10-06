@@ -48,11 +48,29 @@ const date = (value: unknown): Date | null => {
 /** The listing caps how much it reads, so a pasted file can't freeze the tab. */
 export const MAX_LISTING_CHARACTERS = 5_000_000;
 
+/** A listing whose merges span longer than this is a mistake, not a team's history. */
+export const MAX_SPAN_YEARS = 20;
+
+const mergeSpan = (pullRequests: readonly PullRequest[]): { first: Date; last: Date } | null => {
+  let span: { first: Date; last: Date } | null = null;
+  for (const { mergedAt } of pullRequests) {
+    if (!mergedAt) continue;
+    if (!span) span = { first: mergedAt, last: mergedAt };
+    else if (mergedAt < span.first) span.first = mergedAt;
+    else if (mergedAt > span.last) span.last = mergedAt;
+  }
+
+  return span;
+};
+
+/** `YYYY-MM-DD` in UTC, with the sign and six digits ISO uses for a year past 9999. */
+const calendarDay = (date: Date): string => date.toISOString().split('T')[0];
+
 /**
  * Parses a listing defensively. An entry without whole, non-negative
  * `additions` and `deletions` is skipped and reported. A missing author or
  * date doesn't skip the entry: it still counts toward sizes, just not toward
- * timing.
+ * timing. A listing whose merges span more than `MAX_SPAN_YEARS` is rejected.
  */
 export const parseListing = (text: string): ParsedListing | ListingError => {
   if (text.trim() === '') return { error: 'Paste the JSON your pull-request listing printed.' };
@@ -111,6 +129,17 @@ export const parseListing = (text: string): ParsedListing | ListingError => {
       mergedAt: date(entry.mergedAt),
     });
   });
+
+  const span = mergeSpan(pullRequests);
+  if (span) {
+    const limit = new Date(span.first);
+    limit.setUTCFullYear(limit.getUTCFullYear() + MAX_SPAN_YEARS);
+    if (span.last > limit) {
+      return {
+        error: `Those merge dates span more than ${MAX_SPAN_YEARS} years, from ${calendarDay(span.first)} to ${calendarDay(span.last)}. Check the mergedAt values in the listing.`,
+      };
+    }
+  }
 
   return { pullRequests, skipped };
 };
@@ -182,14 +211,21 @@ const utcDay = (moment: Date): number => Math.floor(moment.getTime() / DAY);
 export const workingDaysSpanned = (dates: readonly Date[]): number => {
   if (dates.length === 0) return 0;
 
-  const days = dates.map(utcDay);
-  const first = Math.min(...days);
-  const last = Math.max(...days);
-  let weekdays = 0;
+  let first = Infinity;
+  let last = -Infinity;
+  for (const date of dates) {
+    const day = utcDay(date);
+    if (day < first) first = day;
+    if (day > last) last = day;
+  }
 
-  for (let day = first; day <= last; day += 1) {
-    // Day 0 of the epoch was a Thursday, so (day + 4) % 7 is 0 on Sunday.
-    const weekday = (day + 4) % 7;
+  // Whole weeks hold five weekdays each; walk only the zero to six days left over.
+  const total = last - first + 1;
+  const remainder = total % 7;
+  let weekdays = Math.floor(total / 7) * 5;
+  for (let day = last - remainder + 1; day <= last; day += 1) {
+    // Day 0 of the epoch was a Thursday, so the weekday is 0 on Sunday and 6 on Saturday.
+    const weekday = (((day + 4) % 7) + 7) % 7;
     if (weekday !== 0 && weekday !== 6) weekdays += 1;
   }
 

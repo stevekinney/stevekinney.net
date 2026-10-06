@@ -150,6 +150,8 @@ export type TranscriptToolCall = {
   name: string;
   /** `input.command` for a shell tool such as Bash, otherwise `null`. */
   command: string | null;
+  /** The model of the response that issued the call, or `null` when the response doesn't name one. */
+  model: string | null;
   sessionId: string;
   timestamp: string | null;
   file: string;
@@ -392,10 +394,12 @@ const createReader = ({ details }: ReaderOptions): InternalReader => {
         if (!id || toolCalls.has(id)) continue;
 
         const input = isRecord(item.input) ? item.input : {};
+        const model = readString(message.model);
         toolCalls.set(id, {
           id,
           name: readString(item.name) ?? 'unknown',
           command: readString(input.command),
+          model: model === SYNTHETIC_MODEL ? null : model,
           sessionId: readString(record.sessionId) ?? name,
           timestamp: readString(record.timestamp),
           file: name,

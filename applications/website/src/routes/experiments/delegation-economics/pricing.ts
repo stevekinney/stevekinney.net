@@ -12,6 +12,12 @@ export type WorkerModel = {
   name: string;
   input: number;
   cachedInput: number;
+  /**
+   * Writing a five-minute cache entry, which the first worker does for a shared
+   * prefix. Without one, a cache write costs the input price, as the shared
+   * table's header says.
+   */
+  cacheWrite5m?: number;
   output: number;
 };
 
@@ -47,11 +53,12 @@ export const toWorkerPricing = (catalog: ModelPricingCatalog): WorkerPricing => 
 
   return {
     updated: catalog.updated,
-    models: rows.map(({ id, name, input, cachedInput, output }) => ({
+    models: rows.map(({ id, name, input, cachedInput, cacheWrite5m, output }) => ({
       id,
       name,
       input,
       cachedInput,
+      ...(cacheWrite5m === undefined ? {} : { cacheWrite5m }),
       output,
     })),
     defaultModelId: fallback.id,
@@ -130,8 +137,21 @@ export const parsePriceTable = (text: string): ParsedPriceTable => {
       };
     }
 
+    const cacheWrite5m =
+      entry.cacheWrite5m === undefined ? undefined : readPrice(entry.cacheWrite5m);
+    if (cacheWrite5m === null) {
+      return { error: `${name}’s cacheWrite5m has to be a positive price in dollars per million.` };
+    }
+
     seen.add(id);
-    models.push({ id, name, input, cachedInput, output });
+    models.push({
+      id,
+      name,
+      input,
+      cachedInput,
+      ...(cacheWrite5m === undefined ? {} : { cacheWrite5m }),
+      output,
+    });
   }
 
   return { models };
@@ -153,6 +173,7 @@ export const pricesEqual = (
       model.name === other.name &&
       model.input === other.input &&
       model.cachedInput === other.cachedInput &&
+      model.cacheWrite5m === other.cacheWrite5m &&
       model.output === other.output
     );
   });

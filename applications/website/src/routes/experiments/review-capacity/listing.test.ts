@@ -148,6 +148,65 @@ describe('workingDaysSpanned', () => {
     expect(workingDaysSpanned([new Date('2026-10-03T12:00:00Z')])).toBe(1);
     expect(workingDaysSpanned([])).toBe(0);
   });
+
+  it('agrees with counting day by day for every start weekday and length', () => {
+    const DAY = 86_400_000;
+    const start = Date.UTC(2026, 9, 4); // A Sunday.
+
+    for (let offset = 0; offset < 7; offset += 1) {
+      for (let length = 0; length < 30; length += 1) {
+        const first = start + offset * DAY;
+        let expected = 0;
+        for (let day = 0; day <= length; day += 1) {
+          const weekday = new Date(first + day * DAY).getUTCDay();
+          if (weekday !== 0 && weekday !== 6) expected += 1;
+        }
+
+        expect(
+          workingDaysSpanned([new Date(first + length * DAY), new Date(first + 12 * 3_600_000)]),
+        ).toBe(Math.max(1, expected));
+      }
+    }
+  });
+
+  it('counts a span of hundreds of millennia without walking it', () => {
+    const started = performance.now();
+    const days = workingDaysSpanned([
+      new Date('2000-01-01T00:00:00Z'),
+      new Date('+275000-01-01T00:00:00Z'),
+    ]);
+
+    expect(performance.now() - started).toBeLessThan(50);
+    // 99,711,204 calendar days, Saturday to Wednesday: 14,244,457 whole weeks and three weekdays.
+    expect(days).toBe(71_222_288);
+  });
+});
+
+describe('an implausible merge span', () => {
+  it('rejects a listing whose merges span more than 20 years', () => {
+    const result = parseListing(
+      JSON.stringify([
+        entry({ number: 1, mergedAt: '2000-01-01T00:00:00Z' }),
+        entry({ number: 2, mergedAt: '+275000-01-01T00:00:00Z' }),
+      ]),
+    );
+
+    expect(result).toEqual({
+      error:
+        'Those merge dates span more than 20 years, from 2000-01-01 to +275000-01-01. Check the mergedAt values in the listing.',
+    });
+  });
+
+  it('accepts a listing whose merges span 20 years', () => {
+    const result = parseListing(
+      JSON.stringify([
+        entry({ number: 1, mergedAt: '2006-01-01T00:00:00Z' }),
+        entry({ number: 2, mergedAt: '2026-01-01T00:00:00Z' }),
+      ]),
+    );
+
+    expect('error' in result).toBe(false);
+  });
 });
 
 describe('measureThroughput', () => {

@@ -120,12 +120,27 @@ describe('acceptance check 4: cost on Sonnet 5.5', () => {
     expect(costText(evaluation)).toBe('$1.38 vs $0.90');
   });
 
-  it('costs $1.27 with a shared prefix, as 60K of spawn tokens move to the cached price', () => {
+  it('costs $1.28 with a shared prefix: the first worker writes the cache, the rest read it', () => {
     const evaluation = evaluate(inputs({ sharedPrefix: true }));
+    // 20K written at the $2.50 five-minute cache-write price, 60K read at $0.20 cached, and
+    // the rest as before: 588K − 80K = 508K of input at $2 and 20K of output at $10.
+    const rest = 508_000 * 2 + 20_000 * 10;
 
+    expect(sonnet.cacheWrite5m).toBe(2.5);
+    expect(evaluation.fanCost).toBeCloseTo((20_000 * 2.5 + 60_000 * 0.2 + rest) / 1e6, 10);
+    expect(evaluation.fanCost).toBeCloseTo(1.278, 10);
+    expect(formatCost(evaluation.fanCost)).toBe('$1.28');
+  });
+
+  it('writes the cache at the input price for a model with no cache-write price', () => {
+    const noWritePrice = { ...sonnet, cacheWrite5m: undefined };
+    const evaluation = evaluate(toInputs(scenario({ sharedPrefix: true }), noWritePrice));
+
+    expect(evaluation.fanCost).toBeCloseTo(
+      (20_000 * 2 + 60_000 * 0.2 + 508_000 * 2 + 20_000 * 10) / 1e6,
+      10,
+    );
     expect(evaluation.fanCost).toBeCloseTo(1.268, 10);
-    expect(formatCost(evaluation.fanCost)).toBe('$1.27');
-    expect(evaluate(inputs()).fanCost - evaluation.fanCost).toBeCloseTo((60_000 * 1.8) / 1e6, 10);
   });
 
   it('rounds an exact half cent up: $0.335 shows as $0.34', () => {

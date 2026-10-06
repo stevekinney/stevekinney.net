@@ -129,11 +129,18 @@ export const filterData = (data: AuditData, filters: Filters): AuditData => {
   const responses = data.responses.filter(
     (response) => keep(response) && (!filters.model || response.model === filters.model),
   );
+  // A tool call and its failure belong to the model of the response that issued the call.
   const toolCalls = data.toolCalls.filter(
-    (call) => keep(call) && (!filters.tool || call.name === filters.tool),
+    (call) =>
+      keep(call) &&
+      (!filters.model || call.model === filters.model) &&
+      (!filters.tool || call.name === filters.tool),
   );
   const errors = data.errors.filter(
-    (error) => keep(error) && (!filters.tool || error.tool === filters.tool),
+    (error) =>
+      keep(error) &&
+      (!filters.model || error.model === filters.model) &&
+      (!filters.tool || error.tool === filters.tool),
   );
   const compactions = data.compactions.filter(keep);
 

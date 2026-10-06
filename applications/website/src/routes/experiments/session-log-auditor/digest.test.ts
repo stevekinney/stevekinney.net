@@ -162,6 +162,18 @@ describe('buildSummary', () => {
     expect(summary).toContain('| Signature | Tool | Category | Sessions | Occurrences |');
     expect(summary).not.toContain(githubToken);
   });
+
+  it('masks a home directory in the scope', () => {
+    const analysis = sessionWithSecret();
+    const summary = buildSummary(
+      analysis.overview,
+      analysis.clusters,
+      'directory /Users/alice/private-project',
+    );
+
+    expect(summary).toContain('Scope: directory ~/private-project');
+    expect(summary).not.toContain('alice');
+  });
 });
 
 describe('toCsv', () => {

@@ -340,6 +340,34 @@ describe('prefilling the prompt on push and publish', () => {
 
     expect(report.prefill['publish-gate'].status).toBe('off');
   });
+
+  it.each([
+    'Bash',
+    'Bash(*)',
+    'Bash(git:*)',
+    'Bash(git *)',
+    'Bash(git push:*)',
+    'Bash(git push *)',
+    'Bash(g*)',
+    'Bash(git push)',
+    'Bash(git push origin main)',
+  ])('treats an allow of %s as letting a push out', (rule) => {
+    const report = analyze(file({ permissions: { allow: [rule] } }));
+
+    expect(report.prefill['publish-gate']).toMatchObject({
+      status: 'off',
+      evidence: [expect.objectContaining({ value: rule })],
+    });
+  });
+
+  it.each(['Bash(git)', 'Bash(git status:*)', 'Bash(gh:*)', 'Bash(git pushy:*)'])(
+    'doesn’t treat an allow of %s as allowing a push',
+    (rule) => {
+      const report = analyze(file({ permissions: { allow: [rule] } }));
+
+      expect(report.prefill['publish-gate'].status).toBe('unknown');
+    },
+  );
 });
 
 describe('parsing defensively', () => {

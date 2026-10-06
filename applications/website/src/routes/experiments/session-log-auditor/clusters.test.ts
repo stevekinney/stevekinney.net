@@ -22,6 +22,7 @@ const failure = (
     sessionId,
     timestamp,
     tool,
+    model: 'claude-opus-5-5',
     command: null,
     exitCode: 1,
     message,
