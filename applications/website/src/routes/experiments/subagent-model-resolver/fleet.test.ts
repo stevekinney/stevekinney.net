@@ -412,6 +412,32 @@ describe('where each value comes from', () => {
     expect(analysis.shadowedCount).toBe(1);
   });
 
+  it('keeps a pasted project agent from a different repository than the uploaded one', () => {
+    const analysis = analyzeFleet(
+      input({
+        pastedText: '/Users/me/repo-b/.claude/agents/reviewer.md:3:model: haiku',
+        agentFiles: [
+          agentFile('r', 'repo-a/.claude/agents/reviewer.md', ['name: reviewer', 'model: opus']),
+        ],
+      }),
+    );
+
+    expect(row(analysis, 'reviewer')).toHaveLength(2);
+  });
+
+  it('treats a pasted line for the uploaded project file as the same file', () => {
+    const analysis = analyzeFleet(
+      input({
+        pastedText: '/Users/me/repo-a/.claude/agents/reviewer.md:3:model: opus',
+        agentFiles: [
+          agentFile('r', 'repo-a/.claude/agents/reviewer.md', ['name: reviewer', 'model: opus']),
+        ],
+      }),
+    );
+
+    expect(row(analysis, 'reviewer')).toHaveLength(1);
+  });
+
   it('keeps a pasted definition from another scope so precedence can decide', () => {
     const analysis = analyzeFleet(
       input({

@@ -38,10 +38,14 @@ export const addIntake = (
   intake: IntakeResult,
   skippedFolders: readonly string[] = [],
 ): EvidenceState => {
+  // A path that is skipped now, such as after lowering the size cap, drops its earlier copy too, so
+  // the fit plan doesn't keep counting a file the list reports as skipped.
+  const skippedNow = new Set(intake.skipped.map((entry) => entry.path));
   const replacements = new Map(intake.files.map((file) => [file.id, file]));
-  const known = new Set(state.files.map((file) => file.id));
+  const kept = state.files.filter((file) => !skippedNow.has(file.path));
+  const known = new Set(kept.map((file) => file.id));
   const files = [
-    ...state.files.map((file) => replacements.get(file.id) ?? file),
+    ...kept.map((file) => replacements.get(file.id) ?? file),
     ...intake.files.filter((file) => !known.has(file.id)),
   ];
 

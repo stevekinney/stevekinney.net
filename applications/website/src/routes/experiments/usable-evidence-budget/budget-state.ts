@@ -185,8 +185,9 @@ export const fillFromReadout = (
   let marginShare = state.marginShare;
 
   if (applied.capacityFromHeader && !edited.includes('capacity')) {
-    scenario.capacity = applied.capacity;
-    scenario.margin = marginForCapacity(applied.capacity, marginShare);
+    // The controls and the link decoder both stop at `maximumTokenCount`, so a header can't go past it.
+    scenario.capacity = Math.min(applied.capacity, maximumTokenCount);
+    scenario.margin = marginForCapacity(scenario.capacity, marginShare);
     filled.push('capacity');
     // The margin follows the capacity, so discarding has to put it back along with the capacity.
     if (scenario.margin !== state.scenario.margin) filled.push('margin');
