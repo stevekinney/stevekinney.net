@@ -16,7 +16,7 @@
     roundToSignificantDigits,
   } from './sensitivity';
   import type { MapCell } from './sensitivity';
-  import { placeTooltip } from './tooltip-position';
+  import { placeTooltip } from '$lib/experiments/tooltip-position';
 
   type Props = {
     evaluation: ChangeEvaluation;

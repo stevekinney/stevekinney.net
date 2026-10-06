@@ -4,10 +4,10 @@
   import Button from '$lib/components/button';
   import type { SourceFile } from '$lib/experiments/dropped-files';
   import FileDropZone from '$lib/experiments/file-drop-zone.svelte';
+  import { guessSettingsScope, settingsScopeLabels } from '$lib/experiments/settings-scope';
+  import type { SettingsScope } from '$lib/experiments/settings-scope';
 
   import CommandTabs from './command-tabs.svelte';
-  import { settingsScopeLabels } from './effective-settings';
-  import type { SettingsScope } from './effective-settings';
   import { fieldClasses, hintClasses, labelClasses, panelClasses } from './field-styles';
   import {
     agentGroupKey,
@@ -20,7 +20,7 @@
   import InlineCode from './inline-code.svelte';
   import { exampleLines, parsePastedOutput } from './paste-parser';
   import type { ResolverConfiguration } from './resolve';
-  import { agentScopeLabels, guessSettingsScope, uploadableAgentScopes } from './scopes';
+  import { agentScopeLabels, uploadableAgentScopes } from './scopes';
   import type { AgentScope } from './scopes';
   import SelectField from './select-field.svelte';
   import type { SetupState } from './setup-state';

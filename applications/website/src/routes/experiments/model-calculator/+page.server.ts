@@ -1,6 +1,6 @@
 import { experiment } from './experiment';
-import modelPricingData from './model-pricing.toml';
-import { parseModelPricingCatalog } from './model-pricing-schema';
+import modelPricingData from '$lib/experiments/model-pricing.toml';
+import { parseModelPricingCatalog } from '$lib/experiments/model-pricing-schema';
 import type { PageServerLoad } from './$types';
 
 export const prerender = true;

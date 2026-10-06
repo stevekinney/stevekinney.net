@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { analyzeFleet, configurationForRow, isSettingsPath, rowMatchesFilter } from './fleet';
 import type { FleetInput, UploadedAgentFile } from './fleet';
-import { defaultSettingsPrecedence } from './effective-settings';
+import { defaultSettingsPrecedence } from '$lib/experiments/settings-scope';
 import { baseConfiguration } from './presets';
 import { defaultRange, v } from './versions';
 

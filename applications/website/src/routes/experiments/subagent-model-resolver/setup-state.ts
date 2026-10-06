@@ -1,5 +1,7 @@
-import { defaultSettingsPrecedence } from './effective-settings';
-import type { SettingsFile, SettingsScope } from './effective-settings';
+import { defaultSettingsPrecedence } from '$lib/experiments/settings-scope';
+import type { SettingsScope } from '$lib/experiments/settings-scope';
+
+import type { SettingsFile } from './effective-settings';
 import type { Comparison, UploadedAgentFile } from './fleet';
 import type { AgentScope } from './scopes';
 

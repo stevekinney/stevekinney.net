@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { createTranscriptReader } from './claude-code-transcript';
-import type { ClaudeCodeTranscript } from './claude-code-transcript';
+import { createDetailedTranscriptReader, createTranscriptReader } from './claude-code-transcript';
+import type { ClaudeCodeTranscript, DetailedTranscript } from './claude-code-transcript';
 
 const read = (files: Record<string, string[]>): ClaudeCodeTranscript => {
   const reader = createTranscriptReader();
@@ -122,6 +122,40 @@ describe('createTranscriptReader', () => {
     expect(transcript.files[0]).toMatchObject({ turns: 1, sidechainTurns: 1 });
   });
 
+  it('keeps subagent responses apart with the agent that wrote them, last line winning', () => {
+    const subagent = { isSidechain: true, agentId: 'agent-a' };
+    const transcript = read({
+      'session.jsonl': [response('main', '2026-10-04T10:00:00.000Z', usage({ cacheRead: 100 }))],
+      'session/subagents/agent-a.jsonl': [
+        response(
+          'first',
+          '2026-10-04T10:00:01.000Z',
+          usage({ cacheRead: 4_000, cacheWrite: 16_000, output: 3 }),
+          subagent,
+        ),
+        response(
+          'first',
+          '2026-10-04T10:00:02.000Z',
+          usage({ cacheRead: 4_000, cacheWrite: 16_000, output: 90 }),
+          subagent,
+        ),
+        response('second', '2026-10-04T10:00:03.000Z', usage({ cacheRead: 21_000 }), subagent),
+      ],
+      'old-session.jsonl': [
+        response('inline', '2026-10-04T09:00:00.000Z', usage({ input: 9_000 }), {
+          isSidechain: true,
+        }),
+      ],
+    });
+
+    expect(transcript.turns.map((turn) => turn.messageId)).toEqual(['main']);
+    expect(transcript.subagentTurns).toMatchObject([
+      { messageId: 'inline', agentId: null, contextTokens: 9_000, file: 'old-session.jsonl' },
+      { messageId: 'first', agentId: 'agent-a', contextTokens: 20_000, outputTokens: 90 },
+      { messageId: 'second', agentId: 'agent-a', contextTokens: 21_000 },
+    ]);
+  });
+
   it('ignores a compaction recorded by a subagent', () => {
     const sidechain = JSON.stringify({
       ...JSON.parse(compaction('2026-10-04T10:05:00.000Z', 150_000, 6_000)),
@@ -202,5 +236,154 @@ describe('createTranscriptReader', () => {
 
     expect(transcript.files[0]).toMatchObject({ recognized: false, turns: 0 });
     expect(transcript.turns).toEqual([]);
+  });
+});
+
+const readDetailed = (files: Record<string, string[]>): DetailedTranscript => {
+  const reader = createDetailedTranscriptReader();
+
+  for (const [name, lines] of Object.entries(files)) {
+    const file = reader.readFile(name);
+    lines.forEach(file.addLine);
+    file.finish();
+  }
+
+  return reader.summarize();
+};
+
+const toolUse = (messageId: string, timestamp: string, id: string, command: string): string =>
+  JSON.stringify({
+    type: 'assistant',
+    sessionId: 'session-1',
+    timestamp,
+    cwd: '/work/app',
+    gitBranch: 'main',
+    version: '3.1.0',
+    message: {
+      id: messageId,
+      model: 'claude-opus-5-5',
+      content: [{ type: 'tool_use', id, name: 'Bash', input: { command } }],
+      usage: usage({ input: 10, output: 5 }),
+    },
+  });
+
+const toolResult = (timestamp: string, id: string, content: unknown, isError: boolean): string =>
+  JSON.stringify({
+    type: 'user',
+    sessionId: 'session-1',
+    timestamp,
+    message: {
+      role: 'user',
+      content: [{ type: 'tool_result', tool_use_id: id, is_error: isError, content }],
+    },
+  });
+
+describe('createDetailedTranscriptReader', () => {
+  it('collects tool calls across the lines of one streamed response', () => {
+    const transcript = readDetailed({
+      'session.jsonl': [
+        toolUse('message-1', '2026-10-04T10:00:00.000Z', 'call-1', 'timeout 5 ls'),
+        toolUse('message-1', '2026-10-04T10:00:00.500Z', 'call-2', 'git status'),
+      ],
+    });
+
+    expect(transcript.details.toolCalls).toEqual([
+      {
+        id: 'call-1',
+        name: 'Bash',
+        command: 'timeout 5 ls',
+        model: 'claude-opus-5-5',
+        sessionId: 'session-1',
+        timestamp: '2026-10-04T10:00:00.000Z',
+        file: 'session.jsonl',
+        line: 1,
+      },
+      expect.objectContaining({ id: 'call-2', line: 2 }),
+    ]);
+    expect(transcript.turns).toHaveLength(1);
+  });
+
+  it('keeps failed results with their line and source, and skips successful ones', () => {
+    const failed = toolResult('2026-10-04T10:00:01.000Z', 'call-1', 'Exit code 1\nboom', true);
+    const transcript = readDetailed({
+      'session.jsonl': [
+        toolUse('message-1', '2026-10-04T10:00:00.000Z', 'call-1', 'make'),
+        '',
+        failed,
+        toolResult('2026-10-04T10:00:02.000Z', 'call-2', 'fine', false),
+        toolResult(
+          '2026-10-04T10:00:03.000Z',
+          'call-3',
+          [
+            { type: 'text', text: 'a' },
+            { type: 'text', text: 'b' },
+          ],
+          true,
+        ),
+      ],
+    });
+
+    expect(transcript.details.toolErrors).toHaveLength(2);
+    expect(transcript.details.toolErrors[0]).toEqual({
+      toolUseId: 'call-1',
+      sessionId: 'session-1',
+      timestamp: '2026-10-04T10:00:01.000Z',
+      file: 'session.jsonl',
+      line: 3,
+      text: 'Exit code 1\nboom',
+      source: failed,
+    });
+    expect(transcript.details.toolErrors[1]).toMatchObject({ toolUseId: 'call-3', text: 'a\nb' });
+  });
+
+  it('splits cache writes by lifetime when the transcript records it', () => {
+    const transcript = readDetailed({
+      'session.jsonl': [
+        response('split', '2026-10-04T10:00:00.000Z', {
+          ...usage({ input: 1, cacheRead: 2, cacheWrite: 30, output: 4 }),
+          cache_creation: { ephemeral_5m_input_tokens: 10, ephemeral_1h_input_tokens: 20 },
+        }),
+        response('whole', '2026-10-04T10:00:01.000Z', usage({ cacheWrite: 7 }), {
+          isSidechain: true,
+        }),
+      ],
+    });
+
+    expect(transcript.details.responses.map((entry) => entry.usage)).toEqual([
+      {
+        inputTokens: 1,
+        cacheReadTokens: 2,
+        cacheWriteTokens: 30,
+        cacheWriteSplit: { fiveMinute: 10, oneHour: 20 },
+        outputTokens: 4,
+      },
+      {
+        inputTokens: 0,
+        cacheReadTokens: 0,
+        cacheWriteTokens: 7,
+        cacheWriteSplit: null,
+        outputTokens: 0,
+      },
+    ]);
+    expect(transcript.details.responses[1].isSidechain).toBe(true);
+  });
+
+  it('records the working directory, branch, and version of each response', () => {
+    const transcript = readDetailed({
+      'session.jsonl': [toolUse('message-1', '2026-10-04T10:00:00.000Z', 'call-1', 'ls')],
+    });
+
+    expect(transcript.details.responses[0]).toMatchObject({
+      cwd: '/work/app',
+      gitBranch: 'main',
+      version: '3.1.0',
+    });
+  });
+
+  it('counts a failed result read twice once', () => {
+    const failed = toolResult('2026-10-04T10:00:01.000Z', 'call-1', 'nope', true);
+    const transcript = readDetailed({ 'a.jsonl': [failed], 'b.jsonl': [failed] });
+
+    expect(transcript.details.toolErrors).toHaveLength(1);
   });
 });

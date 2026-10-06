@@ -25,6 +25,8 @@ meta-*
 **/.turbo
 
 **/.claude/settings.local.json
+# Synthetic settings fixtures for the experiment specs are committed.
+!applications/website/tests/fixtures/**/.claude/settings.local.json
 test-results/
 playwright-report/
 .eslintcache

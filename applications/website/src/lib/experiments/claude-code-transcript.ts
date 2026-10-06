@@ -9,13 +9,19 @@ import { readLines } from './read-lines';
  * - A streamed response is written as several lines that share a
  *   `message.id`. Their `output_tokens` grows until the last line, so the last
  *   line for each ID wins. Treating the copies as identical undercounts output.
- * - `isSidechain` lines are subagent traffic, not the main context.
+ * - `isSidechain` lines are subagent traffic, not the main context. They're
+ *   kept apart as `subagentTurns`, each with the `agentId` Claude Code
+ *   records, so a subagent's own transcript can still be measured.
  * - When a response has several `message` iterations, as it does around an
  *   advisor call, its top-level usage is their sum. That double-counts the
  *   prompt: the next turn's context is about half of it, but just above the
  *   last iteration's. So a turn's context is its last iteration's prompt.
  *   Claude Code's own `compactMetadata.preTokens` reports the doubled sum on
  *   such turns.
+ * - Each line of a streamed response carries at most one content item, so a
+ *   response's tool calls are collected from every line, not just the last.
+ * - A failed tool result arrives in a `user` record as a `tool_result` item
+ *   with `is_error: true`, and its line contains `"is_error":true` verbatim.
  */
 
 /** One main-thread model response. */
@@ -36,6 +42,15 @@ export type TranscriptTurn = {
   segment: number;
   /** The file this turn came from. */
   file: string;
+};
+
+/** One subagent response. */
+export type SubagentTurn = TranscriptTurn & {
+  /**
+   * The subagent that wrote it, as recorded in `agentId`. Older transcripts
+   * kept subagent lines in the session file without one.
+   */
+  agentId: string | null;
 };
 
 /** A `compact_boundary` record: the session's history was replaced with a summary. */
@@ -69,6 +84,8 @@ export type ClaudeCodeTranscript = {
   /** Main-thread responses, one per message ID, oldest first. */
   turns: TranscriptTurn[];
   sidechainTurns: number;
+  /** Subagent responses, one per message ID, oldest first. */
+  subagentTurns: SubagentTurn[];
   /** Oldest first. */
   compactions: CompactionEvent[];
   /**
@@ -93,6 +110,84 @@ export type TranscriptReader = {
   /** Starts one file. Feed it every line, then call `finish` before starting the next. */
   readFile: (name: string) => TranscriptFileReader;
   summarize: () => ClaudeCodeTranscript;
+};
+
+/** A response's usage as billed: every part counted once, cache writes split by lifetime when recorded. */
+export type ResponseUsage = {
+  inputTokens: number;
+  cacheReadTokens: number;
+  /** Every cache write, `cache_creation_input_tokens`. */
+  cacheWriteTokens: number;
+  /**
+   * The write split by cache lifetime, from `usage.cache_creation`. `null` when
+   * the transcript doesn't record the split, so the caller has to assume one.
+   */
+  cacheWriteSplit: { fiveMinute: number; oneHour: number } | null;
+  outputTokens: number;
+};
+
+/** One model response, main thread or subagent, with what it billed and where it ran. */
+export type TranscriptResponse = {
+  messageId: string;
+  model: string;
+  sessionId: string;
+  timestamp: string | null;
+  file: string;
+  isSidechain: boolean;
+  /**
+   * The top-level usage. Around an advisor call it's the sum of the response's
+   * iterations, which is what was billed, even though it overstates the context.
+   */
+  usage: ResponseUsage;
+  cwd: string | null;
+  gitBranch: string | null;
+  version: string | null;
+};
+
+/** A `tool_use` item from a response. */
+export type TranscriptToolCall = {
+  id: string;
+  name: string;
+  /** `input.command` for a shell tool such as Bash, otherwise `null`. */
+  command: string | null;
+  /** The model of the response that issued the call, or `null` when the response doesn't name one. */
+  model: string | null;
+  sessionId: string;
+  timestamp: string | null;
+  file: string;
+  /** One-based line number in the file. */
+  line: number;
+};
+
+/** A `tool_result` item with `is_error: true`. */
+export type TranscriptToolError = {
+  /** The call it answers, or `null` when the result doesn't say. */
+  toolUseId: string | null;
+  sessionId: string;
+  timestamp: string | null;
+  file: string;
+  /** One-based line number in the file. */
+  line: number;
+  /** The result's content as text: the string itself, or its text parts joined by newlines. */
+  text: string;
+  /** The whole line the result was read from, so a quote can be checked against it. */
+  source: string;
+};
+
+export type TranscriptDetails = {
+  /** Every response, subagent responses included, one per message ID, oldest first. */
+  responses: TranscriptResponse[];
+  /** Every tool call, one per ID, in the order read. */
+  toolCalls: TranscriptToolCall[];
+  /** Every failed tool result, one per call ID, in the order read. */
+  toolErrors: TranscriptToolError[];
+};
+
+export type DetailedTranscript = ClaudeCodeTranscript & { details: TranscriptDetails };
+
+export type DetailedTranscriptReader = {
+  readFile: (name: string) => TranscriptFileReader;
+  summarize: () => DetailedTranscript;
 };
 
 type JsonRecord = Record<string, unknown>;
@@ -134,6 +229,33 @@ const contextTokensOf = (usage: JsonRecord): number => {
   return last ? promptTokens(last) : promptTokens(usage);
 };
 
+const readUsage = (usage: JsonRecord): ResponseUsage => {
+  const creation = isRecord(usage.cache_creation) ? usage.cache_creation : null;
+
+  return {
+    inputTokens: readCount(usage.input_tokens),
+    cacheReadTokens: readCount(usage.cache_read_input_tokens),
+    cacheWriteTokens: readCount(usage.cache_creation_input_tokens),
+    cacheWriteSplit: creation
+      ? {
+          fiveMinute: readCount(creation.ephemeral_5m_input_tokens),
+          oneHour: readCount(creation.ephemeral_1h_input_tokens),
+        }
+      : null,
+    outputTokens: readCount(usage.output_tokens),
+  };
+};
+
+/** A tool result's content: a string, or an array of parts whose text parts are joined. */
+const contentText = (content: unknown): string => {
+  if (typeof content === 'string') return content;
+  if (!Array.isArray(content)) return '';
+
+  return content
+    .flatMap((part) => (isRecord(part) && typeof part.text === 'string' ? [part.text] : []))
+    .join('\n');
+};
+
 const looksLikeJsonObject = (line: string): boolean => line.startsWith('{') && line.endsWith('}');
 
 const parse = (line: string): JsonRecord | null => {
@@ -164,7 +286,15 @@ const earlier = (first: string | null, second: string | null): string | null =>
 const later = (first: string | null, second: string | null): string | null =>
   first === null ? second : second === null || first >= second ? first : second;
 
-type TurnEntry = TranscriptTurn & { sequence: number; isSidechain: boolean };
+type TurnEntry = TranscriptTurn & {
+  sequence: number;
+  isSidechain: boolean;
+  agentId: string | null;
+  usage: ResponseUsage;
+  cwd: string | null;
+  gitBranch: string | null;
+  version: string | null;
+};
 type CompactionEntry = CompactionEvent & { sequence: number };
 
 const toTurn = (entry: TurnEntry): TranscriptTurn => ({
@@ -178,6 +308,11 @@ const toTurn = (entry: TurnEntry): TranscriptTurn => ({
   file: entry.file,
 });
 
+const toSubagentTurn = (entry: TurnEntry): SubagentTurn => ({
+  ...toTurn(entry),
+  agentId: entry.agentId,
+});
+
 const toCompaction = (entry: CompactionEntry): CompactionEvent => ({
   sessionId: entry.sessionId,
   timestamp: entry.timestamp,
@@ -187,12 +322,34 @@ const toCompaction = (entry: CompactionEntry): CompactionEvent => ({
   file: entry.file,
 });
 
-/**
- * Collects turns and compactions from one or more transcripts. A response that
- * appears in more than one file is counted once.
- */
-export const createTranscriptReader = (): TranscriptReader => {
+const toResponse = (entry: TurnEntry): TranscriptResponse => ({
+  messageId: entry.messageId,
+  model: entry.model,
+  sessionId: entry.sessionId,
+  timestamp: entry.timestamp,
+  file: entry.file,
+  isSidechain: entry.isSidechain,
+  usage: entry.usage,
+  cwd: entry.cwd,
+  gitBranch: entry.gitBranch,
+  version: entry.version,
+});
+
+/** Matches a failed tool result however the JSON is spaced. */
+const FAILED_RESULT = /"is_error"\s*:\s*true/;
+
+type ReaderOptions = {
+  /** Also collect every response, tool call, and failed tool result. */
+  details: boolean;
+};
+
+type InternalReader = TranscriptReader & { summarizeDetailed: () => DetailedTranscript };
+
+const createReader = ({ details }: ReaderOptions): InternalReader => {
   const responses = new Map<string, TurnEntry>();
+  const toolCalls = new Map<string, TranscriptToolCall>();
+  const toolErrors: TranscriptToolError[] = [];
+  const failedCalls = new Set<string>();
   const compactions: CompactionEntry[] = [];
   const files: TranscriptFileSummary[] = [];
   let sequence = 0;
@@ -213,6 +370,7 @@ export const createTranscriptReader = (): TranscriptReader => {
     const trailingLines: string[] = [];
     let fileFirstTimestamp: string | null = null;
     let lastParsedTimestamp: string | null = null;
+    let lineNumber = 0;
 
     const addCompaction = (record: JsonRecord): void => {
       const metadata = isRecord(record.compactMetadata) ? record.compactMetadata : {};
@@ -231,8 +389,57 @@ export const createTranscriptReader = (): TranscriptReader => {
       summary.compactions += 1;
     };
 
+    const addToolCalls = (record: JsonRecord, message: JsonRecord): void => {
+      if (!Array.isArray(message.content)) return;
+
+      for (const item of message.content) {
+        if (!isRecord(item) || item.type !== 'tool_use') continue;
+
+        const id = readString(item.id);
+        if (!id || toolCalls.has(id)) continue;
+
+        const input = isRecord(item.input) ? item.input : {};
+        const model = readString(message.model);
+        toolCalls.set(id, {
+          id,
+          name: readString(item.name) ?? 'unknown',
+          command: readString(input.command),
+          model: model === SYNTHETIC_MODEL ? null : model,
+          sessionId: readString(record.sessionId) ?? name,
+          timestamp: readString(record.timestamp),
+          file: name,
+          line: lineNumber,
+        });
+      }
+    };
+
+    const addToolErrors = (record: JsonRecord, source: string): void => {
+      if (!isRecord(record.message) || !Array.isArray(record.message.content)) return;
+
+      for (const item of record.message.content) {
+        if (!isRecord(item) || item.type !== 'tool_result' || item.is_error !== true) continue;
+
+        const toolUseId = readString(item.tool_use_id);
+        if (toolUseId) {
+          if (failedCalls.has(toolUseId)) continue;
+          failedCalls.add(toolUseId);
+        }
+
+        toolErrors.push({
+          toolUseId,
+          sessionId: readString(record.sessionId) ?? name,
+          timestamp: readString(record.timestamp),
+          file: name,
+          line: lineNumber,
+          text: contentText(item.content),
+          source,
+        });
+      }
+    };
+
     const addResponse = (record: JsonRecord): void => {
       if (!isRecord(record.message)) return;
+      if (details) addToolCalls(record, record.message);
 
       const { id, model, usage } = record.message;
       const messageId = readString(id);
@@ -254,12 +461,18 @@ export const createTranscriptReader = (): TranscriptReader => {
         file: previous?.file ?? name,
         sequence: previous?.sequence ?? sequence++,
         isSidechain: record.isSidechain === true,
+        agentId: readString(record.agentId) ?? previous?.agentId ?? null,
+        usage: readUsage(usage),
+        cwd: readString(record.cwd) ?? previous?.cwd ?? null,
+        gitBranch: readString(record.gitBranch) ?? previous?.gitBranch ?? null,
+        version: readString(record.version) ?? previous?.version ?? null,
       });
       fileResponses.add(messageId);
     };
 
     return {
       addLine: (rawLine) => {
+        lineNumber += 1;
         const line = rawLine.trim();
         if (!line) return;
 
@@ -274,9 +487,16 @@ export const createTranscriptReader = (): TranscriptReader => {
 
         const carriesCompaction = line.includes('"compact_boundary"');
         const carriesResponse = line.includes('"usage"') && line.includes('"assistant"');
+        const carriesFailure =
+          details && line.includes('"tool_result"') && FAILED_RESULT.test(line);
 
         // Parse only the lines that matter, plus the first lines until one has a time.
-        if (!carriesCompaction && !carriesResponse && fileFirstTimestamp !== null) {
+        if (
+          !carriesCompaction &&
+          !carriesResponse &&
+          !carriesFailure &&
+          fileFirstTimestamp !== null
+        ) {
           if (!summary.recognized && line.includes('"sessionId"')) summary.recognized = true;
 
           return;
@@ -303,6 +523,8 @@ export const createTranscriptReader = (): TranscriptReader => {
           addCompaction(record);
         } else if (carriesResponse && record.type === 'assistant') {
           addResponse(record);
+        } else if (carriesFailure && record.type === 'user') {
+          addToolErrors(record, line);
         }
       },
       finish: () => {
@@ -334,6 +556,7 @@ export const createTranscriptReader = (): TranscriptReader => {
       files: files.map((file) => ({ ...file })),
       turns,
       sidechainTurns: entries.length - turns.length,
+      subagentTurns: entries.filter((entry) => entry.isSidechain).map(toSubagentTurn),
       compactions: [...compactions].sort(chronologically).map(toCompaction),
       firstTimestamp,
       lastTimestamp,
@@ -341,7 +564,34 @@ export const createTranscriptReader = (): TranscriptReader => {
     };
   };
 
-  return { readFile, summarize };
+  const summarizeDetailed = (): DetailedTranscript => ({
+    ...summarize(),
+    details: {
+      responses: [...responses.values()].sort(chronologically).map(toResponse),
+      toolCalls: [...toolCalls.values()],
+      toolErrors: [...toolErrors],
+    },
+  });
+
+  return { readFile, summarize, summarizeDetailed };
+};
+
+/**
+ * Collects turns and compactions from one or more transcripts. A response that
+ * appears in more than one file is counted once.
+ */
+export const createTranscriptReader = (): TranscriptReader => createReader({ details: false });
+
+/**
+ * Like `createTranscriptReader`, but also collects every response with its
+ * usage split, every tool call, and every failed tool result with the line it
+ * came from. Lines that only carry a successful tool result are still skipped
+ * without parsing.
+ */
+export const createDetailedTranscriptReader = (): DetailedTranscriptReader => {
+  const reader = createReader({ details: true });
+
+  return { readFile: reader.readFile, summarize: () => reader.summarizeDetailed() };
 };
 
 /** Streams transcripts through one reader in the browser. Nothing leaves the page. */

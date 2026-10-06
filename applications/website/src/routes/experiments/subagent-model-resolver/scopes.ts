@@ -1,4 +1,4 @@
-import type { SettingsScope } from './effective-settings';
+import { isHomeBefore, isManagedSegment, pathSegments } from '$lib/experiments/settings-scope';
 
 /**
  * Where an agent definition comes from, highest priority first: managed
@@ -20,25 +20,6 @@ export const agentScopeLabels: Record<AgentScope, string> = {
 export const uploadableAgentScopes: AgentScope[] = ['managed', 'project', 'user', 'plugin'];
 
 export const scopeRank = (scope: AgentScope): number => agentScopes.indexOf(scope);
-
-export const pathSegments = (path: string): string[] =>
-  path.split(/[\\/]/).filter((segment) => segment !== '' && segment !== '.');
-
-const isManagedSegment = (segment: string): boolean =>
-  /^(claudecode|claude-code|managed|managed-settings(\.d)?)$/i.test(segment);
-
-/** A folder named like someone's home: `~`, `home`, `Users/<name>`, or `home/<name>`. */
-const isHomeBefore = (segments: string[], index: number): boolean => {
-  const before = segments[index - 1];
-  const twoBefore = segments[index - 2];
-
-  return (
-    before === '~' ||
-    before?.toLowerCase() === 'home' ||
-    twoBefore?.toLowerCase() === 'users' ||
-    twoBefore?.toLowerCase() === 'home'
-  );
-};
 
 /**
  * Where the agents folder is. It's the one inside `.claude` when there is one, so a dropped
@@ -78,18 +59,6 @@ export const guessAgentScope = (path: string): AgentScope => {
   }
 
   return isHomeBefore(leading, claudeIndex) ? 'user' : 'project';
-};
-
-export const guessSettingsScope = (path: string): SettingsScope => {
-  const segments = pathSegments(path);
-  const base = segments.at(-1)?.toLowerCase() ?? '';
-
-  if (base.startsWith('managed-settings') || segments.some(isManagedSegment)) return 'managed';
-  if (base === 'settings.local.json') return 'project-local';
-
-  const claudeIndex = segments.lastIndexOf('.claude');
-
-  return claudeIndex !== -1 && isHomeBefore(segments, claudeIndex) ? 'user' : 'project';
 };
 
 /** The folder an agent definition's `agents` tree sits under, as path segments. */

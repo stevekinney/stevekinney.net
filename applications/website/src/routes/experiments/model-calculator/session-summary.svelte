@@ -5,8 +5,8 @@
 
   import { calculateCost } from './calculate-cost';
   import { formatCompactTokenCount, formatCost, formatTokenCount } from '$lib/experiments/format';
-  import { findModelPricing } from './model-pricing';
-  import type { ModelPricing } from './model-pricing';
+  import { findModelPricing } from '$lib/experiments/model-pricing';
+  import type { ModelPricing } from '$lib/experiments/model-pricing';
   import type { SessionFormat, SessionUsage } from './session-usage';
   import { totalInputTokens } from './token-usage';
 

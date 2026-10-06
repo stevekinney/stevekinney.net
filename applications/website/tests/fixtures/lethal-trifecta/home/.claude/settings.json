@@ -1,0 +1,7 @@
+{
+  "sandbox": {
+    "allowUnsandboxedCommands": false,
+    "network": { "strictAllowlist": true }
+  },
+  "env": { "CLAUDE_CODE_SUBPROCESS_ENV_SCRUB": "1" }
+}

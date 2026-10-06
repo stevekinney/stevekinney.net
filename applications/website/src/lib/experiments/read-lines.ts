@@ -1,6 +1,8 @@
 export type ReadLinesOptions = {
   /** How long to work before letting the browser paint and respond to input. */
   workSliceMilliseconds?: number;
+  /** Stops reading, without an error, at the first line after it's aborted. */
+  signal?: AbortSignal;
 };
 
 const yieldToEventLoop = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 0));
@@ -18,7 +20,7 @@ const yieldToEventLoop = (): Promise<void> => new Promise((resolve) => setTimeou
 export const readLines = async (
   stream: ReadableStream<Uint8Array<ArrayBuffer>>,
   onLine: (line: string) => void,
-  { workSliceMilliseconds = 30 }: ReadLinesOptions = {},
+  { workSliceMilliseconds = 30, signal }: ReadLinesOptions = {},
 ): Promise<void> => {
   const reader = stream.pipeThrough(new TextDecoderStream()).getReader();
   const pending: string[] = [];
@@ -26,6 +28,12 @@ export const readLines = async (
 
   try {
     for (;;) {
+      if (signal?.aborted) {
+        await reader.cancel();
+
+        return;
+      }
+
       const { done, value } = await reader.read();
       if (done) break;
 
@@ -36,10 +44,12 @@ export const readLines = async (
         pending.push(value.slice(start, newline));
         onLine(pending.join(''));
         pending.length = 0;
+        if (signal?.aborted) break;
         start = newline + 1;
         newline = value.indexOf('\n', start);
       }
 
+      if (signal?.aborted) continue;
       if (start < value.length) pending.push(value.slice(start));
 
       if (performance.now() - sliceStarted >= workSliceMilliseconds) {
@@ -48,7 +58,7 @@ export const readLines = async (
       }
     }
 
-    if (pending.length > 0) onLine(pending.join(''));
+    if (pending.length > 0 && !signal?.aborted) onLine(pending.join(''));
   } finally {
     reader.releaseLock();
   }
