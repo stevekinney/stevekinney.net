@@ -77,7 +77,14 @@ export const matchModel = (
   return models.find((model) => model.id === normalized) ?? null;
 };
 
-const trimPrice = (price: number): string => String(Number(price.toFixed(4)));
+const trimPrice = (price: number): string => {
+  if (price >= 0.0001 || price === 0) return String(Number(price.toFixed(4)));
+
+  // A price this small would round to zero, so it keeps its digits.
+  const exact = price.toFixed(20).replace(/0+$/, '');
+
+  return Number(exact) === 0 ? String(price) : exact;
+};
 
 /** A model's name with its prices, such as `Opus 5 ($5/$25)`. */
 export const modelLabel = (model: ModelPrice): string =>

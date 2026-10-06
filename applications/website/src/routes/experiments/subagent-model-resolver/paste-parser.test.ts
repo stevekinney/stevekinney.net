@@ -70,6 +70,12 @@ describe('parsePastedOutput', () => {
     expect(parsed.agents.map((agent) => agent.model)).toEqual(['haiku', 'haiku', 'opus']);
   });
 
+  it('reads a model declaration that ends with a YAML comment', () => {
+    const parsed = parsePastedOutput('a/x.md:1:model: sonnet # keep reviews cheap');
+
+    expect(parsed.agents.map((agent) => agent.model)).toEqual(['sonnet']);
+  });
+
   it('ignores a model value with characters it does not expect, and a line with no file', () => {
     expect(parsePastedOutput('a/x.md:1:model: has spaces here').agents).toEqual([]);
     expect(parsePastedOutput('model: opus').agents).toEqual([]);

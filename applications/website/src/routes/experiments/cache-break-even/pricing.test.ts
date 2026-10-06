@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   defaultPricing,
+  formatPriceNumber,
   isCustomPricing,
   MAX_EFFORT_FACTOR,
   MAX_PRICE,
@@ -87,6 +88,17 @@ describe('parsePricingTable', () => {
     const result = parsePricingTable(JSON.parse(serializePricingTable(defaultPricing)));
 
     expect(result).toEqual({ ok: true, table: defaultPricing, warnings: [] });
+  });
+
+  it('shortens a model name too long to fit in a share link', () => {
+    const result = parsePricingTable({ models: [{ name: 'x'.repeat(200), input: 1, output: 2 }] });
+
+    expect(result.ok && result.table.models[0].name).toHaveLength(60);
+  });
+
+  it('shows a very small price with its digits', () => {
+    expect(formatPriceNumber(0.0000001)).toBe('0.0000001');
+    expect(formatPriceNumber(0.8)).toBe('0.8');
   });
 
   it('suffixes the positional ID, not an empty one, when a nameless model collides', () => {

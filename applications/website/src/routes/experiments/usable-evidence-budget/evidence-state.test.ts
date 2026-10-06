@@ -39,6 +39,18 @@ describe('addIntake with a skipped replacement', () => {
   });
 });
 
+describe('addIntake with a folder skipped on a second drop', () => {
+  it('drops files already read from beneath it', () => {
+    const first = addIntake(
+      initialEvidence(),
+      intake([file('project/a.md', 10), file('project/node_modules/pkg/index.js', 20)]),
+    );
+    const second = addIntake(first, intake([]), ['project/node_modules']);
+
+    expect(second.files.map((entry) => entry.path)).toEqual(['project/a.md']);
+  });
+});
+
 describe('addIntake', () => {
   it('appends new files and keeps earlier ones', () => {
     const state = addIntake(

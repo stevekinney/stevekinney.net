@@ -431,7 +431,7 @@
 
       folder = {
         name,
-        libraryKey: folderLibraryKey(name, notes),
+        libraryKey: folderLibraryKey(name, notes, includedTypes),
         notes,
         skipped,
         truncated,
@@ -454,7 +454,11 @@
     const built = await rebuild(folder.notes, folder.skipped);
 
     if (built) {
-      folder = { ...folder, dataset: built };
+      folder = {
+        ...folder,
+        dataset: built,
+        libraryKey: folderLibraryKey(folder.name, folder.notes, includedTypes),
+      };
       resetLibrary();
     }
   };

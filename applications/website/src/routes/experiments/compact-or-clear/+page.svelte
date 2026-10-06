@@ -207,6 +207,8 @@
       calculator.calibration = { ...calculator.calibration, modelMatch: match };
 
       if (match && wasUnmatched && calculator.scenario.modelId === pendingCalibrationModel) {
+        // Discard has to put back the model that was selected before the session's turned up.
+        calculator.backup = { ...calculator.backup, modelId: calculator.scenario.modelId };
         calculator.scenario.modelId = match.id;
         calculator.imported.modelId = true;
         pendingCalibrationModel = null;
