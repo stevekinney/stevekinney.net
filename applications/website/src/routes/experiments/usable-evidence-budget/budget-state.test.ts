@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { thresholdPercent } from './autocompact';
-import { usable } from './budget';
+import { maximumTokenCount, usable } from './budget';
 import {
   chooseCapacity,
   clearPin,
@@ -358,6 +358,23 @@ describe('filling from a readout', () => {
 
     expect(discarded.scenario.history).toBe(55_000);
     expect(discarded.presetId).toBeNull();
+  });
+
+  it('stops a header capacity at the largest the controls and links accept', () => {
+    const readout = applyReadout(
+      parseReadout('claude-opus-5 · 1k/99999999999 tokens (0%)\nSystem prompt: 1k tokens'),
+      defaultMapping,
+      1_000_000,
+    );
+
+    expect(fillFromReadout(initialState(), readout).scenario.capacity).toBe(maximumTokenCount);
+  });
+
+  it('keeps a margin set above the window inside the term limit when the window grows', () => {
+    const start = setTerm(setCapacity(initialState(), 200_000), 'margin', maximumTokenCount);
+    const grown = setCapacity(start, 1_000_000);
+
+    expect(grown.scenario.margin).toBe(maximumTokenCount);
   });
 
   it('keeps the earlier marks when a refill adds a term', () => {

@@ -29,6 +29,16 @@ const intake = (
   skipped,
 });
 
+describe('addIntake with a skipped replacement', () => {
+  it('drops the earlier copy of a path the new intake skips', () => {
+    const first = addIntake(initialEvidence(), intake([file('a.md', 100), file('b.md', 50)]));
+    const second = addIntake(first, intake([], [{ path: 'a.md', reason: 'binary', bytes: 100 }]));
+
+    expect(second.files.map((entry) => entry.path)).toEqual(['b.md']);
+    expect(second.skipped.map((entry) => entry.path)).toEqual(['a.md']);
+  });
+});
+
 describe('addIntake', () => {
   it('appends new files and keeps earlier ones', () => {
     const state = addIntake(

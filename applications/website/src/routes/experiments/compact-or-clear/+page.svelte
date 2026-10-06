@@ -16,7 +16,7 @@
   import { calibrationPatch, discardPatch, mergeBackup } from './import-state';
   import type { ImportedFields } from './import-state';
   import LazySection from '$lib/experiments/lazy-section.svelte';
-  import { defaultModels, renamedModelId } from './pricing';
+  import { defaultModels, matchModel, renamedModelId } from './pricing';
   import type { ModelPrice } from './pricing';
   import { project } from './projection';
   import ProjectionTable from './projection-table.svelte';
@@ -135,6 +135,10 @@
     calculator.touched = true;
   };
 
+  // The model left selected when the session's own wasn't in the table, until the person changes
+  // it or the model turns up.
+  let pendingCalibrationModel: string | null = null;
+
   const applyCalibration = (calibration: Calibration): void => {
     // A second session replaces the first. Whatever the first filled in and the person hasn't
     // edited goes back first, so a field the new session can't measure doesn't keep the old value.
@@ -154,6 +158,7 @@
     Object.assign(calculator.scenario, patch);
     Object.assign(calculator.imported, imported);
     calculator.calibration = calibration;
+    pendingCalibrationModel = calibration.modelMatch ? null : calculator.scenario.modelId;
     calculator.touched = true;
   };
 
@@ -162,6 +167,7 @@
     calculator.imported = {};
     calculator.backup = null;
     calculator.calibration = null;
+    pendingCalibrationModel = null;
     calculator.touched = true;
   };
 
@@ -193,6 +199,19 @@
   const setModels = (models: ModelPrice[]): void => {
     const previous = calculator.models;
     calculator.models = models;
+
+    // The imported session's model can start to match, or stop matching, as the table changes.
+    if (calculator.calibration) {
+      const match = matchModel(calculator.calibration.modelId, models);
+      const wasUnmatched = calculator.calibration.modelMatch === null;
+      calculator.calibration = { ...calculator.calibration, modelMatch: match };
+
+      if (match && wasUnmatched && calculator.scenario.modelId === pendingCalibrationModel) {
+        calculator.scenario.modelId = match.id;
+        calculator.imported.modelId = true;
+        pendingCalibrationModel = null;
+      }
+    }
     if (!models.some((entry) => entry.id === calculator.scenario.modelId)) {
       const renamed = renamedModelId(previous, models, calculator.scenario.modelId);
 

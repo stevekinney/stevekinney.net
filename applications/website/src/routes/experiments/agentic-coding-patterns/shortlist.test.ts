@@ -62,6 +62,15 @@ describe('folderLibraryKey', () => {
     expect(folderLibraryKey('notes', notes)).toBe(folderLibraryKey('notes', [...notes].reverse()));
   });
 
+  it('differs when the notes have the same paths and lengths but different contents', () => {
+    const changed = [
+      { path: 'a.md', text: 'two' },
+      { path: 'b.md', text: 'three' },
+    ];
+
+    expect(folderLibraryKey('notes', notes)).not.toBe(folderLibraryKey('notes', changed));
+  });
+
   it('differs between folders that share a name, and between unnamed selections', () => {
     const other = [{ path: 'c.md', text: 'one' }];
 

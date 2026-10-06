@@ -370,6 +370,23 @@ describe('Codex sessions', () => {
   });
 });
 
+describe('a corrupt token count', () => {
+  it('counts as zero instead of overflowing the totals', () => {
+    const session = collect({
+      'session.jsonl': [
+        claudeCodeResponse('huge', {
+          input_tokens: 1e308,
+          output_tokens: 10,
+        }),
+      ],
+    });
+
+    expect(session.total.uncachedInput).toBe(0);
+    expect(session.total.output).toBe(10);
+    expect(Number.isFinite(session.largestPrompt)).toBe(true);
+  });
+});
+
 describe('Codex sessions that report the same counts', () => {
   const first = codexTokenCount({ input: 100, output: 10 }, { input: 100, output: 10 });
 

@@ -89,6 +89,20 @@ describe('parsePricingTable', () => {
     expect(result).toEqual({ ok: true, table: defaultPricing, warnings: [] });
   });
 
+  it('suffixes the positional ID, not an empty one, when a nameless model collides', () => {
+    const result = parsePricingTable({
+      models: [
+        { id: 'model-2', name: 'First', input: 1, output: 2 },
+        { name: '模型', input: 1, output: 2 },
+      ],
+    });
+
+    expect(result.ok && result.table.models.map((model) => model.id)).toEqual([
+      'model-2',
+      'model-2-2',
+    ]);
+  });
+
   it('skips a model priced past what the arithmetic can hold', () => {
     const result = parsePricingTable({
       models: [

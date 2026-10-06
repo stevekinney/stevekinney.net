@@ -81,9 +81,16 @@ export const uniqueModelId = (table: PricingTable, name: string): string => {
 export const modelOptionLabel = (model: ModelPrice): string =>
   `${model.name} ($${formatPriceNumber(model.input)}/$${formatPriceNumber(model.output)})`;
 
-/** A price without trailing zeros: 5, 0.8, 12.5. */
-export const formatPriceNumber = (price: number): string =>
-  Number.isInteger(price) ? String(price) : String(Number(price.toFixed(4)));
+/** A price without trailing zeros: 5, 0.8, 12.5, or 0.0000001 for a very small one. */
+export const formatPriceNumber = (price: number): string => {
+  if (Number.isInteger(price)) return String(price);
+  if (price >= 0.0001) return String(Number(price.toFixed(4)));
+
+  // A price this small would round to zero, so it keeps its digits.
+  const exact = price.toFixed(20).replace(/0+$/, '');
+
+  return Number(exact) === 0 ? String(price) : exact;
+};
 
 type JsonRecord = Record<string, unknown>;
 
@@ -144,8 +151,10 @@ export const parsePricingTable = (value: unknown): PricingParseResult => {
 
     const requestedId =
       typeof entry.id === 'string' && slugify(entry.id) ? slugify(entry.id) : slugify(name);
-    let id = requestedId || `model-${index + 1}`;
-    for (let suffix = 2; seen.has(id); suffix += 1) id = `${requestedId}-${suffix}`;
+    // A name with nothing to slug gets a positional ID, and that ID is what takes the suffix.
+    const baseId = requestedId || `model-${index + 1}`;
+    let id = baseId;
+    for (let suffix = 2; seen.has(id); suffix += 1) id = `${baseId}-${suffix}`;
     seen.add(id);
 
     models.push({ id, name, input, output, preservesCache: entry.preservesCache === true });

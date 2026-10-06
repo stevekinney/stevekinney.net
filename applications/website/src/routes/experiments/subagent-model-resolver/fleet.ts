@@ -276,14 +276,24 @@ const buildDefinitions = (
   // Pasted agent lines only name a file and its model, so an uploaded copy of the same name and
   // scope is the same file and wins. A pasted line from another scope is a different definition,
   // and precedence decides between them.
-  const uploadedKeys = new Set(
-    definitions.map((definition) => `${definition.scope}:${definition.name}`),
-  );
+  const uploaded = definitions.filter((definition) => definition.source === 'upload');
+  const sameFile = (definition: AgentDefinition, agent: PastedAgent, scope: string): boolean => {
+    if (definition.name !== agent.name || definition.scope !== scope) return false;
+    // User and managed agents live in one place, so the same scope and name is the same file.
+    if (scope !== 'project') return true;
+
+    // Project agents depend on the project: the shorter path has to be the end of the longer.
+    const first = pathSegments(definition.path);
+    const second = pathSegments(agent.path);
+    const [short, long] = first.length <= second.length ? [first, second] : [second, first];
+
+    return short.every((segment, index) => segment === long[long.length - short.length + index]);
+  };
   const pasted = parsePastedOutput(input.pastedText);
 
   const addPasted = (agent: PastedAgent): void => {
     const scope = guessAgentScope(agent.path);
-    if (uploadedKeys.has(`${scope}:${agent.name}`)) return;
+    if (uploaded.some((definition) => sameFile(definition, agent, scope))) return;
 
     const model = parseModelSetting(agent.model);
 

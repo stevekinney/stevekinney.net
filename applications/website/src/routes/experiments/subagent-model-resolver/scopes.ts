@@ -22,6 +22,19 @@ export const uploadableAgentScopes: AgentScope[] = ['managed', 'project', 'user'
 export const scopeRank = (scope: AgentScope): number => agentScopes.indexOf(scope);
 
 /**
+ * Where the agents folder is. It's the one inside `.claude` when there is one, so a dropped
+ * folder that happens to sit under another folder named `agents` doesn't take its place. Without
+ * `.claude`, it's the last `agents` segment, the innermost.
+ */
+const agentsFolderIndex = (segments: string[]): number => {
+  for (let index = segments.length - 1; index > 0; index -= 1) {
+    if (segments[index] === 'agents' && segments[index - 1] === '.claude') return index;
+  }
+
+  return segments.lastIndexOf('agents');
+};
+
+/**
  * Guesses an agent file's scope from its path. A browser only reveals the
  * path inside the folder someone dropped, so a project's `agents` folder and
  * a user's look the same unless the path includes the home folder. That's
@@ -29,7 +42,7 @@ export const scopeRank = (scope: AgentScope): number => agentScopes.indexOf(scop
  */
 export const guessAgentScope = (path: string): AgentScope => {
   const segments = pathSegments(path);
-  const agentsIndex = segments.indexOf('agents');
+  const agentsIndex = agentsFolderIndex(segments);
   const leading = agentsIndex === -1 ? segments : segments.slice(0, agentsIndex);
 
   if (leading.some(isManagedSegment)) return 'managed';
@@ -51,7 +64,7 @@ export const guessAgentScope = (path: string): AgentScope => {
 /** The folder an agent definition's `agents` tree sits under, as path segments. */
 export const agentsRootOf = (path: string): string[] => {
   const segments = pathSegments(path);
-  const agentsIndex = segments.indexOf('agents');
+  const agentsIndex = agentsFolderIndex(segments);
 
   return agentsIndex === -1 ? segments.slice(0, -1) : segments.slice(0, agentsIndex + 1);
 };
