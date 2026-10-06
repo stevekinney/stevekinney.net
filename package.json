@@ -68,7 +68,7 @@
     "@types/node": "^26.6.3",
     "@types/unist": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^8.70.0",
-    "@typescript-eslint/parser": "^8.70.0",
+    "@typescript-eslint/parser": "^8.71.0",
     "ajv": "^8.20.0",
     "autoprefixer": "^10.5.5",
     "axe-playwright": "^2.2.2",
