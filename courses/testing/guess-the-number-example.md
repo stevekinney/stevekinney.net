@@ -1,5 +1,5 @@
 ---
-title: Building A "Guess The Number" Game Using Test-Driven Development With Vitest
+title: 'Building a Guess the Number Game with Vitest'
 description: Learn to build a "Guess the Number" game using TDD with Vitest.
 ---
 

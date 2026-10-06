@@ -1,5 +1,5 @@
 ---
-title: Using Test.each And Describe.each To Generate Tests And Suites
+title: 'Generating Tests with test.each and describe.each'
 description: Learn to programmatically generate tests using test.each.
 ---
 

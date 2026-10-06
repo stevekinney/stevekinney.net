@@ -1,5 +1,5 @@
 ---
-title: 'Fixtures: Worker-Scoped, Test-Scoped, and the Trap Between Them'
+title: 'Worker-Scoped and Test-Scoped Fixtures'
 description: "Use Playwright's test.extend without turning your fixture file into a place where state goes to hide."
 ---
 

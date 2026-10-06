@@ -1,5 +1,5 @@
 ---
-title: 'build-temporal-workflow: Faster Temporal Workflow Bundling with esbuild'
+title: 'Faster Temporal Workflow Bundling with esbuild'
 description: >-
   A drop-in replacement for @temporalio/worker's bundleWorkflowCode that swaps
   Webpack for esbuild—delivering 9–11x faster builds and 94% less memory usage.
