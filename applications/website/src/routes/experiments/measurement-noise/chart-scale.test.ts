@@ -3,6 +3,16 @@ import { describe, expect, it } from 'vitest';
 import { jitter, niceDomain, niceStep, scale, thin, ticks } from './chart-scale';
 
 describe('chart scales', () => {
+  it('finds the domain of 300,000 values without spreading them into arguments', () => {
+    const values = Array.from({ length: 300_000 }, (_, index) => index / 1_000);
+
+    expect(niceDomain([Number.NaN, ...values, Number.POSITIVE_INFINITY])).toEqual({
+      min: 0,
+      max: 300,
+      step: 100,
+    });
+  });
+
   it('picks steps of 1, 2, or 5 times a power of ten', () => {
     expect(niceStep(40)).toBe(10);
     expect(niceStep(37.6)).toBe(10);

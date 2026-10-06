@@ -9,14 +9,28 @@ export const niceStep = (span: number, count = 5): number => {
   return (fraction <= 1 ? 1 : fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10) * power;
 };
 
+/**
+ * The smallest and largest finite values, or `null` with none. One pass, not
+ * `Math.min(...values)`: spreading 100,000 or so arguments overflows the stack.
+ */
+const bounds = (values: readonly number[]): { low: number; high: number } | null => {
+  let low = Infinity;
+  let high = -Infinity;
+  for (const value of values) {
+    if (!Number.isFinite(value)) continue;
+    if (value < low) low = value;
+    if (value > high) high = value;
+  }
+
+  return low <= high ? { low, high } : null;
+};
+
 /** An axis domain that covers every value (and zero, if asked), widened to whole steps. */
 export const niceDomain = (
   values: readonly number[],
   { includeZero = false, count = 5 }: { includeZero?: boolean; count?: number } = {},
 ): { min: number; max: number; step: number } => {
-  const finite = values.filter(Number.isFinite);
-  let low = finite.length > 0 ? Math.min(...finite) : 0;
-  let high = finite.length > 0 ? Math.max(...finite) : 1;
+  let { low, high } = bounds(values) ?? { low: 0, high: 1 };
 
   if (includeZero) {
     low = Math.min(low, 0);
