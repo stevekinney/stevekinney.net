@@ -126,6 +126,27 @@ describe('parseJson', () => {
     });
   });
 
+  it('prefers the rows key over an earlier array, such as a list of column names', () => {
+    expect(parseJson('{"columns":["a","b"],"Rows":[{"a":"A","b":"1"},{"a":"B","b":"2"}]}')).toEqual(
+      {
+        ok: true,
+        table: {
+          columns: ['a', 'b'],
+          rows: [
+            ['A', '1'],
+            ['B', '2'],
+          ],
+        },
+      },
+    );
+  });
+
+  it('otherwise takes the first array of objects, under any key', () => {
+    expect(
+      parseJson('{"labels":["x"],"runs":[{"condition":"A"}],"other":[{"condition":"B"}]}'),
+    ).toEqual({ ok: true, table: { columns: ['condition'], rows: [['A']] } });
+  });
+
   it('turns entries that aren’t objects into blank rows the dataset reports', () => {
     expect(parseJson('[{"condition":"A"}, 4]')).toMatchObject({ table: { rows: [['A'], ['']] } });
   });

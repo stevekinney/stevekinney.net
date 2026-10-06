@@ -253,6 +253,26 @@ export const tableFromObjects = (all: readonly unknown[]): ParsedTable => {
     : { ok: true, table: { columns, rows } };
 };
 
+/** Keys a wrapped JSON object usually keeps its rows under, matched ignoring case. */
+const rowKeys = ['rows', 'tasks', 'data'];
+
+/**
+ * Finds the rows in a wrapped object such as `{ "columns": [...], "rows": [...] }`:
+ * the array under a known row key, or else the first array holding objects.
+ * The first array of any kind is the last resort, so its error can be reported.
+ */
+const findRows = (wrapper: Record<string, unknown>): unknown[] | undefined => {
+  const entries = Object.entries(wrapper);
+  const arrays = entries.filter((entry): entry is [string, unknown[]] => Array.isArray(entry[1]));
+
+  for (const key of rowKeys) {
+    const known = arrays.find(([name]) => name.toLowerCase() === key);
+    if (known) return known[1];
+  }
+
+  return arrays.find(([, list]) => list.some(isRecord))?.[1] ?? arrays[0]?.[1];
+};
+
 /**
  * Reads JSON: an array of objects, or an object holding one under a key such
  * as `rows`, `tasks`, or `data`.
@@ -268,7 +288,7 @@ export const parseJson = (text: string): ParsedTable => {
   if (Array.isArray(parsed)) return tableFromObjects(parsed);
 
   if (isRecord(parsed)) {
-    const list = Object.values(parsed).find(Array.isArray);
+    const list = findRows(parsed);
     if (list) return tableFromObjects(list);
   }
 
