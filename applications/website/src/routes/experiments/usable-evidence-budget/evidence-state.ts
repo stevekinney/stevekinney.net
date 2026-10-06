@@ -63,6 +63,13 @@ export const addIntake = (
   ];
   const incoming = new Set(skippedEntries.map((entry) => entry.path));
   const readNow = new Set(intake.files.map((file) => file.path));
+  // Every folder, with its trailing slash, that holds a file this drop read, at any depth.
+  const readFolders = new Set<string>();
+  for (const path of readNow) {
+    for (let slash = path.indexOf('/'); slash !== -1; slash = path.indexOf('/', slash + 1)) {
+      readFolders.add(path.slice(0, slash + 1));
+    }
+  }
 
   return {
     ...state,
@@ -73,7 +80,7 @@ export const addIntake = (
           !incoming.has(entry.path) &&
           !readNow.has(entry.path) &&
           // A folder skipped before, whose files this drop read, isn't skipped any more.
-          !(entry.path.endsWith('/') && [...readNow].some((path) => path.startsWith(entry.path))),
+          !(entry.path.endsWith('/') && readFolders.has(entry.path)),
       ),
       ...skippedEntries,
     ],
