@@ -1,3 +1,5 @@
+import { dashboardMetadata } from '$lib/dashboard-metadata';
+import { experiments, experimentsIndex } from '$lib/experiments/registry';
 import metadata from '$lib/metadata';
 import { normalizeOpenGraphPath } from '$lib/og/paths';
 import {
@@ -31,18 +33,19 @@ const PROJECTS_INDEX: StaticRoute = {
     'A collection of tools, experiments, and open source projects that I maintain or keep nearby.',
 };
 
-const DASHBOARD_INDEX: StaticRoute = {
-  title: 'Dashboard',
-  description:
-    'A snapshot of GitHub activity, npm downloads, and course updates, updated automatically.',
-};
-
+// Every experiment registers itself through its own `experiment.ts`, so new
+// ones get an Open Graph image without an entry here.
 const STATIC_ROUTES = new Map<string, StaticRoute>([
   ['/', { title: metadata.title, description: metadata.description }],
   ['/writing', WRITING_INDEX],
   ['/courses', COURSES_INDEX],
   ['/projects', PROJECTS_INDEX],
-  ['/dashboard', DASHBOARD_INDEX],
+  ['/dashboard', dashboardMetadata],
+  ['/experiments', experimentsIndex],
+  ...experiments.map(({ path, title, description }): [string, StaticRoute] => [
+    path,
+    { title, description },
+  ]),
 ]);
 
 const safeDecode = (value: string): string => {

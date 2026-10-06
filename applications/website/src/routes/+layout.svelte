@@ -16,8 +16,16 @@
 
   import SocialLink from '$lib/components/social-link.svelte';
   import VercelAnalytics from '$lib/components/vercel-analytics.svelte';
+  import { onMount } from 'svelte';
   // Import styles
   import '../app.css';
+
+  // Prerendered pages show their controls before any event handler exists, so
+  // a click or keystroke that early goes nowhere. Integration tests wait for
+  // this marker before interacting. Pages with `csr = false` never set it.
+  onMount(() => {
+    document.documentElement.dataset.hydrated = 'true';
+  });
 
   /**
    * Component props with children snippet support

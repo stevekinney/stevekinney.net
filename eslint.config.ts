@@ -101,10 +101,14 @@ const config: Linter.Config[] = [
     rules: {
       'no-undef': 'off',
       'svelte/valid-compile': 'off',
+      // The site has no base path for `resolve()` to add. Shallow routing also
+      // needs a query string or hash, which a bare `resolve()` call can't carry.
       'svelte/no-navigation-without-resolve': [
         'error',
         {
           ignoreLinks: true,
+          ignorePushState: true,
+          ignoreReplaceState: true,
         },
       ],
 

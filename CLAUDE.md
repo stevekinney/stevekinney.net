@@ -53,7 +53,7 @@ in `.env.local`.
 
 ## Code Style
 
-- **Formatting**: Use tabs, single quotes, 100 char line length
+- **Formatting**: Two-space indentation, single quotes, trailing commas, 100-character lines (enforced by `.prettierrc`)
 - **Naming**: Use kebab-case for files, camelCase for variables
 - **Types**: Strict TypeScript with explicit return types
 - **Imports**: Group imports (svelte/library/internal)

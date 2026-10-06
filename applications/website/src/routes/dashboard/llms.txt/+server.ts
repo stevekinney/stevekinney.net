@@ -1,3 +1,4 @@
+import { dashboardMetadata } from '$lib/dashboard-metadata';
 import { url } from '$lib/metadata';
 import { getDashboardData, isDashboardComplete } from '$lib/server/dashboard';
 
@@ -121,7 +122,7 @@ const buildBody = (data: DashboardData): string => {
   const lines = [
     '# Steve Kinney — Dashboard',
     '',
-    '> A snapshot of GitHub activity, npm downloads, and course updates.',
+    `> ${dashboardMetadata.description}`,
     '',
     `Last computed: ${data.generatedAt}`,
     '',

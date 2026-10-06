@@ -1,0 +1,7 @@
+{
+  // A synthetic user settings file, with a comment and a trailing comma.
+  "model": "sonnet",
+  "env": {
+    "CLAUDE_CODE_SUBAGENT_MODEL": "haiku"
+  }
+}
