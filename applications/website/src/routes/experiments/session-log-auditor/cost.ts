@@ -170,7 +170,8 @@ const niceStep = (maximum: number, bins: number): number => {
 export const costHistogram = (costs: readonly number[], bins = 8): HistogramBin[] => {
   if (costs.length === 0) return [];
 
-  const maximum = Math.max(...costs);
+  // Reduced rather than spread: thousands of sessions can exceed the engine's argument limit.
+  const maximum = costs.reduce((high, cost) => Math.max(high, cost), Number.NEGATIVE_INFINITY);
   if (maximum <= 0) return [{ from: 0, to: 0, count: costs.length }];
 
   const step = niceStep(maximum, bins);

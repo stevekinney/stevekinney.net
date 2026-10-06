@@ -68,8 +68,9 @@ export const calibrateSpawnOverhead = (transcript: ClaudeCodeTranscript): Calibr
     calibration: {
       subagents: contexts.length,
       median: Math.round(middle),
-      minimum: Math.min(...contexts),
-      maximum: Math.max(...contexts),
+      // Reduced rather than spread: a large upload can exceed the engine's argument limit.
+      minimum: contexts.reduce((low, value) => Math.min(low, value), Number.POSITIVE_INFINITY),
+      maximum: contexts.reduce((high, value) => Math.max(high, value), Number.NEGATIVE_INFINITY),
       files: transcript.files.length,
       skippedLines: transcript.skippedLines,
     },
