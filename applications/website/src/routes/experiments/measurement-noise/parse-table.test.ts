@@ -121,6 +121,15 @@ describe('parseCsv', () => {
     );
   });
 
+  it('holds a quoted line of exactly a million characters, and stops at one more', () => {
+    const quoted = (length: number): string =>
+      ['condition,task,minutes', `A,"${'x'.repeat(length - 3)}`, 'y",1'].join('\n');
+
+    // The newline joins the opening line to the next, so only a second pending line pays for it.
+    expect(parseCsv(quoted(MAX_PENDING_CHARACTERS))).toMatchObject({ ok: true });
+    expect(parseCsv(quoted(MAX_PENDING_CHARACTERS + 1))).toMatchObject({ ok: false });
+  });
+
   it('detects tabs and semicolons', () => {
     expect(detectDelimiter('a\tb\tc')).toBe('\t');
     expect(detectDelimiter('a;b;c')).toBe(';');

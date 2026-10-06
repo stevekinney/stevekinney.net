@@ -187,7 +187,8 @@ export const createCsvReader = (): LineReader => {
           pendingStart = lineNumber;
           pendingCharacters = 0;
         }
-        pendingCharacters += text.length + 1;
+        // A newline joins each line after the first, so only those pay for one.
+        pendingCharacters += text.length + (pending.length > 0 ? 1 : 0);
         if (pending.length >= MAX_PENDING_LINES || pendingCharacters > MAX_PENDING_CHARACTERS) {
           // Stop rather than hold the rest of the file in memory waiting for a closing quote.
           const lines = (lineNumber - pendingStart).toLocaleString('en-US');
