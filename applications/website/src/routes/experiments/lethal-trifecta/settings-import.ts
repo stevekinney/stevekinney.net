@@ -638,10 +638,17 @@ export const analyzeSettings = (
   // gh api, so only a rule covering all of gh counts, and through any MCP server.
   // A prompt has to cover every push. Any allow rule for a push lets one out with no prompt.
   const gatesPush = (rule: Located<string>): boolean => coversEvery(rule.value, 'git push');
+  // An allow lets a push out only when it matches some git push command: a wildcard whose
+  // prefix starts `git push`, such as Bash(git:*) or Bash(g*), or a rule naming a push itself,
+  // such as Bash(git push) or Bash(git push origin main). Bash(git) matches bare git only.
   const allowsPush = (rule: Located<string>): boolean => {
-    const command = bashCommand(rule.value);
+    const parsed = bashRule(rule.value);
+    if (parsed === null) return false;
 
-    return command !== null && (command === '' || command === 'git' || /^git push\b/.test(command));
+    return (
+      (parsed.wildcard && 'git push'.startsWith(parsed.command)) ||
+      /^git push(?![\w-])/.test(parsed.command)
+    );
   };
   const coversAllOfGh = (rule: Located<string>): boolean => coversEvery(rule.value, 'gh');
   // bypassPermissions skips every prompt, so an ask rule gates nothing and only a deny counts.
