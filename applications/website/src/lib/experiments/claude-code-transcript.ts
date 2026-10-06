@@ -106,8 +106,13 @@ const TRAILING_LINES = 50;
 const isRecord = (value: unknown): value is JsonRecord =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
+/** No real request carries a trillion tokens. A count past this is corrupt, and would overflow cost arithmetic. */
+const MAX_TRANSCRIPT_TOKENS = 1_000_000_000_000;
+
 const readCount = (value: unknown): number =>
-  typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : 0;
+  typeof value === 'number' && Number.isFinite(value) && value > 0 && value <= MAX_TRANSCRIPT_TOKENS
+    ? value
+    : 0;
 
 const readString = (value: unknown): string | null =>
   typeof value === 'string' && value ? value : null;

@@ -71,6 +71,12 @@ describe('folderLibraryKey', () => {
     expect(folderLibraryKey('notes', notes)).not.toBe(folderLibraryKey('notes', changed));
   });
 
+  it('differs when the included types differ, since they decide the entry IDs', () => {
+    expect(folderLibraryKey('notes', notes, 'pattern')).not.toBe(
+      folderLibraryKey('notes', notes, 'pattern, methodology'),
+    );
+  });
+
   it('differs between folders that share a name, and between unnamed selections', () => {
     const other = [{ path: 'c.md', text: 'one' }];
 

@@ -8,6 +8,7 @@
   import NumberField from './number-field.svelte';
   import {
     MAX_EFFORT_FACTOR,
+    MAX_NAME_LENGTH,
     MIN_EFFORT_FACTOR,
     MAX_MODELS,
     defaultPricing,
@@ -150,6 +151,7 @@
                   type="text"
                   value={model.name}
                   aria-label="Model {index + 1} name"
+                  maxlength={MAX_NAME_LENGTH}
                   autocomplete="off"
                   spellcheck="false"
                   oninput={(event) => {

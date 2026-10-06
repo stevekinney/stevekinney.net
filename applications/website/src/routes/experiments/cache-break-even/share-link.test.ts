@@ -14,6 +14,15 @@ describe('an enormous ratio in a link', () => {
   });
 });
 
+describe('a ratio written in exponent form', () => {
+  it('survives a round trip', () => {
+    const state = { ...defaultState, ratioOverride: 0.0000001 };
+    const decoded = decodeConfiguration(encodeConfiguration(state, defaultPricing));
+
+    expect(decoded?.state.ratioOverride).toBe(0.0000001);
+  });
+});
+
 describe('share links', () => {
   it('round-trips the full configuration', () => {
     const state = {

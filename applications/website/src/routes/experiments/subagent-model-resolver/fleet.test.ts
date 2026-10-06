@@ -126,7 +126,7 @@ describe('acceptance 9: uploads', () => {
     expect(analysis.rows.map((entry) => entry.name)).toContain('general-purpose');
   });
 
-  it('counts same-name definitions that tie once, while keeping both rows', () => {
+  it('keeps same-name definitions that tie out of the totals, while keeping both rows', () => {
     const analysis = analyzeFleet(
       input({
         agentFiles: [
@@ -140,8 +140,8 @@ describe('acceptance 9: uploads', () => {
     expect(row(analysis, 'twin')).toHaveLength(2);
     expect(row(analysis, 'twin').every((entry) => entry.status.kind === 'ambiguous')).toBe(true);
     expect(analysis.ambiguousCount).toBe(2);
-    // The built-ins plus one `twin`, not two.
-    expect(analysis.agentCount).toBe(baseline.agentCount + 1);
+    // The tool can't say which twin loads, so neither counts as running.
+    expect(analysis.agentCount).toBe(baseline.agentCount);
     expect(analysis.summary.moved + analysis.summary.unchanged).toBe(analysis.agentCount);
   });
 

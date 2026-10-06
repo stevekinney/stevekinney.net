@@ -42,7 +42,11 @@ export const addIntake = (
   // the fit plan doesn't keep counting a file the list reports as skipped.
   const skippedNow = new Set(intake.skipped.map((entry) => entry.path));
   const replacements = new Map(intake.files.map((file) => [file.id, file]));
-  const kept = state.files.filter((file) => !skippedNow.has(file.path));
+  const kept = state.files.filter(
+    (file) =>
+      !skippedNow.has(file.path) &&
+      !skippedFolders.some((folder) => file.path.startsWith(`${folder}/`)),
+  );
   const known = new Set(kept.map((file) => file.id));
   const files = [
     ...kept.map((file) => replacements.get(file.id) ?? file),

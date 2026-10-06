@@ -97,6 +97,9 @@ type JsonRecord = Record<string, unknown>;
 const isRecord = (value: unknown): value is JsonRecord =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
+/** The longest a model name can be. */
+export const MAX_NAME_LENGTH = 60;
+
 /** The most a model can cost per million tokens. Larger values overflow the cost arithmetic. */
 export const MAX_PRICE = 100_000;
 
@@ -141,7 +144,8 @@ export const parsePricingTable = (value: unknown): PricingParseResult => {
       continue;
     }
 
-    const name = typeof entry.name === 'string' ? entry.name.trim() : '';
+    // Names are capped so any table the page accepts still fits in a share link.
+    const name = typeof entry.name === 'string' ? entry.name.trim().slice(0, MAX_NAME_LENGTH) : '';
     const input = readPrice(entry.input);
     const output = readPrice(entry.output);
     if (!name || input === null || output === null) {

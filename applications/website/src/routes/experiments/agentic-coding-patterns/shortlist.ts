@@ -18,6 +18,7 @@ export const bundledLibrary = 'bundled';
 export const folderLibraryKey = (
   name: string | null,
   notes: readonly { path: string; text: string }[],
+  includedTypes = '',
 ): string => {
   let hash = 0x811c9dc5;
 
@@ -32,6 +33,8 @@ export const folderLibraryKey = (
     mix(text);
     mix('\u0001');
   }
+  // Entry IDs depend on which notes are included, so a different type selection is a different library.
+  mix(`types:${includedTypes}`);
 
   return `folder:${name ?? ''}:${notes.length}:${hash.toString(16)}`;
 };

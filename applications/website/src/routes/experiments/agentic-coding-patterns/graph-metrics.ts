@@ -1,5 +1,8 @@
 import type { PatternEntry } from './pattern-types';
 
+/** The most edges the graph view lays out and draws. */
+export const MAX_DRAWN_EDGES = 5_000;
+
 export type PatternGraph = {
   entries: readonly PatternEntry[];
   byId: ReadonlyMap<string, PatternEntry>;
@@ -52,13 +55,16 @@ export const buildGraph = (entries: readonly PatternEntry[]): PatternGraph => {
     ]),
   );
 
+  const outgoingSets = new Map([...outgoing].map(([id, targets]) => [id, new Set(targets)]));
   const edges: GraphEdge[] = [];
-  for (const entry of entries) {
+  collect: for (const entry of entries) {
     for (const target of outgoing.get(entry.id) ?? []) {
-      const mutual = outgoing.get(target)?.includes(entry.id) ?? false;
+      const mutual = outgoingSets.get(target)?.has(entry.id) ?? false;
 
       // A mutual pair is one edge, kept from the side that sorts first.
       if (!mutual || entry.id < target) edges.push({ source: entry.id, target, mutual });
+      // The picture draws an element for each edge, so a very dense library draws only this many.
+      if (edges.length >= MAX_DRAWN_EDGES) break collect;
     }
   }
 

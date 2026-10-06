@@ -74,7 +74,10 @@ export const decodeConfiguration = (hash: string): DecodedConfiguration | null =
 
   const ttl = parameters.get('ttl');
   const ratioText = parameters.get('ratio');
-  const ratio = ratioText !== null && /^\d+(?:\.\d+)?$/.test(ratioText) ? Number(ratioText) : null;
+  const ratio =
+    ratioText !== null && /^\d+(?:\.\d+)?(?:e[+-]?\d+)?$/i.test(ratioText)
+      ? Number(ratioText)
+      : null;
 
   const state = normalizeState(
     {

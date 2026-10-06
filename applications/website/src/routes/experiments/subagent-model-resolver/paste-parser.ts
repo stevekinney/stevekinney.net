@@ -40,7 +40,13 @@ export const parseAgentLine = (line: string): PastedAgent | null => {
   const marker = line.lastIndexOf('model:');
   if (marker === -1) return null;
 
-  const valueMatch = modelValuePattern.exec(line.slice(marker + 'model:'.length).trim());
+  const valueMatch = modelValuePattern.exec(
+    // A trailing YAML comment, as in `model: sonnet # keep reviews cheap`, isn't part of the value.
+    line
+      .slice(marker + 'model:'.length)
+      .replace(/\s+#.*$/, '')
+      .trim(),
+  );
   if (!valueMatch) return null;
 
   const prefix = line.slice(0, marker).trim().replace(/:$/, '').replace(/:\d+$/, '');

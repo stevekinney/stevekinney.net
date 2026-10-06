@@ -4,6 +4,7 @@
   import FileDropZone from '$lib/experiments/file-drop-zone.svelte';
   import { parseTokenCount } from '$lib/experiments/format';
 
+  import { MAX_TOKENS } from './calculator-state';
   import type { ContextReadout } from './context-readout';
   import { formatTokens } from './display';
   import {
@@ -71,6 +72,10 @@
 
     return average !== null && turns !== null && turns > 0 ? average * turns : null;
   });
+  // The calculator keeps its last value when the product is out of range, so the estimate says so.
+  const estimateTooLarge = $derived(
+    estimateTotal !== null && !(Number.isSafeInteger(estimateTotal) && estimateTotal <= MAX_TOKENS),
+  );
 
   const plural = (count: number, noun: string): string =>
     `${count} ${noun}${count === 1 ? '' : 's'}`;
@@ -246,7 +251,9 @@
           <p class="pb-2 text-sm font-semibold text-slate-800 tabular-nums dark:text-slate-100">
             {estimateTotal === null
               ? 'Enter both to estimate R'
-              : `≈ ${formatTokens(estimateTotal)} tokens`}
+              : estimateTooLarge
+                ? `Too large: R can be at most ${formatTokens(MAX_TOKENS)} tokens`
+                : `≈ ${formatTokens(estimateTotal)} tokens`}
           </p>
         </div>
       </div>

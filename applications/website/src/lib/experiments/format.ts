@@ -8,6 +8,13 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 3,
 });
 
+// A price under a tenth of a cent would round to $0.000, so it keeps two significant digits.
+const tinyPriceFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumSignificantDigits: 2,
+});
+
 const costFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -46,7 +53,8 @@ export const formatCompactTokenCount = (count: number): string => {
 };
 
 /** A price per million tokens. */
-export const formatPrice = (price: number): string => priceFormatter.format(price);
+export const formatPrice = (price: number): string =>
+  price > 0 && price < 0.001 ? tinyPriceFormatter.format(price) : priceFormatter.format(price);
 
 /** A cost in dollars. Amounts under a cent keep two significant digits instead of rounding to zero. */
 export const formatCost = (cost: number): string =>
