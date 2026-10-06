@@ -144,8 +144,10 @@ export const parsePricingTable = (value: unknown): PricingParseResult => {
 
     const requestedId =
       typeof entry.id === 'string' && slugify(entry.id) ? slugify(entry.id) : slugify(name);
-    let id = requestedId || `model-${index + 1}`;
-    for (let suffix = 2; seen.has(id); suffix += 1) id = `${requestedId}-${suffix}`;
+    // A name with nothing to slug gets a positional ID, and that ID is what takes the suffix.
+    const baseId = requestedId || `model-${index + 1}`;
+    let id = baseId;
+    for (let suffix = 2; seen.has(id); suffix += 1) id = `${baseId}-${suffix}`;
     seen.add(id);
 
     models.push({ id, name, input, output, preservesCache: entry.preservesCache === true });

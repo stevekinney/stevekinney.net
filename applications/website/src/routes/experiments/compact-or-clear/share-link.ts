@@ -19,8 +19,9 @@ const wholeNumber = (value: string | null): number | null => {
   return Number(value);
 };
 
+/** A decimal, including the exponent form `String()` writes for a very small price, such as `1e-7`. */
 const decimal = (value: string | null): number | null => {
-  if (value === null || !/^(\d+(\.\d+)?|\.\d+)$/.test(value)) return null;
+  if (value === null || !/^(\d+(\.\d+)?|\.\d+)(e[+-]?\d+)?$/i.test(value)) return null;
 
   return Number(value);
 };

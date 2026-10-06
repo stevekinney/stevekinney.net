@@ -60,6 +60,21 @@ describe('encodeScenario and decodeScenario', () => {
     });
   });
 
+  it('round-trips a price small enough to be written in exponent form', () => {
+    const models = [
+      ...defaultModels,
+      { id: 'tiny', name: 'Tiny', input: 0.0000001, output: 0.0000005 },
+    ];
+    const decoded = decodeScenario(encodeScenario(scenario({ modelId: 'tiny' }), models));
+
+    expect(decoded?.customModel).toEqual({
+      id: 'tiny',
+      name: 'Tiny',
+      input: 0.0000001,
+      output: 0.0000005,
+    });
+  });
+
   it('carries changed prices for a default model', () => {
     const models = defaultModels.map((model) =>
       model.id === 'opus-5' ? { ...model, input: 6, output: 30 } : model,
