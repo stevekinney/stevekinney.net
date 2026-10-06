@@ -8,6 +8,7 @@
   import NumberField from './number-field.svelte';
   import {
     MAX_EFFORT_FACTOR,
+    MIN_EFFORT_FACTOR,
     MAX_MODELS,
     defaultPricing,
     isCustomPricing,
@@ -253,6 +254,7 @@
                   label="{effort.label} effort factor"
                   value={effort.factor}
                   allowZero={false}
+                  min={MIN_EFFORT_FACTOR}
                   max={MAX_EFFORT_FACTOR}
                   onChange={(factor) => editEffort(effort.id, { factor })}
                 />

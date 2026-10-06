@@ -108,6 +108,18 @@
   const setPricing = (table: PricingTable): void => {
     pricing = table;
     app.calc = normalizeState(app.calc, table);
+
+    // A session whose model wasn't in the table can match once the person adds it. If they haven't
+    // chosen a From model since, the match applies.
+    if (session && pendingSessionModel !== null && app.calc.fromModel === pendingSessionModel) {
+      const model = matchModel(session.modelId, table);
+
+      if (model) {
+        app.calc = { ...app.calc, fromModel: model.id };
+        sources.fromModel = 'session';
+        pendingSessionModel = null;
+      }
+    }
     app.touched = true;
   };
 
@@ -124,6 +136,10 @@
     CalculatorState,
     'fromModel' | 'contextTokens' | 'remainingOutput'
   > | null = null;
+
+  // The From model left in place when the session's own wasn't in the table, until the person
+  // changes it or the model turns up.
+  let pendingSessionModel: string | null = null;
 
   const matchedModel = $derived(session ? matchModel(session.modelId, pricing) : null);
 
@@ -173,6 +189,7 @@
     );
     sources.contextTokens = 'session';
     sources.fromModel = model ? 'session' : null;
+    pendingSessionModel = model ? null : app.calc.fromModel;
   };
 
   const loadFiles = async (source: Promise<SourceFile[]>): Promise<void> => {
@@ -217,6 +234,7 @@
     restoreImportedFields();
 
     beforeImport = null;
+    pendingSessionModel = null;
     session = null;
     readMessage = null;
     readError = null;
