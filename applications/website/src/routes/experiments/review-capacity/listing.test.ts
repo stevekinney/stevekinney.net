@@ -72,6 +72,22 @@ describe('parseListing', () => {
     ]);
   });
 
+  it('skips sizes too large to be real, so the sum stays finite', () => {
+    const result = parsed([
+      entry({ additions: 1e308, deletions: 1e308 }),
+      entry({ additions: 2 ** 53 }),
+      entry({ deletions: 10_000_001 }),
+      entry({ additions: 10_000_000, deletions: 10_000_000 }),
+    ]);
+
+    expect(result.skipped).toEqual([
+      { position: 1, reason: 'additions and deletions over 10,000,000 lines' },
+      { position: 2, reason: 'additions over 10,000,000 lines' },
+      { position: 3, reason: 'deletions over 10,000,000 lines' },
+    ]);
+    expect(result.pullRequests.map((pullRequest) => pullRequest.lines)).toEqual([20_000_000]);
+  });
+
   it('keeps an entry with a missing author or dates, for sizes only', () => {
     const [pr] = parsed([
       { additions: 5, deletions: 5, createdAt: 'yesterday', author: null },

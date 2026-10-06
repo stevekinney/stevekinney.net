@@ -33,9 +33,10 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
 const count = (value: unknown): number | null =>
-  typeof value === 'number' && Number.isFinite(value) && value >= 0 && Number.isInteger(value)
-    ? value
-    : null;
+  typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : null;
+
+/** More lines than this in additions or deletions is a mistake, not a pull request. */
+export const MAX_LINES = 10_000_000;
 
 const date = (value: unknown): Date | null => {
   if (typeof value !== 'string' || value === '') return null;
@@ -114,17 +115,37 @@ export const parseListing = (text: string): ParsedListing | ListingError => {
       return;
     }
 
+    const tooLarge = [
+      additions > MAX_LINES ? 'additions' : null,
+      deletions > MAX_LINES ? 'deletions' : null,
+    ]
+      .filter(Boolean)
+      .join(' and ');
+    // The bound keeps both safe integers, and their sum finite.
+    const lines = additions + deletions;
+    if (tooLarge !== '' || !Number.isSafeInteger(lines)) {
+      skipped.push({
+        position,
+        reason: `${tooLarge || 'additions and deletions'} over ${MAX_LINES.toLocaleString('en-US')} lines`,
+      });
+      return;
+    }
+
     const author = isRecord(entry.author) ? entry.author : {};
     const login =
       typeof author.login === 'string' && author.login.trim() !== ''
         ? author.login.trim()
         : 'unknown';
 
+    const pullRequestNumber = count(entry.number);
     pullRequests.push({
-      number: count(entry.number) ?? position,
+      number:
+        pullRequestNumber !== null && Number.isSafeInteger(pullRequestNumber)
+          ? pullRequestNumber
+          : position,
       login: login.slice(0, 100),
       isBot: author.is_bot === true,
-      lines: additions + deletions,
+      lines,
       createdAt: date(entry.createdAt),
       mergedAt: date(entry.mergedAt),
     });
