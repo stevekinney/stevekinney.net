@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { MAX_ROWS } from './parse-table';
 import { formatOf, readDataFile } from './read-data-file';
 
 const fileOf = (name: string, text: string): File => new File([text], name);
@@ -56,5 +57,19 @@ describe('readDataFile', () => {
 
     expect(result.ok && result.table.rows.length).toBe(12_000);
     expect(counts).toEqual([5_000, 10_000]);
+  });
+
+  it('stops reading a file past the row limit', async () => {
+    const rows = Array.from({ length: MAX_ROWS + 5_000 }, (_, index) => `A,${index + 1}`);
+    const counts: number[] = [];
+    const result = await readDataFile(
+      fileOf('huge.csv', `condition,minutes\n${rows.join('\n')}\n`),
+      (count) => counts.push(count),
+    );
+
+    expect(result).toMatchObject({ ok: true, truncated: true });
+    expect(result.ok && result.table.rows.length).toBe(MAX_ROWS);
+    // Progress stops with the reading, well before the last line of the file.
+    expect(counts.at(-1)).toBeLessThanOrEqual(MAX_ROWS + 1);
   });
 });

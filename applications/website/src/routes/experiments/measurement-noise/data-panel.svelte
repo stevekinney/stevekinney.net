@@ -19,6 +19,8 @@
     /** While a file is read. */
     progress: string | null;
     status: string | null;
+    /** Said under the paste box, such as when only the first rows were read. */
+    pasteStatus: string | null;
     error: string | null;
     onMode: (mode: InputMode) => void;
     onPaste: (text: string) => void;
@@ -33,6 +35,7 @@
     grid,
     progress,
     status,
+    pasteStatus,
     error,
     onMode,
     onPaste,
@@ -118,6 +121,9 @@
         What you paste is read in this tab and never sent anywhere. The first line names the
         columns.
       </p>
+      {#if pasteStatus}
+        <p role="status" class="text-sm text-amber-800 dark:text-amber-300">{pasteStatus}</p>
+      {/if}
     </div>
   {:else}
     <div class="space-y-4">

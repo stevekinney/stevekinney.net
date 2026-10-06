@@ -10,7 +10,24 @@ export type RawTable = {
   rows: string[][];
 };
 
-export type ParsedTable = { ok: true; table: RawTable } | { ok: false; error: string };
+/** Set only when rows past `MAX_ROWS` were left out. */
+export type ParsedTable =
+  { ok: true; table: RawTable; truncated?: true } | { ok: false; error: string };
+
+/**
+ * The most rows read from one source. Every row is kept in memory as strings
+ * and fed to the statistics, so a file past this is read only up to it, and
+ * the page says so with `ROW_LIMIT_NOTE`.
+ */
+export const MAX_ROWS = 100_000;
+
+export const ROW_LIMIT_NOTE = `Read the first ${MAX_ROWS.toLocaleString('en-US')} rows only.`;
+
+/** A table reader fed one line at a time. `push` returns false once it wants no more lines. */
+export type LineReader = {
+  push: (line: string) => boolean;
+  finish: () => ParsedTable;
+};
 
 type Delimiter = ',' | '\t' | ';';
 
@@ -108,10 +125,7 @@ const scanQuotes = (line: string, start: QuoteState, delimiter: Delimiter): Quot
  * `readLines`. A quoted cell with a line break in it spans lines, and the
  * reader joins them back together.
  */
-export const createCsvReader = (): {
-  push: (line: string) => void;
-  finish: () => ParsedTable;
-} => {
+export const createCsvReader = (): LineReader => {
   let delimiter: Delimiter = ',';
   let columns: string[] | null = null;
   const rows: string[][] = [];
@@ -119,6 +133,7 @@ export const createCsvReader = (): {
   let pending: string[] | null = null;
   let pendingDelimiter: Delimiter = ',';
   let state: QuoteState = { quoted: false, cellBlank: true };
+  let truncated = false;
 
   const take = (record: string): void => {
     if (columns === null) {
@@ -131,11 +146,17 @@ export const createCsvReader = (): {
     }
 
     if (record.trim() === '') return;
+    if (rows.length >= MAX_ROWS) {
+      truncated = true;
+
+      return;
+    }
     rows.push(splitRecord(record, delimiter));
   };
 
   return {
     push: (line) => {
+      if (truncated) return false;
       const text = line.endsWith('\r') ? line.slice(0, -1) : line;
 
       if (pending === null) {
@@ -148,12 +169,14 @@ export const createCsvReader = (): {
       if (state.quoted) {
         (pending ??= []).push(text);
 
-        return;
+        return true;
       }
 
       const record = pending === null ? text : [...pending, text].join('\n');
       pending = null;
       take(record);
+
+      return !truncated;
     },
     finish: () => {
       if (pending !== null) {
@@ -170,14 +193,16 @@ export const createCsvReader = (): {
         };
       }
 
-      return { ok: true, table: { columns, rows } };
+      return truncated
+        ? { ok: true, table: { columns, rows }, truncated }
+        : { ok: true, table: { columns, rows } };
     },
   };
 };
 
 export const parseCsv = (text: string): ParsedTable => {
   const reader = createCsvReader();
-  for (const line of text.split('\n')) reader.push(line);
+  for (const line of text.split('\n')) if (!reader.push(line)) break;
 
   return reader.finish();
 };
@@ -193,8 +218,13 @@ const cellText = (value: unknown): string => {
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
 
-/** Builds a table from objects, with a column for every key in the order keys first appear. */
-export const tableFromObjects = (items: readonly unknown[]): ParsedTable => {
+/**
+ * Builds a table from objects, with a column for every key in the order keys
+ * first appear. Only the first `MAX_ROWS` items are read.
+ */
+export const tableFromObjects = (all: readonly unknown[]): ParsedTable => {
+  const truncated = all.length > MAX_ROWS;
+  const items = truncated ? all.slice(0, MAX_ROWS) : all;
   const columns: string[] = [];
   const positions = new Map<string, number>();
 
@@ -218,7 +248,9 @@ export const tableFromObjects = (items: readonly unknown[]): ParsedTable => {
     ),
   );
 
-  return { ok: true, table: { columns, rows } };
+  return truncated
+    ? { ok: true, table: { columns, rows }, truncated }
+    : { ok: true, table: { columns, rows } };
 };
 
 /**
@@ -247,24 +279,35 @@ export const parseJson = (text: string): ParsedTable => {
 };
 
 /** Reads JSON Lines one line at a time. Lines that aren't JSON objects are left out. */
-export const createJsonLinesReader = (): {
-  push: (line: string) => void;
-  finish: () => ParsedTable;
-} => {
+export const createJsonLinesReader = (): LineReader => {
   const items: unknown[] = [];
+  let truncated = false;
 
   return {
     push: (line) => {
+      if (truncated) return false;
       const trimmed = line.trim();
-      if (trimmed === '') return;
+      if (trimmed === '') return true;
+
+      if (items.length >= MAX_ROWS) {
+        truncated = true;
+
+        return false;
+      }
 
       try {
         items.push(JSON.parse(trimmed));
       } catch {
         items.push(null);
       }
+
+      return true;
     },
-    finish: () => tableFromObjects(items),
+    finish: () => {
+      const result = tableFromObjects(items);
+
+      return result.ok && truncated ? { ...result, truncated } : result;
+    },
   };
 };
 
@@ -279,7 +322,7 @@ export const parsePasted = (text: string): ParsedTable => {
 
     // One object per line is JSON Lines.
     const reader = createJsonLinesReader();
-    for (const line of trimmed.split('\n')) reader.push(line);
+    for (const line of trimmed.split('\n')) if (!reader.push(line)) break;
     const lines = reader.finish();
 
     return lines.ok ? lines : json;
