@@ -15,6 +15,7 @@
   import { experiment } from './experiment';
   import { bodyClasses, headingClasses } from './field-styles';
   import IntakePanel from './intake-panel.svelte';
+  import { createLatestRequest } from './latest-request';
   import LazySection from './lazy-section.svelte';
   import PredictionCard from './prediction-card.svelte';
   import { presetSummaries } from './preset-list';
@@ -67,6 +68,9 @@
         })
       : null,
   );
+
+  // Every way of loading sessions starts a request, and only the newest one is read.
+  const requests = createLatestRequest();
 
   const readFiles = async (files: SourceFile[]): Promise<void> => {
     controller?.abort();
@@ -126,7 +130,7 @@
   const handleFiles = (files: Promise<SourceFile[]>): void => {
     auditor.presetId = null;
     auditor.presetNotice = null;
-    files.then(readFiles).catch(() => {
+    void requests.follow(files, readFiles, () => {
       auditor.error = 'Couldn’t open what was dropped. Try choosing the files instead.';
     });
   };
@@ -134,18 +138,20 @@
   const handlePaste = (text: string): void => {
     auditor.presetId = null;
     auditor.presetNotice = null;
+    requests.start();
     const name = 'pasted.jsonl';
     void readFiles([{ file: new File([text], name), path: name }]);
   };
 
   const handlePreset = async (id: string): Promise<void> => {
+    const isCurrent = requests.start();
     auditor.presetId = id;
     auditor.presetNotice = presetSummaries.find((summary) => summary.id === id)?.notice ?? null;
 
     // The generators load only when a preset is chosen.
     const { findPreset } = await import('./presets');
     const preset = findPreset(id);
-    if (!preset) return;
+    if (!preset || !isCurrent()) return;
 
     await readFiles(
       preset.files().map(({ path, text }) => ({
