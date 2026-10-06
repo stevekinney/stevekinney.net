@@ -596,10 +596,11 @@ export const counterfactual = (
       name,
       stopIndex: null,
       stopIteration: null,
-      saved: 0,
+      // It might have stopped early and saved something, but nothing here can show where.
+      saved: null,
       progressLost: 0,
       progressLostAtMost: null,
-      uncertain: false,
+      uncertain: true,
       sentence: `${name} can’t be checked on this log, which has neither a score nor a kept field.`,
     };
   }

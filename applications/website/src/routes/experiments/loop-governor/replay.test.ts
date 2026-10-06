@@ -374,7 +374,12 @@ describe('reading a log defensively', () => {
     expect(replay.iterations.every((step) => step.sinceProgress === null)).toBe(true);
 
     const stall = counterfactual(replay, { kind: 'stall', m: 2 }, formatCost);
-    expect(stall).toMatchObject({ stopIndex: null, stopIteration: null, saved: 0 });
+    expect(stall).toMatchObject({
+      stopIndex: null,
+      stopIteration: null,
+      saved: null,
+      uncertain: true,
+    });
     expect(stall.sentence).toBe(
       'A stall detector of 2 can’t be checked on this log, which has neither a score nor a kept field.',
     );
