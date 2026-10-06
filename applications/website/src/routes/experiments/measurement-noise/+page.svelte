@@ -257,12 +257,15 @@
       }
 
       if (costsA.length > 0 && costsB.length > 0) {
-        costInterval = 'running';
-        const interval = await runInSlices(costPerAcceptedJob(costsA, costsB, { seed }), {
-          cancelled: () => id !== runId,
-        });
-        if (id !== runId) return;
-        costInterval = interval;
+        const costJob = costPerAcceptedJob(costsA, costsB, { seed });
+        if (costJob === 'too-many-rows') {
+          costInterval = costJob;
+        } else {
+          costInterval = 'running';
+          const interval = await runInSlices(costJob, { cancelled: () => id !== runId });
+          if (id !== runId) return;
+          costInterval = interval;
+        }
       } else {
         costInterval = null;
       }

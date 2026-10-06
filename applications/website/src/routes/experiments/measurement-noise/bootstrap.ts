@@ -326,12 +326,23 @@ export const medianDifferenceJob = (
 
 export type CostRecord = { cost: number; accepted: boolean };
 
-/** A percentile interval for the difference in cost per accepted result, A − B. */
+/**
+ * A percentile interval for the difference in cost per accepted result, A − B,
+ * or `'too-many-rows'` when the work budget would need a subsample. A
+ * subsample can leave out every accepted task in a condition, such as the one
+ * accepted task among 50,000, which would make the interval depend on the seed.
+ */
 export const costPerAcceptedJob = (
   allA: readonly CostRecord[],
   allB: readonly CostRecord[],
   { seed, resamples }: { seed: number; resamples?: number },
-): BootstrapJob => {
+): BootstrapJob | 'too-many-rows' => {
+  checkSizes(allA.length, allB.length, false);
+  if (resamples === undefined) {
+    const plan = planBootstrap(allA.length, allB.length);
+    if (plan.sampleA < allA.length || plan.sampleB < allB.length) return 'too-many-rows';
+  }
+
   const { a, b, ...plan } = budgeted([allA, allB], false, seed, resamples);
 
   const ratio = (records: readonly CostRecord[], indices: Int32Array): number => {

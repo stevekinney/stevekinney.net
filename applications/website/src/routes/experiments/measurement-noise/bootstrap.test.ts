@@ -117,7 +117,9 @@ describe('acceptance 5: the bootstrap', () => {
       { cost: 2, accepted: true },
       { cost: 2, accepted: true },
     ];
-    const result = runToEnd(costPerAcceptedJob(groupA, groupB, { seed: 5, resamples: 2_000 }));
+    const job = costPerAcceptedJob(groupA, groupB, { seed: 5, resamples: 2_000 });
+    if (job === 'too-many-rows') throw new Error('Expected a job.');
+    const result = runToEnd(job);
 
     // A's resamples cost $2 for one accepted, or $2 for two; a resample with none is skipped.
     expect(result.usable).toBeLessThan(2_000);
@@ -211,14 +213,27 @@ describe('the bootstrap work budget', () => {
     expect(first.upper).toBeGreaterThan(5);
   });
 
-  it('subsamples cost records under the same budget', () => {
-    const records = Array.from({ length: 30_000 }, (_, index) => ({
+  it('fewer resamples, but every row, for cost records under the budget', () => {
+    const records = Array.from({ length: 5_000 }, (_, index) => ({
       cost: 1 + (index % 7),
       accepted: index % 3 !== 0,
     }));
-    const result = runToEnd(costPerAcceptedJob(records, records, { seed: 2 }));
+    const job = costPerAcceptedJob(records, records, { seed: 2 });
+    if (job === 'too-many-rows') throw new Error('Expected a job.');
 
-    expect(result).toMatchObject({ resamples: 1_000, rows: 60_000, sampledRows: 20_000 });
+    expect(runToEnd(job)).toMatchObject({ resamples: 2_000, rows: 10_000, sampledRows: 10_000 });
+  });
+
+  it('declines to bootstrap cost per accepted rather than subsample it', () => {
+    // A subsample of 20,000 rows could leave out the only accepted task in A.
+    const groupA = Array.from({ length: 50_000 }, (_, index) => ({
+      cost: 1,
+      accepted: index === 0,
+    }));
+    const groupB = Array.from({ length: 50_000 }, () => ({ cost: 2, accepted: true }));
+
+    expect(costPerAcceptedJob(groupA, groupB, { seed: 2 })).toBe('too-many-rows');
+    expect(costPerAcceptedJob(groupA, groupB, { seed: 3 })).toBe('too-many-rows');
   });
 
   it('keeps an explicit resample count and every row', () => {

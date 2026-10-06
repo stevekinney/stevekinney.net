@@ -64,8 +64,11 @@
               >{/if}
           </td>
           <td class="px-3 py-2 tabular-nums" data-cell="difference">{formatDifference(row)}</td>
-          <td class="px-3 py-2 whitespace-nowrap tabular-nums" data-cell="interval"
-            >{formatOutcomeInterval(row)}</td
+          <td
+            class="px-3 py-2 tabular-nums {row.intervalNote
+              ? 'min-w-[14rem] text-xs text-slate-600 dark:text-slate-300'
+              : 'whitespace-nowrap'}"
+            data-cell="interval">{formatOutcomeInterval(row)}</td
           >
         </tr>
       {/each}
