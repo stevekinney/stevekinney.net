@@ -51,6 +51,28 @@ describe('acceptance check 1: the defaults', () => {
   });
 });
 
+describe('a backlog that never clears', () => {
+  it('keeps the queue in order across thousands of reviewed pull requests', () => {
+    // 100 pull requests of 10 lines a day against 990 lines of capacity: one more waits each day.
+    const simulation = simulate(
+      scenario({
+        agents: 10,
+        prsPerAgent: 10,
+        linesPerPr: 10,
+        sittings: 1,
+        linesPerSitting: 990,
+        days: 60,
+      }),
+      'queue',
+    );
+    const last = simulation.days.at(-1)!;
+
+    // 5,940 pull requests reviewed in order, so the oldest waiting one opened on day 60.
+    expect(last).toMatchObject({ backlogLines: 600, backlogPrs: 60, oldestOpenedDay: 60 });
+    expect(simulation.days.every((day, index) => day.backlogPrs === index + 1)).toBe(true);
+  });
+});
+
 describe('acceptance check 2: queue it', () => {
   const simulation = simulate(defaultScenario, 'queue');
   const last = simulation.days.at(-1)!;

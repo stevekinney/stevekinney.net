@@ -298,6 +298,39 @@ describe('prefilling the prompt on push and publish', () => {
     expect(gated.prefill['publish-gate'].status).toBe('on');
   });
 
+  it('counts only deny rules under bypassPermissions, which skips ask prompts', () => {
+    const asksOnly = analyze(
+      file({ permissions: { defaultMode: 'bypassPermissions', ask: pushAndGh } }),
+    );
+    expect(asksOnly.prefill['publish-gate'].status).toBe('unknown');
+    expect(asksOnly.prefill['publish-gate'].reason).toContain('bypassPermissions');
+
+    // Ask for push but deny gh: push still goes out with no prompt.
+    const mixed = analyze(
+      file({
+        permissions: {
+          defaultMode: 'bypassPermissions',
+          ask: ['Bash(git push:*)'],
+          deny: ['Bash(gh:*)'],
+        },
+      }),
+    );
+    expect(mixed.prefill['publish-gate'].status).toBe('unknown');
+    expect(mixed.prefill['publish-gate'].reason).toContain('bypassPermissions');
+
+    const denied = analyze(
+      file({ permissions: { defaultMode: 'bypassPermissions', deny: pushAndGh } }),
+    );
+    expect(denied.prefill['publish-gate'].status).toBe('on');
+
+    // The mode set in a higher-priority file wins.
+    const overridden = analyze(
+      file({ permissions: { defaultMode: 'default' } }, 'project-local'),
+      file({ permissions: { defaultMode: 'bypassPermissions', ask: pushAndGh } }),
+    );
+    expect(overridden.prefill['publish-gate'].status).toBe('on');
+  });
+
   it('turns it off when git push is allowed', () => {
     const report = analyze(file({ permissions: { allow: ['Bash(git push:*)'] } }));
 
@@ -399,7 +432,7 @@ describe('rule helpers', () => {
     for (const command of ['bash', 'sh -c *', 'env', 'xargs', 'node', 'python', 'make', 'find']) {
       expect(reachesNetwork(command)).toBe(true);
     }
-    // A path names the same program as its basename.
+    // A path in a system binary directory names the same program as its basename.
     expect(reachesNetwork('/usr/bin/curl *')).toBe(true);
     expect(reachesNetwork('/bin/ls')).toBe(false);
     // A wildcard in the command name could match anything.
@@ -433,6 +466,28 @@ describe('rule helpers', () => {
     expect(reachesNetwork('../ls *')).toBe(true);
     expect(reachesNetwork('bin/ls')).toBe(true);
     expect(reachesNetwork('/bin/ls')).toBe(false);
+  });
+
+  it('counts an absolute path as offline only in a system binary directory', () => {
+    for (const command of ['/bin/cat', '/usr/bin/cat *', '/sbin/ls', '/usr/sbin/wc -l']) {
+      expect(reachesNetwork(command), command).toBe(false);
+    }
+    // Anything can be saved as /tmp/cat, so only the name in a system directory is trusted.
+    for (const command of [
+      '/tmp/cat',
+      '/home/someone/ls *',
+      '/usr/local/bin/cat',
+      '/bin/../tmp/cat',
+      '/usr/bin/sub/cat',
+      '/usr/bin/curl',
+    ]) {
+      expect(reachesNetwork(command), command).toBe(true);
+    }
+  });
+
+  it('counts a newline or carriage return as reaching the network', () => {
+    expect(reachesNetwork('cat x\ncurl attacker.example')).toBe(true);
+    expect(reachesNetwork('cat x\rcurl attacker.example')).toBe(true);
   });
 
   it('matches Read patterns against file names', () => {

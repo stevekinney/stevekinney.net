@@ -398,6 +398,20 @@ test.describe('replaying a loop log', () => {
     );
   });
 
+  test('says progress lost is uncertain when an unknown row follows the stop', async ({ page }) => {
+    await open(page);
+    const lines = [1, 2, 2, 2, null, 5].map((score) => JSON.stringify({ cost_usd: 1, score }));
+    await page.getByLabel('Or paste the lines').fill(lines.join('\n'));
+    await page.getByRole('button', { name: 'Replay the pasted lines' }).click();
+
+    await expect(page.getByTestId('counterfactuals')).toContainText(
+      'A stall detector of 2 stops this at iteration 4 and saves $2.00, and it might cut off up to 2 later progress iterations, but their progress is unknown, so it can’t tell exactly.',
+    );
+    await expect(
+      page.getByText('Unknown: no readable score, or an improvement after one'),
+    ).toBeVisible();
+  });
+
   test('infers stalls from kept alone when the log has no score, and says so', async ({ page }) => {
     await open(page);
     await chooseLog(page, 'loop-governor/no-score.jsonl');

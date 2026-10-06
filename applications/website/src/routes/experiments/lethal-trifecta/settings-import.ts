@@ -363,24 +363,28 @@ const offlineCommands = new Set([
 
 /**
  * Shell syntax that runs more than one program or opens a connection: a redirection, which
- * reaches `/dev/tcp` and `/dev/udp`, a pipe, a chain, a background `&`, or a substitution.
+ * reaches `/dev/tcp` and `/dev/udp`, a pipe, a chain, a line break that starts another
+ * command, a background `&`, or a substitution.
  */
-const shellOperators = /[<>|;&`]|\$\(|\/dev\/(tcp|udp)\b/;
+const shellOperators = /[<>|;&`\n\r]|\$\(|\/dev\/(tcp|udp)\b/;
+
+/** An absolute path directly inside a system binary directory, such as `/usr/bin/cat`. */
+const systemBinary = /^\/(?:usr\/)?s?bin\/([^/]+)$/;
 
 /**
  * Whether a command, or a command pattern, can make a network request. It fails
  * safe: only a single offline program with plain arguments counts as offline. An
  * empty command means every command, any shell operator counts as reaching the
- * network, an absolute path counts as its program, a relative path such as `./cat`
- * is a script that could do anything, and any program not known to stay offline
- * counts as reaching the network.
+ * network, an absolute path counts as its program only in `/bin`, `/usr/bin`, `/sbin`,
+ * or `/usr/sbin`, any other path such as `./cat` or `/tmp/cat` could be anything, and
+ * any program not known to stay offline counts as reaching the network.
  */
 export const reachesNetwork = (command: string): boolean => {
   if (shellOperators.test(command)) return true;
 
   const first = command.trim().split(/\s+/)[0] ?? '';
-  if (first.includes('/') && !first.startsWith('/')) return true;
-  const program = first.split('/').at(-1) ?? '';
+  const program = first.includes('/') ? systemBinary.exec(first)?.[1] : first;
+  if (program === undefined) return true;
 
   return program.includes('*') || !offlineCommands.has(program);
 };
@@ -640,7 +644,11 @@ export const analyzeSettings = (
     return command !== null && (command === '' || command === 'git' || /^git push\b/.test(command));
   };
   const coversAllOfGh = (rule: Located<string>): boolean => coversEvery(rule.value, 'gh');
-  const askOrDeny = [...merged.ask, ...merged.deny];
+  // bypassPermissions skips every prompt, so an ask rule gates nothing and only a deny counts.
+  const bypass = merged.defaultMode?.value === 'bypassPermissions' ? merged.defaultMode : null;
+  const askOrDeny = bypass ? merged.deny : [...merged.ask, ...merged.deny];
+  const gatingRule = bypass ? 'deny rule' : 'ask or deny rule';
+  const gatedPush = bypass ? 'git push is denied' : 'git push asks first, or is denied';
   const gated = askOrDeny.filter(gatesPush);
   const pushAllowed = merged.allow.filter(allowsPush);
   const ghRule = askOrDeny.find(coversAllOfGh);
@@ -671,10 +679,17 @@ export const analyzeSettings = (
         : gated.length > 0
           ? {
               status: 'unknown',
-              reason: `git push asks first, or is denied, but no ask or deny rule covers public comments through ${missing}, so a comment can still go out with no prompt.`,
+              reason: `${gatedPush}, but no ${gatingRule} covers public comments through ${missing}, so a comment can still go out with no prompt.`,
               evidence: gated,
             }
-          : notDeterminable('No ask or deny rule covers every git push.');
+          : notDeterminable(`No ${gatingRule} covers every git push.`);
+  if (bypass && prefill['publish-gate'].status === 'unknown') {
+    prefill['publish-gate'] = {
+      status: 'unknown',
+      reason: `The default permission mode is bypassPermissions, which skips ask prompts, so only deny rules count. ${prefill['publish-gate'].reason}`,
+      evidence: [bypass, ...prefill['publish-gate'].evidence],
+    };
+  }
 
   const mode = merged.defaultMode;
   prefill['auto-mode'] = mode
