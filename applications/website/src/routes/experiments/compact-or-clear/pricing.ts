@@ -150,6 +150,9 @@ export const MODEL_ID_PATTERN = /^[a-z0-9][a-z0-9-]{0,59}$/;
 /** The most models a price table can hold. The editor stops at it too, so it can't export a file the importer rejects. */
 export const MAXIMUM_MODELS = 60;
 
+/** The longest a model name can be. A shared link keeps no more. */
+export const MAXIMUM_NAME_LENGTH = 60;
+
 export type ParsedPriceTable = { models: ModelPrice[] } | { error: string };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -185,7 +188,9 @@ export const parsePriceTable = (text: string): ParsedPriceTable => {
     const position = `Model ${index + 1}`;
     if (!isRecord(entry)) return { error: `${position} isn’t an object.` };
 
-    const name = typeof entry.name === 'string' ? entry.name.trim() : '';
+    // Names are capped so a table fits in a share link and doesn't overflow the page.
+    const name =
+      typeof entry.name === 'string' ? entry.name.trim().slice(0, MAXIMUM_NAME_LENGTH) : '';
     if (!name) return { error: `${position} needs a name.` };
 
     const id = typeof entry.id === 'string' && entry.id.trim() ? entry.id.trim() : toModelId(name);

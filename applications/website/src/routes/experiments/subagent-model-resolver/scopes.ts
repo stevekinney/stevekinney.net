@@ -119,8 +119,13 @@ export const containsWorkingDirectory = (
 ): boolean => {
   if (directory.length === 0) return true;
 
+  // Windows paths ignore case, and a drive letter gives them away.
+  const windows = [...directory, ...workingDirectory].some((segment) => /^[a-z]:$/i.test(segment));
+  const same = (first: string, second: string): boolean =>
+    windows ? first.toLowerCase() === second.toLowerCase() : first === second;
+
   for (let offset = 0; offset + directory.length <= workingDirectory.length; offset += 1) {
-    if (directory.every((segment, index) => workingDirectory[offset + index] === segment)) {
+    if (directory.every((segment, index) => same(workingDirectory[offset + index], segment))) {
       return true;
     }
   }

@@ -34,7 +34,15 @@ export const folderLibraryKey = (
     mix('\u0001');
   }
   // Entry IDs depend on which notes are included, so a different type selection is a different library.
-  mix(`types:${includedTypes}`);
+  const types = [
+    ...new Set(
+      includedTypes
+        .split(',')
+        .map((type) => type.trim().toLowerCase())
+        .filter((type) => type !== ''),
+    ),
+  ].sort();
+  mix(`types:${types.join(',')}`);
 
   return `folder:${name ?? ''}:${notes.length}:${hash.toString(16)}`;
 };
