@@ -28,6 +28,10 @@ href = "running-openclaw-on-railway-with-tailscale.md"
 title = "Connecting to a Remote OpenClaw as a Paired Node"
 href = "connecting-a-remote-node.md"
 
+[[section.item]]
+title = "Syncing Your Browser Cookies to a Remote Gateway"
+href = "syncing-cookies-to-a-remote-gateway.md"
+
 [[section]]
 title = "Channels and Integrations"
 

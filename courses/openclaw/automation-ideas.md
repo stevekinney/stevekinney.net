@@ -322,7 +322,7 @@ openclaw automations create "0 2 * * 1-5" \
 
 **Push-style webhooks on a private Gateway.** A webhook needs the outside service to reach your Gateway, and a Gateway that's reachable only over Tailscale, as in the [Railway lesson](running-openclaw-on-railway-with-tailscale.md), can't be reached by GitHub or Stripe. Public exposure is exactly what we avoided. When you can, prefer the pull-style version of an idea: a schedule that checks every few minutes instead of an event that arrives.
 
-**Anything that browses while signed in.** It's convenient and it's a much bigger grant than it looks.
+**Anything that browses while signed in.** It's convenient and it's a much bigger grant than it looks. If you do need it, [sync only the cookies for the sites a task needs](syncing-cookies-to-a-remote-gateway.md) into a named profile instead of attaching your whole browser.
 
 ## Picking Your First Three
 
