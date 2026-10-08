@@ -3,6 +3,8 @@ import os from 'node:os';
 import path from 'node:path';
 
 import type { Element, Root } from 'hast';
+import { compile } from 'mdsvex';
+import { parse } from 'svelte/compiler';
 import { afterEach, describe, expect, it } from 'vitest';
 import { VFile } from 'vfile';
 
@@ -197,5 +199,128 @@ describe('rehypeEnhanceImages', () => {
         children: [],
       }),
     ).resolves.toMatchObject({ properties: { src: second.original } });
+  });
+  describe('author-written alt and title text', () => {
+    const awkwardAlt = 'A "quoted" {value} with `code`';
+    const escapedAlt = 'A &quot;quoted&quot; &#123;value&#125; with &#96;code&#96;';
+
+    const imageNode = (properties: Element['properties']): Element => ({
+      type: 'element',
+      tagName: 'img',
+      properties,
+      children: [],
+    });
+
+    const findImage = (element: Element): Element => {
+      if (element.tagName === 'img') return element;
+      const image = element.children.find(
+        (child): child is Element => child.type === 'element' && child.tagName === 'img',
+      );
+      if (!image) throw new Error('Expected an <img> element.');
+      return image;
+    };
+
+    const writeImageManifest = async (entry: ReturnType<typeof manifestEntry>) => {
+      const directory = await mkdtemp(path.join(os.tmpdir(), 'rehype-images-'));
+      temporaryDirectories.push(directory);
+      const manifestPath = path.join(directory, 'manifest.json');
+      await writeManifest(manifestPath, { [`${manifestKey(markdownFile)}/image.png`]: entry });
+      return manifestPath;
+    };
+
+    it('escapes alt and title on images enhanced into a <picture>', async () => {
+      const manifestPath = await writeImageManifest(
+        manifestEntry({ avif: [{ width: 480, url: 'https://example.com/image.avif' }] }),
+      );
+      const result = await transform(
+        manifestPath,
+        imageNode({ src: 'assets/image.png', alt: awkwardAlt, title: 'say "hi"' }),
+      );
+
+      expect(result.tagName).toBe('picture');
+      expect(findImage(result).properties).toMatchObject({
+        alt: escapedAlt,
+        title: 'say &quot;hi&quot;',
+      });
+    });
+
+    it('escapes alt on images enhanced into a plain <img>', async () => {
+      const manifestPath = await writeImageManifest(manifestEntry());
+      const result = await transform(
+        manifestPath,
+        imageNode({ src: 'assets/image.png', alt: awkwardAlt }),
+      );
+
+      expect(result.tagName).toBe('img');
+      expect(result.properties).toMatchObject({ alt: escapedAlt });
+    });
+
+    it('escapes alt on images that are missing from the manifest', async () => {
+      const manifestPath = await writeImageManifest(manifestEntry());
+      const result = await transform(
+        manifestPath,
+        imageNode({ src: 'assets/not-in-the-manifest.png', alt: awkwardAlt }),
+        false,
+      );
+
+      expect(result.properties).toMatchObject({ alt: escapedAlt });
+    });
+
+    it('escapes alt on external images the plugin otherwise leaves alone', async () => {
+      const manifestPath = await writeImageManifest(manifestEntry());
+      const result = await transform(
+        manifestPath,
+        imageNode({ src: 'https://example.com/photo.png', alt: awkwardAlt }),
+      );
+
+      expect(result.properties).toMatchObject({
+        src: 'https://example.com/photo.png',
+        alt: escapedAlt,
+      });
+    });
+
+    it('leaves ampersands and existing entities alone, so escaping is idempotent', async () => {
+      const manifestPath = await writeImageManifest(manifestEntry());
+      const alt = 'R&D says &quot;hello&quot;';
+      const node = imageNode({ src: 'https://example.com/photo.png', alt });
+
+      await transform(manifestPath, node);
+      await transform(manifestPath, node);
+
+      expect(node.properties?.alt).toBe(alt);
+    });
+
+    it('produces markup that mdsvex and Svelte compile back to the original text', async () => {
+      const manifestPath = await writeImageManifest(
+        manifestEntry({ avif: [{ width: 480, url: 'https://example.com/image.avif' }] }),
+      );
+      const source = `![${awkwardAlt}](assets/image.png 'say "hi"')\n`;
+
+      const compiled = await compile(source, {
+        filename: markdownFile,
+        extensions: ['.md'],
+        // mdsvex bundles an older `unified`, so the plugin's types do not line up.
+        rehypePlugins: [[rehypeEnhanceImages, { manifestPath, strictManifest: true }]] as never,
+      });
+      expect(compiled?.code).toBeDefined();
+
+      // Svelte throws on the unescaped form: `alt="A "quoted" ..."` ends the attribute early.
+      const ast = parse(compiled?.code ?? '', { modern: true });
+      const texts: Record<string, string> = {};
+      const walk = (value: unknown): void => {
+        if (Array.isArray(value)) return value.forEach(walk);
+        if (typeof value !== 'object' || value === null) return;
+        const node = value as Record<string, unknown>;
+        if (node.type === 'Attribute' && (node.name === 'alt' || node.name === 'title')) {
+          const parts = node.value as Array<{ type: string; data?: string }>;
+          texts[node.name as string] = parts.map((part) => part.data ?? `<${part.type}>`).join('');
+        }
+        Object.values(node).forEach(walk);
+      };
+      walk(ast);
+
+      expect(texts.alt).toBe(awkwardAlt);
+      expect(texts.title).toBe('say "hi"');
+    });
   });
 });

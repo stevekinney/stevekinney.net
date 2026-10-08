@@ -152,6 +152,35 @@ const safeDecode = (value: string): string => {
 };
 
 // ---------------------------------------------------------------------------
+// Attribute text
+// ---------------------------------------------------------------------------
+
+// mdsvex writes attribute values into Svelte source without escaping them, so
+// an author-written `"` ends the attribute early and `{`, `}`, or a backtick can
+// open a Svelte expression or template literal. Encode them as entities, which
+// Svelte decodes back to the original characters. `&` is deliberately left
+// alone: mdsvex does not encode it either, so encoding it here would double-encode
+// any entity that is already in the text.
+const escapeAttributeText = (value: string): string =>
+  value
+    .replace(/"/g, '&quot;')
+    .replace(/\{/g, '&#123;')
+    .replace(/\}/g, '&#125;')
+    .replace(/`/g, '&#96;');
+
+// `alt` and `title` are the only image attributes whose text comes from the
+// author. Escape them on every <img> the plugin sees, before any early return,
+// so images that skip the manifest (external, unmanifested, static attachments)
+// get the same treatment as enhanced ones.
+const escapeImageText = (node: Element): void => {
+  if (!node.properties) return;
+  for (const name of ['alt', 'title'] as const) {
+    const value = node.properties[name];
+    if (typeof value === 'string') node.properties[name] = escapeAttributeText(value);
+  }
+};
+
+// ---------------------------------------------------------------------------
 // Plugin
 // ---------------------------------------------------------------------------
 
@@ -175,6 +204,7 @@ const rehypeEnhanceImages: Plugin<[Options?], Root> = (options = {}) => {
 
     visit(tree, 'element', (node: Element, index, parent) => {
       if (node.tagName !== 'img') return;
+      escapeImageText(node);
       if (!parent || index === undefined) return;
 
       // Skip images already inside a <picture>
