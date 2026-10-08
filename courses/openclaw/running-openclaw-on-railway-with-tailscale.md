@@ -82,7 +82,7 @@ Two things to check:
 
 The `tailscale` service needs a one-time key so it can join your tailnet without anyone logging in by hand. Go to **Settings → Keys → Generate auth key**.
 
-![The Tailscale "Generate auth key" dialog with Reusable, Ephemeral, and Tags toggles](assets/tailscale-generate-auth-key-dialog.png)
+![The Tailscale Generate auth key dialog with Reusable, Ephemeral, and Tags toggles](assets/tailscale-generate-auth-key-dialog.png)
 
 Set it up like this:
 

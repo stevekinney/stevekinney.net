@@ -19,7 +19,7 @@ If we hop over to the desktop application, we'll see something that looks like t
 
 You can use the application to install OpenClaw onto your computer or connect to a remote OpenClaw gateway. For our purposes, we'll install it locally on this machine.
 
-![The onboarding screen asking where the assistant should live, with "On this Mac" selected](assets/openclaw-choose-gateway-location.png)
+![The onboarding screen asking where the assistant should live, with the On this Mac option selected](assets/openclaw-choose-gateway-location.png)
 
 It will then go ahead and get itself all installed and configured.
 
@@ -29,7 +29,7 @@ You can go ahead and let it cook—it'll take a bit before it's ready. It's also
 
 Once that's rocking and rolling, you can go through the process of connecting it to our model provider of choice.
 
-![The "Connect your AI" screen listing Claude Code, Codex, LM Studio, and Ollama](assets/openclaw-connect-your-ai.png)
+![The Connect your AI screen listing Claude Code, Codex, LM Studio, and Ollama](assets/openclaw-connect-your-ai.png)
 
 And once you've done that—you should be ready to rock and roll.
 

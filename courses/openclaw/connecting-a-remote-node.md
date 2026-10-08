@@ -160,7 +160,7 @@ Connecting isn't the same as being trusted. There are two separate approvals:
 
 When the node asks for its capabilities, you'll see a prompt like this.
 
-![The "Allow this node's capabilities?" prompt listing the node's name, requested access, capabilities, and commands, with Not Now, Reject, and Approve Node buttons](assets/openclaw-approve-node-capabilities.png)
+![The Allow this node's capabilities prompt listing the node's name, requested access, capabilities, and commands, with Not Now, Reject, and Approve Node buttons](assets/openclaw-approve-node-capabilities.png)
 
 Read it before you click anything:
 

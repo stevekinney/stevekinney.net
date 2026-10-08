@@ -22,7 +22,7 @@ openclaw channels add --channel telegram --token <YOUR_BOT_TOKEN>
 
 Once you message your bot for the first time, you'll see that it's still going to need to be paired.
 
-![The bot replying "access not configured" with a pairing code and an approval command](assets/telegram-pairing-code-prompt.png)
+![The bot replying that access is not configured, with a pairing code and an approval command](assets/telegram-pairing-code-prompt.png)
 
 Run the approval command from the message on the machine hosting OpenClaw. Once we've done that, we should be good to go.
 
