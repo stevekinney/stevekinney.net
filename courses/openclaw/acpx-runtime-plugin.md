@@ -37,7 +37,7 @@ OpenClaw also has native **subagents**, which run inside OpenClaw's own runtime.
 
 Use ACP when the worker you want is specifically an external harness. Use a subagent when you just want bounded delegation inside OpenClaw. [Subagents and Orchestration](subagents-and-orchestration.md) covers those.
 
-One more thing to keep straight: choosing an `openai/gpt-*` model doesn't select Codex, and naming a model after a harness doesn't make something ACP. For Codex specifically, OpenClaw's own native Codex plugin is the default way to bind a conversation. Codex over ACP is the explicit alternative, selected by `runtime: "acp"` and `agentId: "codex"`.
+One more thing to keep straight: choosing an `openai/gpt-*` model runs your agent on OpenClaw's native Codex runtime, not on Codex over ACP, and naming a model after a harness doesn't make something ACP. For Codex specifically, OpenClaw's own native Codex plugin is the default. Codex over ACP is the explicit alternative, selected by `runtime: "acp"` and `agentId: "codex"`.
 
 ## Step 1: Install and Enable the Plugin
 
@@ -232,7 +232,7 @@ To pick up an earlier harness session instead of starting fresh, pass its ID as 
 
 With `--bind here`, a chat is pinned to the ACP session. Anything you send goes to the harness, `/new` and `/reset` reset it in place, and `/acp close` removes the binding. Bindings survive Gateway restarts.
 
-This only works on channels that support it. At the time of writing, that means Discord threads and channels, and Telegram topics (forum topics in groups and DM topics). Everywhere else, OpenClaw tells you it's unsupported. If you want a Telegram or Discord conversation to always be a particular harness, you can also make it permanent in config:
+This only works on channels that support binding the current conversation. Everywhere else, OpenClaw tells you it's unsupported. Binding to a _thread_ (`--thread`) is narrower: at the time of writing, that means Discord threads and channels, and Telegram topics (forum topics in groups and DM topics). If you want a Telegram or Discord conversation to always be a particular harness, you can also make it permanent in config:
 
 ```json5
 {
@@ -273,7 +273,7 @@ The `/acp` command has more subcommands than `spawn`:
      | permissions | timeout | model | reset-options | doctor | install | help
 ```
 
-Use `cancel` to stop a run, `steer` to nudge a harness that's already working instead of restarting it, `sessions` and `status` to see what's running, and `close` to end a session. Runtime controls require owner identity, so you have to be the command owner (see [Choosing a DM Policy](choosing-a-dm-policy.md)). Run `/acp help` for the exact syntax of each, since it can vary by version.
+Use `cancel` to stop a run, `steer` to queue a follow-up instruction that runs after the current turn finishes, `sessions` and `status` to see what's running, and `close` to end a session. Runtime controls require owner identity, so you have to be the command owner (see [Choosing a DM Policy](choosing-a-dm-policy.md)). Run `/acp help` for the exact syntax of each, since it can vary by version.
 
 When a one-shot run finishes, the result reports back to the parent agent, which usually rewrites it in its own voice. Finishing the work and delivering the message are separate events, so a finished harness doesn't guarantee a message in your chat.
 
@@ -400,19 +400,19 @@ You'll need `permissionMode approve-all` again for the edit to land. Turn it on 
 
 ### Exercise 6: Steer and Cancel
 
-Real tasks go wrong halfway. Practice correcting a harness mid-run instead of restarting it. Start a task that takes a little while:
+Real tasks go wrong halfway. Practice the two ways of correcting a harness. Start a task that takes a little while:
 
 > Spawn an ACP session with `agentId: "codex"` and `cwd: "<scratch>"`. Ask it to write a README for this folder with a section on every file, in as much detail as it can.
 
 While it's working:
 
-1. Use `/acp steer` to redirect it, for example by asking it to keep each section to two sentences. Run `/acp help` if you need the exact syntax.
-2. Start another long task and stop it with `/acp cancel`.
-3. Confirm it actually stopped with `/acp status`.
+1. Use `/acp steer` to queue a follow-up, for example asking it to shorten each section to two sentences. Run `/acp help` if you need the exact syntax.
+2. Watch what happens: the steer doesn't interrupt the current turn. It waits for that turn to finish, then runs as the next instruction in the same session.
+3. Start another long task. This time, redirect it properly: stop it with `/acp cancel`, confirm it stopped with `/acp status`, and then send the new instruction.
 
 What to look for:
 
-- A steered run changes course without starting over.
+- `/acp steer` is a queued follow-up, not a mid-turn correction. To change course while a harness is working, cancel first.
 - A cancelled run really settles. Cancelling has two halves, the control plane and the external process, so confirm the result instead of assuming it.
 
 ### Exercise 7: Prove It Isn't a Subagent
@@ -459,7 +459,7 @@ Run through this list:
 - **ACP sessions run on the host, not in OpenClaw's sandbox.** OpenClaw's sandbox policy doesn't wrap a harness. The harness is governed by its own CLI permissions and its `cwd`, while OpenClaw enforces the feature gates, the allowlist, session ownership, and delivery.
 - **Sandboxed sessions can't spawn ACP at all.** If the requesting session is sandboxed, both `/acp spawn` and `sessions_spawn({ runtime: "acp" })` are blocked, and `sandbox: "require"` isn't supported. If you need sandbox-enforced work, use a native subagent.
 - **Logins are access.** Once a harness is signed in on the Gateway host, an agent can use that account. A signed-in Claude Code or Codex can edit code and push it, which makes prompt injection more consequential.
-- **Uncertain starts need inspection.** If a spawn times out or the Gateway restarts, don't just retry. The harness may have started and changed files. Check the session and its task first.
+- **Uncertain starts need inspection.** If a spawn times out or the Gateway restarts, don't just retry. The harness may have started and changed files. Check `/acp sessions` and the working directory first.
 
 ## ACP and Mac Nodes
 
@@ -509,7 +509,7 @@ Setup has three parts. First, enable the Codex plugin on **both** the Gateway an
 }
 ```
 
-Third, turn on session hosting on the Mac. It's a node-local setting, and the docs I could find for it only show the basic form:
+Third, turn on session hosting on the Mac. It's a node-local setting:
 
 ```json5
 {
@@ -518,6 +518,8 @@ Third, turn on session hosting on the Mac. It's a node-local setting, and the do
   },
 }
 ```
+
+By default the node offers one worker slot per CPU core. `nodeHost.workerRuns.capacity` changes that, and `nodeHost.workerRuns.isolation: "container"` runs each hosted session in its own container (with `nodeHost.workerRuns.containerImage` to choose the image). A headless node host can opt in with `openclaw node run --session-host`.
 
 Then restart the app or node host. Because the node's command set changed, reconnect it and approve the new request from the Gateway:
 
@@ -533,14 +535,14 @@ openclaw gateway call sessions.dispatch \
   --params '{"key":"agent:main:device-work","deviceId":"<paired-device-id>"}'
 ```
 
-**Every launch needs your approval.** Starting the exec-server shows a critical approval prompt. **Allow once** covers one launch. **Allow always** covers later launches only while the placement stays exactly the same, lives in the Gateway's memory, and is wiped when the Gateway restarts. Allowing the command in config doesn't skip the prompt.
+**Launches need your approval.** Starting the exec-server shows a critical approval prompt. **Allow once** covers one launch. **Allow always** covers later launches only while the placement stays exactly the same, lives in the Gateway's memory, and is wiped when the Gateway restarts. Allowing the command in config doesn't skip the prompt. The one exception is a session you've explicitly set to **Full access**, and only when the Mac's own exec policy also allows running without approval.
 
 If the connection drops or you cancel the turn, the attempt ends and its remote processes are killed. Reconnecting starts a fresh attempt. It never resumes the old one.
 
 > [!WARNING] Approval is not a sandbox
 > Once you approve a launch, the process can reach anything your Mac account can reach. The working directory only sets where it starts. Pair only devices you trust, and if you want real isolation, run the node under a separate least-privilege macOS account.
 
-This feature is relatively new, and the documentation doesn't say which operating systems are supported or give the node-side keys beyond the basic form above. Check the [Codex placement page](https://docs.openclaw.ai/plugins/codex-harness/placement) for your installed version before you rely on it.
+This feature is relatively new, and the documentation doesn't say which operating systems are supported. Check the [Codex placement page](https://docs.openclaw.ai/plugins/codex-harness/placement) for your installed version before you rely on it.
 
 ### What About Claude Code on the Mac?
 

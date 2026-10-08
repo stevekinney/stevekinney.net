@@ -63,7 +63,7 @@ Each entry is the sender's canonical ID on that platform, which is the user ID t
 
 Two details matter:
 
-- **An empty `allowFrom` rejects everyone.** OpenClaw only logs a warning at startup, so it's easy to lock yourself out and not notice.
+- **An empty `allowFrom` blocks everyone.** On Telegram, config validation rejects that combination outright. On some other channels, like SMS, OpenClaw only logs a warning at startup, so it's easy to lock yourself out and not notice.
 - **You can reuse one list across channels.** If several people need access, define a named access group once and reference it from each channel with `allowFrom: ['accessGroup:operators']`, instead of keeping three lists in sync by hand.
 
 ### `open`

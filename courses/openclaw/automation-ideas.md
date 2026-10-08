@@ -75,9 +75,9 @@ These apply to every idea. They're the difference between an automation you trus
 4. **Make silence a feature.** A job whose output is only `NO_REPLY` is suppressed. A monitor that talks every day gets ignored. A monitor that speaks only when something changes gets read.
 5. **Treat what it reads as data.** Emails, web pages, and documents can contain instructions aimed at your agent. Say so in `AGENTS.md`, and keep tool permissions as narrow as the job allows.
 6. **Mind the cost.** Every scheduled model turn spends tokens. Checks that don't need a model (is the site up, did the file change) should use a command or a trigger script, not an agent turn.
-7. **Know what's already running.** A fresh Gateway already has system jobs, including a heartbeat every 30 minutes. Run `openclaw automations list --all` before you add yours.
+7. **Know what's already running.** A fresh Gateway already has system jobs, including a heartbeat every 30 minutes (every hour when Anthropic OAuth or token auth is set up, including reusing a Claude Code login). Run `openclaw automations list --all` before you add yours.
 8. **Watch for silent failure.** A job that quietly stops looks identical to a quiet inbox. Turn on failure alerts, and check run history now and then.
-9. **Plan for approvals.** If commands require approval, a scheduled job's request goes only to a connected approval app, and it's denied if none is connected. Run the job once while you're watching and approve it with **Always allow**. See [When Nobody's There](security-and-approvals.md#when-nobodys-there).
+9. **Plan for approvals.** If commands require approval, a scheduled job's request goes only to a connected approval app, and it's denied if none is connected. Run the job once while you're watching and approve it with **Always allow**. Commands that run on a paired node are the exception: scheduled jobs never show approval cards for them, so allowlist those commands on the node ahead of time. See [When Nobody's There](security-and-approvals.md#when-nobodys-there).
 
 ## Daily Rhythms
 
@@ -277,7 +277,7 @@ Then schedule a Friday job whose prompt points at the program instead of repeati
 
 **What you get:** at 6pm, a summary of what you worked on across your repositories: commits, branches, and uncommitted changes.
 
-**Built from:** a [paired Mac node](connecting-a-remote-node.md) and a scheduled job, with the commands routed to the node using `/exec host=node`.
+**Built from:** a [paired Mac node](connecting-a-remote-node.md) and a scheduled job, with the commands routed to the node. Set `tools.exec.host` to `node` for the agent that runs the job (and `tools.exec.node` if you have more than one node), rather than relying on an `/exec` directive, which only applies in a chat.
 
 **Try it:** allowlist only the read-only git commands on the Mac, then schedule a job whose prompt asks for a recap of recent activity in your projects folder.
 

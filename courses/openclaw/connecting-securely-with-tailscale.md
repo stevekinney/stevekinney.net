@@ -176,7 +176,7 @@ wss://<host>.<tailnet>.ts.net
 - **The iOS and Android apps:** point them at the same `wss://` address. They have no SSH tunnel option, which makes Serve the practical way to reach a remote Gateway from a phone.
 - **Paired nodes:** nodes use the same Gateway WebSocket endpoint, so this address is what you'll enter in [Connecting to a Remote OpenClaw as a Paired Node](connecting-a-remote-node.md).
 
-Each new device still has to be paired and approved. A private network gets a device to the front door; it doesn't skip the lock.
+Each new device still needs its own identity and approval. A private network gets a device to the front door; it doesn't skip the lock.
 
 ## Optional: Sign In with Your Tailscale Identity
 
@@ -186,7 +186,7 @@ This is on by default when you use Serve with token auth, and it's controlled by
 
 - It only covers Control UI sign-in.
 - HTTP API endpoints (`/v1/*`, `/tools/invoke`, and `/api/channels/*`) **never** use it. They always follow your configured auth.
-- It doesn't skip device pairing, and node connections still have to be paired.
+- It doesn't replace device identity. A browser that already has a device identity can skip the one-time pairing code, but clients without one are still rejected, and node connections still have to be paired.
 
 It also assumes you trust the Gateway host. If untrusted code could run on that machine, turn it off and require the token or password:
 

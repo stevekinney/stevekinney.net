@@ -209,6 +209,9 @@ openclaw webhooks gmail setup \
 
 However, this is a separate security-sensitive workflow.
 
+> [!WARNING] The default endpoint is public
+> `openclaw webhooks gmail setup` defaults to `--tailscale funnel`, which publishes the push endpoint on the public internet. Google's Pub/Sub has to reach it from outside, so a tailnet-only Gateway can't receive these notifications without some other public way in. Read the setup flags before you run it.
+
 The setup provisions Google Pub/Sub resources and configures Gmail events to trigger OpenClaw. Before enabling it, the official documentation recommends a dedicated, sandboxed, restricted email-reader agent, because incoming email is untrusted content and could contain prompt-injection instructions. The webhook can otherwise execute using your default agent's capabilities.
 
 For now, I'd skip push notifications. A scheduled morning briefing can query Gmail and Calendar directly, without adding inbound webhooks.
