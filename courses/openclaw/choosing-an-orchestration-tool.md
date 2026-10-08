@@ -191,7 +191,7 @@ curl --include http://127.0.0.1:18789/hooks/agent \
 
 You should get HTTP `200` with a `runId` and a `completion` object whose `status` is `ok`. Send the exact same request again: because the idempotency key matches, you get the same `runId` back instead of a second run. Then try a request with a wrong token and confirm it's rejected.
 
-On the Railway template, run these through `railway ssh --service openclaw -- ...`. If you don't plan to use webhooks, set `hooks.enabled` back to `false` afterward.
+On the [Railway](https://railway.com?referralCode=kinney) template, run these through `railway ssh --service openclaw -- ...`. If you don't plan to use webhooks, set `hooks.enabled` back to `false` afterward.
 
 ### 5. If You Used TaskFlow Before
 

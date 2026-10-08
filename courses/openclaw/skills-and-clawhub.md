@@ -294,7 +294,7 @@ openclaw skills install @steipete/gog
 
 By default it goes into the current agent's workspace `skills/` folder. Use `--agent <id>` to pick a specific agent, `--global` to install into `~/.openclaw/skills` for every agent, and `--version <version>` to pin a release.
 
-`install` writes to a workspace on the machine where you run it, so **run it on the Gateway host**. If your Gateway is remote, either run it there (on the Railway template, through `railway ssh --service openclaw -- openclaw skills install ...`) or install from the Control UI: open **Plugins**, switch to the **Skills** tab, and use the ClawHub search there.
+`install` writes to a workspace on the machine where you run it, so **run it on the Gateway host**. If your Gateway is remote, either run it there (on the [Railway](https://railway.com?referralCode=kinney) template, through `railway ssh --service openclaw -- openclaw skills install ...`) or install from the Control UI: open **Plugins**, switch to the **Skills** tab, and use the ClawHub search there.
 
 Before downloading, the install checks the release's audit:
 

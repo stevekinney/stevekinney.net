@@ -15,7 +15,7 @@ Once your Gateway lives on another machine, you need a way to reach it. The obvi
 The OpenClaw side of this (`gateway.tailscale.*`) is built into core, so there's no plugin to install. The `tailscale` CLI and daemon are separate software that you install yourself.
 
 > [!NOTE] Hosting on Railway?
-> Railway can't run Tailscale next to the Gateway, so it needs a different arrangement. See [Running OpenClaw on Railway with Tailscale](running-openclaw-on-railway-with-tailscale.md).
+> [Railway](https://railway.com?referralCode=kinney) can't run Tailscale next to the Gateway, so it needs a different arrangement. See [Running OpenClaw on Railway with Tailscale](running-openclaw-on-railway-with-tailscale.md).
 
 ## Serve vs. Funnel
 

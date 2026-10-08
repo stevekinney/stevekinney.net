@@ -3,7 +3,7 @@ title: Running OpenClaw on Railway with Tailscale
 description: Deploy a private OpenClaw Gateway on Railway with no public URL, reachable only through a Tailscale service on your own tailnet.
 ---
 
-[Railway](https://railway.com) is a convenient place to run an always-on Gateway: you don't manage a server, and volumes keep your state between deploys. A typical Railway deploy, though, gives the Gateway a public URL, and that's the opposite of what we want for something that can read your files and use your accounts.
+[Railway](https://railway.com?referralCode=kinney) is a convenient place to run an always-on Gateway: you don't manage a server, and volumes keep your state between deploys. A typical Railway deploy, though, gives the Gateway a public URL, and that's the opposite of what we want for something that can read your files and use your accounts.
 
 This lesson uses [`stevekinney/openclaw-railway-template`](https://github.com/stevekinney/openclaw-railway-template), a minimal deployment with **no public domain at all**. Two Railway services run side by side:
 
@@ -47,7 +47,7 @@ This template forwards **raw TCP** instead. Bytes pass through untouched, so the
 
 You'll need:
 
-- A Railway account on a paid plan (the volumes are larger than the free tier allows) and the [Railway CLI](https://docs.railway.com/cli): `brew install railway`, then `railway login`.
+- A [Railway](https://railway.com?referralCode=kinney) account on a paid plan (the volumes are larger than the free tier allows) and the [Railway CLI](https://docs.railway.com/cli): `brew install railway`, then `railway login`.
 - A tailnet with **MagicDNS** and **HTTPS Certificates** turned on, as described in the previous lesson. Note your tailnet's DNS name in the admin console under **DNS**. It looks like `tail1234.ts.net`.
 - An API key for a model provider. The examples use Anthropic.
 
@@ -127,7 +127,7 @@ For a Gateway that can run commands, the tag is cheap insurance. On a small pers
 
 ## Step 3: Deploy the Template
 
-Open the [OpenClaw Private Gateway template](https://railway.com/deploy/openclaw-private-gateway) on Railway and fill in two variables:
+Open the [OpenClaw Private Gateway template](https://railway.com/deploy/openclaw-private-gateway?referralCode=kinney) on Railway and fill in two variables:
 
 | Variable                 | Value                                    |
 | ------------------------ | ---------------------------------------- |

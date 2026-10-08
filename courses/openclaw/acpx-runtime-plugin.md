@@ -85,7 +85,7 @@ The lines worth reading:
 - **`healthy: yes`** and **`runtimeDoctor: ok`** mean OpenClaw launched an adapter and completed the protocol handshake. That's the line you're checking for.
 - **`registeredBackend: acpx`** confirms the plugin is the active backend.
 - **`agent=codex`** is the harness the health check used. It's the probe agent, which defaults to the first entry in `acp.allowedAgents`, or `codex` if you haven't set one. A healthy result tells you about **that** adapter only. To check a different harness, set `probeAgent` (see Step 4).
-- **`command=…/codex-acp-wrapper.mjs`** is a small launcher script that ACPX generated inside the Gateway's state directory. On the Railway template that's `/data/.openclaw`, which lives on the volume.
+- **`command=…/codex-acp-wrapper.mjs`** is a small launcher script that ACPX generated inside the Gateway's state directory. On the [Railway](https://railway.com?referralCode=kinney) template that's `/data/.openclaw`, which lives on the volume.
 - **The counters** (`activeRuntimeSessions`, `turnCounts`, `errorCodes`, and so on) are all zero because nothing has run yet. They're how you'll see activity later.
 
 A clean doctor doesn't prove the harness is signed in. It proves the adapter starts and speaks ACP. A missing or expired login shows up when a real turn runs, which is exactly what the exercises below are for.

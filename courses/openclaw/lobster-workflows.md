@@ -126,7 +126,7 @@ This isn't the same as an [exec approval](security-and-approvals.md#layer-3-exec
 
 ## Try It Out
 
-Run these against your real Gateway. On the Railway template, run the shell commands through `railway ssh --service openclaw -- ...`, and remember that `/tmp` there is inside the container.
+Run these against your real Gateway. On the [Railway](https://railway.com?referralCode=kinney) template, run the shell commands through `railway ssh --service openclaw -- ...`, and remember that `/tmp` there is inside the container.
 
 ### 1. Install and Smoke-Test
 

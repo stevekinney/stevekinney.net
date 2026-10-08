@@ -324,7 +324,7 @@ openclaw automations create "0 2 * * 1-5" \
 
 **Anything with real-world consequences.** Community showcases are full of agents that negotiate with car dealers, file insurance claims, check in for flights, place grocery orders, and send invoices. It's impressive, but none of the published summaries mentions an approval step. If you want something like that, borrow the numbered-approval pattern from idea 3: the agent prepares the action, and nothing happens until you reply.
 
-**Push-style webhooks on a private Gateway.** A webhook needs the outside service to reach your Gateway, and a Gateway that's reachable only over Tailscale, as in the [Railway lesson](running-openclaw-on-railway-with-tailscale.md), can't be reached by GitHub or Stripe. Public exposure is exactly what that setup avoids. When you can, prefer the pull-style version of an idea: a schedule that checks every few minutes instead of an event that arrives.
+**Push-style webhooks on a private Gateway.** A webhook needs the outside service to reach your Gateway, and a Gateway that's reachable only over Tailscale, like the one the [Railway lesson](running-openclaw-on-railway-with-tailscale.md) deploys to [Railway](https://railway.com?referralCode=kinney), can't be reached by GitHub or Stripe. Public exposure is exactly what that setup avoids. When you can, prefer the pull-style version of an idea: a schedule that checks every few minutes instead of an event that arrives.
 
 **Anything that browses while signed in.** It's convenient and it's a much bigger grant than it looks. If you do need it, [sync only the cookies for the sites a task needs](syncing-cookies-to-a-remote-gateway.md) into a named profile instead of attaching your whole browser.
 

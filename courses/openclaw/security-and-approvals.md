@@ -118,7 +118,7 @@ openclaw exec-policy show
 
 `cautious` sets `ask` mode with a fallback of `deny`: if a command needs approval and nobody can be asked, it doesn't run. The other presets are `yolo` (no prompts) and `deny-all`.
 
-`exec-policy` only changes the machine you run it on. On a remote Gateway, run it there. On the Railway template, that's `railway ssh --service openclaw -- openclaw exec-policy preset cautious`.
+`exec-policy` only changes the machine you run it on. On a remote Gateway, run it there. On the [Railway](https://railway.com?referralCode=kinney) template, that's `railway ssh --service openclaw -- openclaw exec-policy preset cautious`.
 
 > [!WARNING] Nodes have their own policy
 > A [paired node](connecting-a-remote-node.md) starts with the same no-prompts default as the Gateway, and the Gateway's preset doesn't change it. That's why the node lesson sets the Mac's approvals policy _before_ pairing.

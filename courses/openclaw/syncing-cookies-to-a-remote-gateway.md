@@ -76,7 +76,7 @@ You'll need:
   ```
 
 - **A reachable remote Gateway,** like the one from the [Tailscale lessons](connecting-securely-with-tailscale.md), with your Mac able to connect to it.
-- **A browser on the Gateway.** This is the one that trips people up on Railway. The template's image doesn't include Chromium, and it ships with browser control turned off. To use a browser there, you'd switch to the template's browser image variant and enable browser control, and you should do that deliberately. The template's security notes cover it.
+- **A browser on the Gateway.** This is the one that trips people up on [Railway](https://railway.com?referralCode=kinney). The template's image doesn't include Chromium, and it ships with browser control turned off. To use a browser there, you'd switch to the template's browser image variant and enable browser control, and you should do that deliberately. The template's security notes cover it.
 
 > [!NOTE] Gateway mode decides which tool you get
 > If a Cookie sync option in the macOS app is greyed out, that's the app telling you it's connected to a **local** Gateway. Cookie sync only exists in remote mode, and installing a CLI won't change that.

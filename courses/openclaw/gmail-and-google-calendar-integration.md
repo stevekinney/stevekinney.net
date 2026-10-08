@@ -36,7 +36,7 @@ gog --version
 Install it under the same operating-system user that runs your OpenClaw Gateway, so the agent can access its authenticated configuration.
 
 > [!NOTE] Running on the Railway template?
-> The template's image already includes `gog`, so there's nothing to install. You run it through `railway ssh` as the Gateway's user, like this: `railway ssh --service openclaw -- as-node gog auth list`. It also stores its tokens in an encrypted file, which needs a password kept in a sealed Railway variable (`GOG_KEYRING_PASSWORD`), and you copy the OAuth client JSON onto the volume instead of using a local path. The template's documentation flags this flow as untested on a live deployment, so check its `TOOLS.md` before relying on it.
+> The [Railway](https://railway.com?referralCode=kinney) template's image already includes `gog`, so there's nothing to install. You run it through `railway ssh` as the Gateway's user, like this: `railway ssh --service openclaw -- as-node gog auth list`. It also stores its tokens in an encrypted file, which needs a password kept in a sealed Railway variable (`GOG_KEYRING_PASSWORD`), and you copy the OAuth client JSON onto the volume instead of using a local path. The template's documentation flags this flow as untested on a live deployment, so check its `TOOLS.md` before relying on it.
 
 ## Create a Google Cloud project
 
