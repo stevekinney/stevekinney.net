@@ -3,6 +3,8 @@ title: OpenClaw Browser Prompts
 description: "Two example prompts that put OpenClaw's browser to work: researching GitHub Trending and running an exploratory QA pass on a web app."
 ---
 
+These prompts assume the browser is already set up. If you haven't turned it on yet, start with [Setting Up and Using the Browser](browser-setup-and-use.md).
+
 Here is an example prompt that you might consider:
 
 ```md

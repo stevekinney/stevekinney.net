@@ -55,6 +55,10 @@ title = "Demonstrating OpenClaw's Memory"
 href = "demonstrating-openclaw-memory.md"
 
 [[section.item]]
+title = "Setting Up and Using the Browser"
+href = "browser-setup-and-use.md"
+
+[[section.item]]
 title = "OpenClaw Browser Prompts"
 href = "openclaw-browser-prompts.md"
 

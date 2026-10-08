@@ -10,15 +10,18 @@ There are two separate capabilities:
 
 Start with on-demand access. It's substantially easier and doesn't require exposing a webhook endpoint.
 
-## Install gog on your VPS
+> [!NOTE] Run the `gog` commands where the Gateway runs
+> The agent uses `gog` by running it on the machine that hosts your Gateway, and it uses the credentials stored for the operating-system user that runs the Gateway. So every `gog` command in this lesson belongs on that machine, as that user. If your Gateway runs on your Mac, that's just your own terminal. If it runs on a remote machine, connect to it first (for example over SSH) and run the commands there.
 
-SSH into your VPS and run:
+## Install gog
+
+On the machine that runs your Gateway:
 
 ```bash
 brew install openclaw/tap/gogcli
 ```
 
-If you don't use Homebrew on the VPS but have a compatible Go installation:
+If you don't use Homebrew there but have a compatible Go installation:
 
 ```bash
 go install github.com/openclaw/gogcli/cmd/gog@latest
@@ -31,6 +34,9 @@ gog --version
 ```
 
 Install it under the same operating-system user that runs your OpenClaw Gateway, so the agent can access its authenticated configuration.
+
+> [!NOTE] Running on the Railway template?
+> The template's image already includes `gog`, so there's nothing to install. You run it through `railway ssh` as the Gateway's user, like this: `railway ssh --service openclaw -- as-node gog auth list`. It also stores its tokens in an encrypted file, which needs a password kept in a sealed Railway variable (`GOG_KEYRING_PASSWORD`), and you copy the OAuth client JSON onto the volume instead of using a local path. The template's documentation flags this flow as untested on a live deployment, so check its `TOOLS.md` before relying on it.
 
 ## Create a Google Cloud project
 
@@ -71,7 +77,23 @@ This imports the OAuth client credentials into gog's configuration.
 
 ## Authenticate Gmail and Calendar
 
-Because your VPS has no browser, use gog's manual OAuth flow:
+How you authorize depends on whether the machine has a browser.
+
+### On a machine with a browser
+
+If the Gateway runs on your Mac or another desktop, authorize normally:
+
+```sh
+gog auth add you@gmail.com \
+  --services gmail,calendar \
+  --readonly
+```
+
+gog walks you through signing in to Google and approving access. If your version behaves differently, check `gog auth add --help`.
+
+### On a machine without a browser
+
+On a server or in a container there's nowhere to open a sign-in page, so use gog's manual OAuth flow:
 
 ```sh
 gog auth add you@gmail.com \
@@ -83,10 +105,10 @@ gog auth add you@gmail.com \
 The process is:
 
 1. gog prints an authorization URL.
-2. Open that URL in your local browser.
+2. Open that URL in a browser on any machine you like.
 3. Sign into Google and approve access.
 4. Your browser redirects to a localhost URL that might not load.
-5. Copy the entire redirect URL and paste it into your VPS terminal.
+5. Copy the entire redirect URL and paste it into the terminal where gog is waiting.
 
 This exchanges the OAuth authorization code for tokens that gog can use.
 
@@ -101,7 +123,7 @@ gog auth add you@gmail.com \
 
 Follow the printed instructions, then complete the flow using `--remote --step 2` with the redirect URL. Never paste that URL into a public chat because it contains a temporary authorization code.
 
-For unattended VPS operation, make sure gog's encrypted credential store can be unlocked by the Gateway service without requiring an interactive password prompt. Keep any keyring password in a properly protected secret source.
+If the Gateway runs as a background service, make sure gog's encrypted credential store can be unlocked by that service without requiring an interactive password prompt. Keep any keyring password in a properly protected secret source.
 
 ## Test the connection
 
@@ -144,7 +166,7 @@ openclaw skills check
 
 Look for the `gog` skill. Depending on your installation, it may already be available once the required CLI is installed.
 
-Make sure the `gog` executable is available in the Gateway service's `PATH`, not just your interactive SSH shell.
+Make sure the `gog` executable is available in the Gateway service's `PATH`, not just your interactive shell. A background service often has a shorter `PATH` than your terminal does.
 
 You can also add guidance to the `## Tools` section of your `AGENTS.md`:
 
@@ -174,7 +196,7 @@ Then:
 
 > What's on my calendar tomorrow? Identify conflicts and any gaps longer than one hour.
 
-These tests establish that OpenClaw, not merely your SSH shell, can access both services.
+These tests establish that OpenClaw, not merely your own terminal, can access both services.
 
 ## Gmail notifications: Optional next step
 
