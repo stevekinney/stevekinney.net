@@ -29,7 +29,7 @@
 #                        snapshot such as claude-haiku-4-5-20251001 matches the
 #                        undated identifier.
 
-updated = "2026-10-04"
+updated = "2026-10-08"
 
 [[models]]
 name = "GPT-6 Astra"
@@ -87,7 +87,7 @@ identifiers = ["gpt-6.1-sol"]
 name = "Claude Sonnet 5.5"
 provider = "Anthropic"
 input = 2.00
-cachedInput = 0.20
+cachedInput = 0.10
 cacheWrite5m = 2.50
 cacheWrite1h = 4.00
 output = 10.00
