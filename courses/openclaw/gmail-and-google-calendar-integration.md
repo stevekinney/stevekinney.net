@@ -164,7 +164,7 @@ openclaw skills list
 openclaw skills check
 ```
 
-Look for the `gog` skill. Depending on your installation, it may already be available once the required CLI is installed.
+Look for the `gog` skill. Depending on your installation, it may already be available once the required CLI is installed. If it isn't, [Skills and ClawHub](skills-and-clawhub.md) covers installing and vetting skills.
 
 Make sure the `gog` executable is available in the Gateway service's `PATH`, not just your interactive shell. A background service often has a shorter `PATH` than your terminal does.
 

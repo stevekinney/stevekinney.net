@@ -8,7 +8,7 @@ When you [add a channel](adding-telegram-as-a-channel.md), you're giving your ag
 Every channel therefore has a **DM policy** that decides what happens when someone you haven't approved sends your agent a direct message. It's set with `dmPolicy`, and it takes one of four values.
 
 > [!NOTE] Policy is about who gets in, not what they can do
-> A DM policy only decides whether a sender's messages reach your agent. What that conversation is then allowed to _do_ is controlled separately by tool and approval policy. You need both.
+> A DM policy only decides whether a sender's messages reach your agent. What that conversation is then allowed to _do_ is controlled separately by [tool and approval policy](security-and-approvals.md). You need both.
 
 ## The Four Policies
 
@@ -167,7 +167,7 @@ Then adjust for your situation:
 | You think something is overexposed       | `disabled` everywhere, right now           | Doesn't matter     |
 | A public bot for strangers               | Don't. Make a separate, locked-down agent. | `per-channel-peer` |
 
-And whichever you pick, keep the second layer in place. A tight DM policy plus an agent that asks before running commands is much safer than either one alone. If you haven't already, revisit the execution settings in [Setting Up OpenClaw](openclaw-setup.md).
+And whichever you pick, keep the second layer in place. A tight DM policy plus an agent that asks before running commands is much safer than either one alone. If you haven't already, set that up as described in [Security and Approvals](security-and-approvals.md).
 
 > [!NOTE] Commands and flags change
-> This lesson matches OpenClaw `2026.9.5`. If something doesn't behave as described, run the command with `--help` and check the [OpenClaw documentation](https://docs.openclaw.ai).
+> This lesson matches OpenClaw `2026.9.8`. If something doesn't behave as described, run the command with `--help` and check the [OpenClaw documentation](https://docs.openclaw.ai).

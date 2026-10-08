@@ -69,7 +69,7 @@ If something's missing, there are three switches to check. The browser needs all
    }
    ```
 
-   To allow it for a single agent, use `agents.entries.<id>.tools.alsoAllow` instead. Allowing it for subagents is a separate setting, and it isn't enough on its own.
+   To allow it for a single agent, use `agents.entries.<id>.tools.alsoAllow` instead. Allowing it for [subagents](subagents-and-orchestration.md) is a separate setting, and it isn't enough on its own.
 
 > [!NOTE] Some deployments turn it off
 > The Railway template, for example, ships with browser control disabled and without Chromium in the image. That's a deliberate security choice. If you're on a setup like that, enabling the browser is a decision, not a default.

@@ -85,6 +85,7 @@ A few things worth knowing:
 - With no target flag, `approvals` reads and writes the **local** document, which is what you want on the Mac.
 - `set` **replaces** the whole document. On a machine that already has rules, run `openclaw approvals get` first and preserve what's there.
 - An approval policy is not a filesystem sandbox. An approved command runs with whatever access your macOS account has.
+- For what `security`, `ask`, and `askFallback` mean, and how approvals reach you, see [Security and Approvals](security-and-approvals.md#layer-3-exec-approvals).
 
 ## Step 3: Choose How to Connect the Mac
 
@@ -215,6 +216,9 @@ To make the node the default for a session, set `tools.exec.host=node`. If more 
 
 An offline target is **rejected, not redirected**. If your Mac is asleep, the command fails instead of quietly running on the server. That's what you want.
 
+> [!NOTE] Want a coding agent on your Mac?
+> A paired node doesn't make ACP run on it. ACP harnesses run on the Gateway host. Native Codex can use a node, and [ACP and Mac Nodes](acpx-runtime-plugin.md#acp-and-mac-nodes) covers what works and what doesn't.
+
 ## Step 7: Run an Acceptance Test
 
 A connectivity check isn't enough. Prove the failure mode works too:
@@ -256,4 +260,4 @@ openclaw nodes remove --node "<node-id>"
 That revokes the device's `node` role and disconnects its node-role sessions. If the same device holds other roles, those need to be revoked separately.
 
 > [!NOTE] Commands and flags change
-> The flags above match OpenClaw `2026.9.5`. If a command doesn't behave the way it's described here, run it with `--help` and check the [OpenClaw documentation](https://docs.openclaw.ai).
+> The flags above match OpenClaw `2026.9.8`. If a command doesn't behave the way it's described here, run it with `--help` and check the [OpenClaw documentation](https://docs.openclaw.ai).

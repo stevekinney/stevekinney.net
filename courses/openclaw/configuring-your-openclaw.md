@@ -97,7 +97,7 @@ Verify the outcome of any state-changing action.
 
 Don't put your biography, the agent's personality, or detailed notes about past projects here.
 
-Also avoid copying entire skill definitions into `AGENTS.md`. A rule such as "use the research skill for substantial research" belongs here. The actual research procedure belongs in the skill.
+Also avoid copying entire skill definitions into `AGENTS.md`. A rule such as "use the research skill for substantial research" belongs here. The actual research procedure belongs in [the skill](skills-and-clawhub.md).
 
 Useful distinction: `AGENTS.md` tells the agent when and how to approach a type of work. A skill provides the detailed procedure for a specific capability.
 

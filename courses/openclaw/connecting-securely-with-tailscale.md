@@ -225,4 +225,4 @@ Two more things worth knowing:
 - **Boot order.** If the Gateway starts before the Tailscale daemon has connected, it waits up to 90 seconds before giving up.
 
 > [!NOTE] Commands and flags change
-> This lesson matches OpenClaw `2026.9.5`. If something doesn't behave as described, run the command with `--help` and check the [OpenClaw documentation](https://docs.openclaw.ai/gateway/tailscale).
+> This lesson matches OpenClaw `2026.9.8`. If something doesn't behave as described, run the command with `--help` and check the [OpenClaw documentation](https://docs.openclaw.ai/gateway/tailscale).

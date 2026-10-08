@@ -14,26 +14,14 @@ title = "Configuring Your OpenClaw"
 href = "configuring-your-openclaw.md"
 
 [[section]]
-title = "Remote Gateways"
+title = "Security"
 
 [[section.item]]
-title = "Connecting to Your OpenClaw Securely with Tailscale"
-href = "connecting-securely-with-tailscale.md"
-
-[[section.item]]
-title = "Running OpenClaw on Railway with Tailscale"
-href = "running-openclaw-on-railway-with-tailscale.md"
-
-[[section.item]]
-title = "Connecting to a Remote OpenClaw as a Paired Node"
-href = "connecting-a-remote-node.md"
-
-[[section.item]]
-title = "Syncing Your Browser Cookies to a Remote Gateway"
-href = "syncing-cookies-to-a-remote-gateway.md"
+title = "Security and Approvals"
+href = "security-and-approvals.md"
 
 [[section]]
-title = "Channels and Integrations"
+title = "Channels"
 
 [[section.item]]
 title = "Adding Telegram as a Channel"
@@ -42,6 +30,16 @@ href = "adding-telegram-as-a-channel.md"
 [[section.item]]
 title = "Choosing a DM Policy"
 href = "choosing-a-dm-policy.md"
+
+[[section]]
+title = "Automations"
+
+[[section.item]]
+title = "Automation Ideas to Try"
+href = "automation-ideas.md"
+
+[[section]]
+title = "Integrations"
 
 [[section.item]]
 title = "Gmail and Google Calendar Integration"
@@ -63,15 +61,57 @@ title = "OpenClaw Browser Prompts"
 href = "openclaw-browser-prompts.md"
 
 [[section]]
-title = "Coding Agents"
+title = "Extending OpenClaw"
+
+[[section.item]]
+title = "Skills and ClawHub"
+href = "skills-and-clawhub.md"
+
+[[section]]
+title = "Delegating Work"
+
+[[section.item]]
+title = "Subagents and Orchestration"
+href = "subagents-and-orchestration.md"
 
 [[section.item]]
 title = "The ACPX Runtime Plugin"
 href = "acpx-runtime-plugin.md"
 
 [[section]]
-title = "Putting It to Work"
+title = "Remote Gateways"
 
 [[section.item]]
-title = "Automation Ideas to Try"
-href = "automation-ideas.md"
+title = "Connecting to Your OpenClaw Securely with Tailscale"
+href = "connecting-securely-with-tailscale.md"
+
+[[section.item]]
+title = "Running OpenClaw on Railway with Tailscale"
+href = "running-openclaw-on-railway-with-tailscale.md"
+
+[[section.item]]
+title = "Connecting to a Remote OpenClaw as a Paired Node"
+href = "connecting-a-remote-node.md"
+
+[[section.item]]
+title = "Syncing Your Browser Cookies to a Remote Gateway"
+href = "syncing-cookies-to-a-remote-gateway.md"
+
+[[section]]
+title = "Workflows and Orchestration"
+
+[[section.item]]
+title = "Lobster Workflows"
+href = "lobster-workflows.md"
+
+[[section.item]]
+title = "LLM Task"
+href = "llm-task.md"
+
+[[section.item]]
+title = "Swarms"
+href = "swarms.md"
+
+[[section.item]]
+title = "Choosing an Orchestration Tool"
+href = "choosing-an-orchestration-tool.md"

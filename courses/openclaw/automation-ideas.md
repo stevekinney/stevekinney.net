@@ -3,17 +3,20 @@ title: Automation Ideas to Try
 description: A menu of practical OpenClaw automations, from a morning brief to an overnight coding agent, with starter prompts, building blocks, and guardrails for each.
 ---
 
-Once OpenClaw is installed, connected to a channel, and talking to your mail and calendar, the fun part starts: getting it to do useful things while you're not looking. This lesson is a menu. Read through it, pick one or two that match your life, and set them up in order of difficulty.
+As soon as you can talk to your agent in Telegram, the fun part starts: getting it to do useful things while you're not looking. This lesson is a menu. Read through it, pick one or two that match your life, and set them up in order of difficulty.
 
 Every idea has the same shape:
 
 - **What you get** is the point of the thing.
-- **Built from** names the pieces we've already covered.
+- **Built from** names the pieces it uses.
 - **Try it** is a starter command or prompt.
 - **Guardrails** is what keeps it from going wrong.
 
+> [!NOTE] Some ideas need pieces from later lessons
+> This lesson comes early so you can start scheduling right away, but many ideas use things later lessons set up: [Gmail and Calendar](gmail-and-google-calendar-integration.md), [the browser](browser-setup-and-use.md), [a paired Mac](connecting-a-remote-node.md), and [coding agents](acpx-runtime-plugin.md). The **Needs** column in [Picking Your First Three](#picking-your-first-three) shows what each one requires. Start with the ones that only need a schedule and a chat, and come back for the rest as you go.
+
 > [!NOTE] Treat the commands as sketches
-> The scheduling flags here follow OpenClaw's `2026.9.5` documentation, but I haven't run every one against a live Gateway. If a flag doesn't behave as shown, run the command with `--help`. Many ideas are also adapted from community write-ups, which are one person's report of their own setup and not something the project has verified.
+> The scheduling flags here follow OpenClaw's `2026.9.8` documentation, but I haven't run every one against a live Gateway. If a flag doesn't behave as shown, run the command with `--help`. Many ideas are also adapted from community write-ups, which are one person's report of their own setup and not something the project has verified.
 
 ## The Building Blocks
 
@@ -74,6 +77,7 @@ These apply to every idea. They're the difference between an automation you trus
 6. **Mind the cost.** Every scheduled model turn spends tokens. Checks that don't need a model (is the site up, did the file change) should use a command or a trigger script, not an agent turn.
 7. **Know what's already running.** A fresh Gateway already has system jobs, including a heartbeat every 30 minutes. Run `openclaw automations list --all` before you add yours.
 8. **Watch for silent failure.** A job that quietly stops looks identical to a quiet inbox. Turn on failure alerts, and check run history now and then.
+9. **Plan for approvals.** If commands require approval, a scheduled job's request goes only to a connected approval app, and it's denied if none is connected. Run the job once while you're watching and approve it with **Always allow**. See [When Nobody's There](security-and-approvals.md#when-nobodys-there).
 
 ## Daily Rhythms
 
@@ -320,7 +324,7 @@ openclaw automations create "0 2 * * 1-5" \
 
 **Anything with real-world consequences.** Community showcases are full of agents that negotiate with car dealers, file insurance claims, check in for flights, place grocery orders, and send invoices. It's impressive, but none of the published summaries mentions an approval step. If you want something like that, borrow the numbered-approval pattern from idea 3: the agent prepares the action, and nothing happens until you reply.
 
-**Push-style webhooks on a private Gateway.** A webhook needs the outside service to reach your Gateway, and a Gateway that's reachable only over Tailscale, as in the [Railway lesson](running-openclaw-on-railway-with-tailscale.md), can't be reached by GitHub or Stripe. Public exposure is exactly what we avoided. When you can, prefer the pull-style version of an idea: a schedule that checks every few minutes instead of an event that arrives.
+**Push-style webhooks on a private Gateway.** A webhook needs the outside service to reach your Gateway, and a Gateway that's reachable only over Tailscale, as in the [Railway lesson](running-openclaw-on-railway-with-tailscale.md), can't be reached by GitHub or Stripe. Public exposure is exactly what that setup avoids. When you can, prefer the pull-style version of an idea: a schedule that checks every few minutes instead of an event that arrives.
 
 **Anything that browses while signed in.** It's convenient and it's a much bigger grant than it looks. If you do need it, [sync only the cookies for the sites a task needs](syncing-cookies-to-a-remote-gateway.md) into a named profile instead of attaching your whole browser.
 
@@ -345,10 +349,11 @@ openclaw automations create "0 2 * * 1-5" \
 
 A good path:
 
-1. **Week one:** the evening look-ahead, then the morning brief. Get used to scheduling, run history, and delivery.
-2. **Week two:** a quiet watcher, either the vendor monitor or the babysitter, so you learn what "silent unless it matters" feels like.
-3. **Week three:** email triage in digest-only mode.
-4. **After that:** the coding-agent ideas, once you trust your permissions.
+1. **Right away:** the quick babysitter, which only needs a chat. It's the fastest way to see scheduling and delivery work.
+2. **Once Gmail and Calendar are connected:** the evening look-ahead, then the morning brief. Get used to run history and delivery.
+3. **Next:** a quiet watcher, either the vendor monitor or the build-finished alert, so you learn what "silent unless it matters" feels like.
+4. **Then:** email triage in digest-only mode.
+5. **After that:** the coding-agent ideas, once you trust your permissions.
 
 ## Living With Your Automations
 

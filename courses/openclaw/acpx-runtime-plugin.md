@@ -35,7 +35,7 @@ OpenClaw also has native **subagents**, which run inside OpenClaw's own runtime.
 | Controlled with | `/acp ...`                             | `/subagents ...`                  |
 | Spawned with    | `sessions_spawn` with `runtime: "acp"` | `sessions_spawn` (the default)    |
 
-Use ACP when the worker you want is specifically an external harness. Use a subagent when you just want bounded delegation inside OpenClaw.
+Use ACP when the worker you want is specifically an external harness. Use a subagent when you just want bounded delegation inside OpenClaw. [Subagents and Orchestration](subagents-and-orchestration.md) covers those.
 
 One more thing to keep straight: choosing an `openai/gpt-*` model doesn't select Codex, and naming a model after a harness doesn't make something ACP. For Codex specifically, OpenClaw's own native Codex plugin is the default way to bind a conversation. Codex over ACP is the explicit alternative, selected by `runtime: "acp"` and `agentId: "codex"`.
 
@@ -173,7 +173,7 @@ openclaw config set plugins.entries.acpx.config.permissionMode approve-all
 If you do use it, limit the blast radius. Point sessions at a disposable checkout or worktree with `cwd`, keep `acp.allowedAgents` short, and put it back to `approve-reads` when you're done.
 
 > [!WARNING] These permissions are separate from OpenClaw's approvals
-> ACPX permissions are not the same as OpenClaw's own exec approvals, and neither is a substitute for the other. The harness has its own permission model, and ACPX maps onto it. Check what you've actually granted at each layer.
+> ACPX permissions are not the same as OpenClaw's own [exec approvals](security-and-approvals.md#layer-3-exec-approvals), and neither is a substitute for the other. The harness has its own permission model, and ACPX maps onto it. Check what you've actually granted at each layer.
 
 ### The Tool Bridges Widen the Surface
 
@@ -460,6 +460,108 @@ Run through this list:
 - **Sandboxed sessions can't spawn ACP at all.** If the requesting session is sandboxed, both `/acp spawn` and `sessions_spawn({ runtime: "acp" })` are blocked, and `sandbox: "require"` isn't supported. If you need sandbox-enforced work, use a native subagent.
 - **Logins are access.** Once a harness is signed in on the Gateway host, an agent can use that account. A signed-in Claude Code or Codex can edit code and push it, which makes prompt injection more consequential.
 - **Uncertain starts need inspection.** If a spawn times out or the Gateway restarts, don't just retry. The harness may have started and changed files. Check the session and its task first.
+
+## ACP and Mac Nodes
+
+If you've [paired your Mac as a node](connecting-a-remote-node.md), a natural question is whether OpenClaw can now drive Claude Code on it. **Not through ACP.** ACP and nodes are separate mechanisms, and nothing in OpenClaw's documentation connects them.
+
+### What Runs Where
+
+| Piece                                  | Where it runs                                                                        |
+| -------------------------------------- | ------------------------------------------------------------------------------------ |
+| **An ACP harness** (Claude Code, etc.) | The Gateway host's runtime, outside OpenClaw's sandbox                               |
+| **A paired Mac node**                  | Only the commands and capabilities you approved, called by the Gateway               |
+| **Native Codex with placement**        | Codex's brain stays on the Gateway, and its commands and file access run on the node |
+
+So with a remote Gateway, `/acp spawn claude` starts Claude Code on the Gateway's server, against files that exist there. Your Mac's repositories aren't in reach, and the docs for ACP, session hosting, and node exec don't describe running an ACP harness on a node.
+
+The node approval prompt lists a couple of things that might look related, like "Sessions: Claude, Codex." I couldn't find documentation saying what those do, so don't read them as support for ACP on the Mac.
+
+### What Does Work: Native Codex on a Node
+
+There's a documented way to run a coding agent on a paired device, but it's for **Codex, through its native runtime**, not through ACP. In OpenClaw's terms it's **placement**: the Gateway keeps Codex's app-server, the model connection, and the transcript, while Codex's shell commands, file access, and HTTP requests happen on your Mac. The node runs `codex exec-server` in a session workspace, and the changes it makes are reconciled back into a worktree the Gateway owns.
+
+A few things to know before you try it:
+
+- **It's controlled with `/codex`,** not `/acp`.
+- **The work happens in a managed workspace,** which the Gateway creates and syncs. It isn't a folder you point at on your Mac. A new session starts from an empty workspace, a GitHub repository, or a checkout on the Gateway, and you don't browse the device's filesystem to choose it.
+- **You don't need to sign in to Codex on the Mac.** Provider credentials stay on the Gateway, and the node gets a fresh private home directory and a sanitized environment.
+- **Requests that carry credentials are refused on the node.** Anything that needs a bearer token or cookies has to run on the Gateway.
+
+Setup has three parts. First, enable the Codex plugin on **both** the Gateway and the Mac (and add `codex` to `plugins.allow` on either one that uses an allowlist). Second, allow the node command on the Gateway, because it's high-risk and isn't allowed by default:
+
+```json5
+{
+  gateway: {
+    nodes: {
+      commands: {
+        allow: ['codex.exec-server.stdio.v1'],
+      },
+    },
+  },
+  plugins: {
+    entries: {
+      codex: {
+        enabled: true,
+      },
+    },
+  },
+}
+```
+
+Third, turn on session hosting on the Mac. It's a node-local setting, and the docs I could find for it only show the basic form:
+
+```json5
+{
+  nodeHost: {
+    workerRuns: { enabled: true },
+  },
+}
+```
+
+Then restart the app or node host. Because the node's command set changed, reconnect it and approve the new request from the Gateway:
+
+```sh
+openclaw nodes pending
+openclaw nodes approve <requestId>
+```
+
+Choose the paired device in the **Place** picker when you start a new session in the Control UI. From the command line, you can dispatch an existing managed-worktree session to a device:
+
+```sh
+openclaw gateway call sessions.dispatch \
+  --params '{"key":"agent:main:device-work","deviceId":"<paired-device-id>"}'
+```
+
+**Every launch needs your approval.** Starting the exec-server shows a critical approval prompt. **Allow once** covers one launch. **Allow always** covers later launches only while the placement stays exactly the same, lives in the Gateway's memory, and is wiped when the Gateway restarts. Allowing the command in config doesn't skip the prompt.
+
+If the connection drops or you cancel the turn, the attempt ends and its remote processes are killed. Reconnecting starts a fresh attempt. It never resumes the old one.
+
+> [!WARNING] Approval is not a sandbox
+> Once you approve a launch, the process can reach anything your Mac account can reach. The working directory only sets where it starts. Pair only devices you trust, and if you want real isolation, run the node under a separate least-privilege macOS account.
+
+This feature is relatively new, and the documentation doesn't say which operating systems are supported or give the node-side keys beyond the basic form above. Check the [Codex placement page](https://docs.openclaw.ai/plugins/codex-harness/placement) for your installed version before you rely on it.
+
+### What About Claude Code on the Mac?
+
+There's no documented placement for Claude Code. You have three realistic choices:
+
+| You want…                                                 | Do this                                                                                                                                               |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Code working on repositories that live on your Mac | Run the Gateway on the Mac, so the Gateway host _is_ the Mac and ACP runs there                                                                       |
+| Claude Code working on a copy, with the Gateway remote    | Keep using ACP on the Gateway host, with a scratch checkout there, and bring the results back through Git                                             |
+| One-off commands on the Mac                               | Run the CLI as an ordinary command with `/exec host=node`, allowlisting the binary first with `openclaw approvals allowlist add --node <id> "<path>"` |
+
+That last option is a shell command, not an ACP session. You'd lose session tracking, `steer` and `cancel`, bindings, and the rest of the ACP controls, and the docs give no guidance for running a coding CLI that way. I haven't tried it, so treat it as an experiment, and keep the allowlist as narrow as you can.
+
+### Choosing
+
+| You want…                                            | Use…                                 |
+| ---------------------------------------------------- | ------------------------------------ |
+| Any ACP harness (Claude Code, Gemini CLI, and so on) | ACP, which runs on the Gateway host  |
+| Codex doing work on the Mac, with the Gateway remote | Native Codex placement on the node   |
+| Claude Code on your Mac's own repositories           | A Gateway running on that Mac        |
+| OpenClaw's own coding sessions on the Mac            | Session hosting on the paired device |
 
 ## Using It on Railway
 

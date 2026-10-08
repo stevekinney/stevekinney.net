@@ -11,9 +11,10 @@ The first thing we're going to want to do is set up which models we're going to 
 
 ## Tweaking Your Security Settings
 
-**Optional**: Out of the box, OpenClaw has full access to run commands. One thing you _might_ want to consider doing is to have it ask you for permission.
+**Optional**: Out of the box, OpenClaw has full access to run commands. One thing you _might_ want to consider doing is to have it ask you for permission before running anything that isn't on an allowlist.
 
 ```bash
-openclaw config set tools.exec.security allowlist
-openclaw config set tools.exec.ask on-miss
+openclaw exec-policy preset cautious
 ```
+
+Run this on the machine where the Gateway runs. [Security and Approvals](security-and-approvals.md) explains what it changes, how approval requests reach you, and the rest of OpenClaw's safety controls.
