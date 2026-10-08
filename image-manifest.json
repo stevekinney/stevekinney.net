@@ -4792,6 +4792,318 @@
       "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAgCdASoYAA4APxFyslAsJqSisAgBgCIJaQAAelOUAAD+jK7cu/SkmicnOILoAAA=",
       "videoMimeType": null
     },
+    "courses/openclaw/assets/telegram-botfather-newbot-command.png": {
+      "hash": "68d57bbbe21ae407",
+      "width": 1470,
+      "height": 332,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/68d57bbbe21ae407/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/68d57bbbe21ae407/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/68d57bbbe21ae407/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADwAgCdASoYAAUAPxF0sFCsJqSuMAgBwCIJZQCdAC2OAAD+7KyjxGTRcTjMClftCIAAAA==",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/telegram-botfather-bot-token.png": {
+      "hash": "ce9580e3fa352140",
+      "width": 1006,
+      "height": 616,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ce9580e3fa352140/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ce9580e3fa352140/avif-480w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADwAgCdASoYAA8APxFwsFAsJiSisAgBgCIJZQC7AC0kAAD+7BZ70GpW6vxknAAA",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/telegram-pairing-code-prompt.png": {
+      "hash": "3b3692c8988f7825",
+      "width": 1478,
+      "height": 576,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3b3692c8988f7825/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3b3692c8988f7825/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3b3692c8988f7825/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAADwAgCdASoYAAkAPxFysVAsJqSisAgBgCIJZQCdAC0kAAD+6yQ46s2f0hxVkgAA",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/openclaw-agent-settings.png": {
+      "hash": "6ed2bf98cf35a269",
+      "width": 1600,
+      "height": 1151,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/6ed2bf98cf35a269/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/6ed2bf98cf35a269/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/6ed2bf98cf35a269/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/6ed2bf98cf35a269/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAACwAwCdASoYABEAPxFytFM/v6UisBgIA/AiCWcAyRALliQHZb5uQAD5xs4DlV46Om7juE5ZEKGvwTgkFkZAPe7XAAA=",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/openclaw-approve-node-capabilities.png": {
+      "hash": "a568161439ab5dde",
+      "width": 1468,
+      "height": 1314,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a568161439ab5dde/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a568161439ab5dde/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/a568161439ab5dde/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAAAQAwCdASoYABUAPxFyr1A4pqQisAgDECIJZwC/OCgob5AA/utTqraLKl+nrAio1H90M96qmNP+1AAA",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/google-auth-platform-not-configured.png": {
+      "hash": "69b113c68f5e68cc",
+      "width": 1600,
+      "height": 1013,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/69b113c68f5e68cc/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/69b113c68f5e68cc/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/69b113c68f5e68cc/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/69b113c68f5e68cc/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAABQAwCdASoYAA8APxF0tFE/pqUisAgD8CIJZwDKABrx/l4LAADrL3DJGgr1u8XmT4vQ9lxsUfwAAA==",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/google-oauth-create-client-prompt.png": {
+      "hash": "9f3e13229204fe68",
+      "width": 1600,
+      "height": 1013,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f3e13229204fe68/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f3e13229204fe68/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f3e13229204fe68/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9f3e13229204fe68/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAABQAwCdASoYAA8APxF4slE/p6SisAgD8CIJZwDE2DBhg8xkIAD+ullVw/IUSmwoxggzNHiX1kGAAA==",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/google-oauth-create-client-id.png": {
+      "hash": "3d11b5a0c7dce4f9",
+      "width": 1600,
+      "height": 1013,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3d11b5a0c7dce4f9/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3d11b5a0c7dce4f9/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3d11b5a0c7dce4f9/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/3d11b5a0c7dce4f9/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAABQAwCdASoYAA8APxF4slE/p6SisAgD8CIJZwDE2DBhg8h6AAD+ullVw/IUSmwoxggzM/BE61BkAA==",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/openclaw-website-desktop-app-downloads.png": {
+      "hash": "9877658150f5f718",
+      "width": 1600,
+      "height": 1013,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9877658150f5f718/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9877658150f5f718/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9877658150f5f718/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9877658150f5f718/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAADwAgCdASoYAA8ALtGIxGI1rCwsFYDQSzgGN6L47ef4AAD+7afFnkiJ1Lkr05O6WUpfgZvAAAA=",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/openclaw-welcome-screen.png": {
+      "hash": "5c203323fd36a21b",
+      "width": 1488,
+      "height": 1732,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5c203323fd36a21b/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5c203323fd36a21b/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/5c203323fd36a21b/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAAAwBACdASoYABwAPxF0rlAsJyQisBgMAYAiCWcAwcwLEtnQcWfGS+s4g6AA/hAf8K+1f5lg700yi4qmOc084GWLIDAnjimu9vxcha8/bAA=",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/openclaw-choose-gateway-location.png": {
+      "hash": "b987f7dbdbc25a97",
+      "width": 1488,
+      "height": 1732,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b987f7dbdbc25a97/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b987f7dbdbc25a97/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/b987f7dbdbc25a97/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAACwBACdASoYABwAPxF0rlAsJzMisBgMAmAiCWcAwcwNvK5007bYth1EXaE9vVDQAP4QHvwkUt/wj+YPURdupT7QX/Nk0ZFe6PfpXAAA",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/openclaw-installing-gateway-service.png": {
+      "hash": "9ccbc8305aafa1cb",
+      "width": 1488,
+      "height": 1732,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9ccbc8305aafa1cb/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9ccbc8305aafa1cb/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/9ccbc8305aafa1cb/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAABQBACdASoYABwAPxF0rlAsJyQisBgMAYAiCWcAwcwLEvwA2zxJbAYkp5wAAP4QH/CvtX+ZYO9NMouKpjk2OLzLft+6oyTi3uXtorx2R7rgAA==",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/openclaw-connect-your-ai.png": {
+      "hash": "980cc9eeda677267",
+      "width": 1488,
+      "height": 1732,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/980cc9eeda677267/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/980cc9eeda677267/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/980cc9eeda677267/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAABwBACdASoYABwAPxF0tFAsJyUisBgMAYAiCWcAwcwK+fC84TXKI9MiZyzIYAD+EB/wbqB2Wmrcv4/CT7wmuLyT0fTyRQwgbH6RDkAA",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/openclaw-inference-ready.png": {
+      "hash": "ace911760ab2e73e",
+      "width": 1600,
+      "height": 1151,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ace911760ab2e73e/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ace911760ab2e73e/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ace911760ab2e73e/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/ace911760ab2e73e/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAwCdASoYABEAPxF0tFM/v6UisBgIA/AiCWcAxNgVnMMcxne85EAA/rpaNoZ5OsYOSeRvKHn54tAvkIJBsW0MAAA=",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/openclaw-model-defaults.png": {
+      "hash": "4233e4583f67b3ec",
+      "width": 1492,
+      "height": 846,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4233e4583f67b3ec/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4233e4583f67b3ec/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/4233e4583f67b3ec/avif-1024w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAACwAgCdASoYAA4APxFysFCsJqSisAgBgCIJaQAAeyAA/u+qp6kBQAAA",
+      "videoMimeType": null
+    },
+    "courses/openclaw/assets/tailscale-generate-auth-key-dialog.png": {
+      "hash": "c654576554f619ed",
+      "width": 1600,
+      "height": 1046,
+      "original": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/c654576554f619ed/original.png",
+      "avif": [
+        {
+          "width": 480,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/c654576554f619ed/avif-480w.avif"
+        },
+        {
+          "width": 1024,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/c654576554f619ed/avif-1024w.avif"
+        },
+        {
+          "width": 1600,
+          "url": "https://s2mkrsfdifk0dskd.public.blob.vercel-storage.com/images/c654576554f619ed/avif-1600w.avif"
+        }
+      ],
+      "lqip": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAACwAgCdASoYABAALtGIxGIwLCwsEADQSzgGFAKtfzgA/u8PkbI9iscDSuJWh+VXQAA=",
+      "videoMimeType": null
+    },
     "courses/python-ai/assets/hugging-face-website.png": {
       "hash": "3527117fe8f0a880",
       "width": 1600,

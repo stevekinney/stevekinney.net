@@ -1,0 +1,69 @@
+[[section]]
+title = "Getting Started"
+
+[[section.item]]
+title = "Installing OpenClaw"
+href = "installation.md"
+
+[[section.item]]
+title = "Setting Up OpenClaw"
+href = "openclaw-setup.md"
+
+[[section.item]]
+title = "Configuring Your OpenClaw"
+href = "configuring-your-openclaw.md"
+
+[[section]]
+title = "Remote Gateways"
+
+[[section.item]]
+title = "Connecting to Your OpenClaw Securely with Tailscale"
+href = "connecting-securely-with-tailscale.md"
+
+[[section.item]]
+title = "Running OpenClaw on Railway with Tailscale"
+href = "running-openclaw-on-railway-with-tailscale.md"
+
+[[section.item]]
+title = "Connecting to a Remote OpenClaw as a Paired Node"
+href = "connecting-a-remote-node.md"
+
+[[section]]
+title = "Channels and Integrations"
+
+[[section.item]]
+title = "Adding Telegram as a Channel"
+href = "adding-telegram-as-a-channel.md"
+
+[[section.item]]
+title = "Choosing a DM Policy"
+href = "choosing-a-dm-policy.md"
+
+[[section.item]]
+title = "Gmail and Google Calendar Integration"
+href = "gmail-and-google-calendar-integration.md"
+
+[[section]]
+title = "Memory and the Browser"
+
+[[section.item]]
+title = "Demonstrating OpenClaw's Memory"
+href = "demonstrating-openclaw-memory.md"
+
+[[section.item]]
+title = "OpenClaw Browser Prompts"
+href = "openclaw-browser-prompts.md"
+
+[[section]]
+title = "Coding Agents"
+
+[[section.item]]
+title = "The ACPX Runtime Plugin"
+href = "acpx-runtime-plugin.md"
+
+[[section]]
+title = "Putting It to Work"
+
+[[section.item]]
+title = "Automation Ideas to Try"
+href = "automation-ideas.md"
