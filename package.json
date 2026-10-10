@@ -103,7 +103,7 @@
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.13",
-    "turbo": "^2.10.12",
+    "turbo": "^2.11.5",
     "typescript": "^6.0.3",
     "unified": "^11.0.5",
     "unist-util-remove": "^4.0.0",
