@@ -38,7 +38,7 @@ test('prices one million tokens in and out on every model by default', async ({ 
 
   await expect(
     page.getByRole('region', { name: 'Model pricing comparison' }).locator('tbody tr'),
-  ).toHaveCount(21);
+  ).toHaveCount(22);
   await expect(costFor(page, 'GPT-6 Astra')).toHaveText('$60.00');
   await expect(costFor(page, 'Qwen3.8-Flash')).toHaveText('$0.50');
 });

@@ -23,6 +23,12 @@ describe('toWorkerPricing', () => {
     expect(Object.keys(pricing.models[0]).sort()).toEqual(['id', 'input', 'name', 'output']);
   });
 
+  it('leaves out Haiku 5.5, which is priced only up to 100K prompt tokens', () => {
+    expect(toWorkerPricing(catalog).models.map((model) => model.name)).not.toContain(
+      'Claude Haiku 5.5',
+    );
+  });
+
   it('matches the four input and output prices', () => {
     const byName = Object.fromEntries(
       toWorkerPricing(catalog).models.map((model) => [model.name, [model.input, model.output]]),

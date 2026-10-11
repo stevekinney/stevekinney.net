@@ -30,11 +30,14 @@ const WORKER_PROVIDER = 'Anthropic';
 
 /**
  * Picks the worker models out of the validated catalog and hands the page
- * plain data. Throws when the default model is missing, which fails the build
- * rather than quietly defaulting to some other price.
+ * plain data. Rows priced only up to a prompt size are left out, because this
+ * page never checks prompt size. Throws when the default model is missing,
+ * which fails the build rather than quietly defaulting to some other price.
  */
 export const toWorkerPricing = (catalog: ModelPricingCatalog): WorkerPricing => {
-  const rows = catalog.models.filter((model) => model.provider === WORKER_PROVIDER);
+  const rows = catalog.models.filter(
+    (model) => model.provider === WORKER_PROVIDER && model.maximumPromptTokens === undefined,
+  );
   const fallback = rows.find((model) => model.identifiers.includes(DEFAULT_MODEL_IDENTIFIER));
 
   if (!fallback) {

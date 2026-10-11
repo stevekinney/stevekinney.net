@@ -26,6 +26,21 @@ const catalog = {
 describe('toSessionPricing', () => {
   const pricing = toSessionPricing(catalog);
 
+  it('leaves out a row priced only up to a prompt size', () => {
+    const tiered = row({
+      id: 'claude-haiku-5-5-100k',
+      input: 0.1,
+      output: 0.5,
+      maximumPromptTokens: 100_000,
+    });
+
+    expect(
+      toSessionPricing({ ...catalog, models: [...catalog.models, tiered] }).models.map(
+        (model) => model.id,
+      ),
+    ).not.toContain('claude-haiku-5-5-100k');
+  });
+
   it('keeps only the Claude models and picks the defaults', () => {
     expect(pricing.models.map((model) => model.id)).toEqual([
       'claude-opus-5-5',

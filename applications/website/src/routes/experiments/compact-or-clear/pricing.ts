@@ -52,12 +52,14 @@ const PROVIDER = 'Anthropic';
 /**
  * Hands the page plain prices with no schema library. A missing cache-write
  * price is billed at the input price, as the shared table's header says.
+ * Rows priced only up to a prompt size are left out, because this page never
+ * checks prompt size and would underprice a long session with them.
  * Throws when a default model is missing, which fails the build rather than
  * quietly defaulting to some other price.
  */
 export const toSessionPricing = (catalog: ModelPricingCatalog): SessionPricing => {
   const models = catalog.models
-    .filter((model) => model.provider === PROVIDER)
+    .filter((model) => model.provider === PROVIDER && model.maximumPromptTokens === undefined)
     .map((model) => ({
       id: model.id,
       name: model.name,
