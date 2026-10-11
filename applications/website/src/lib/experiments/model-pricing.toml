@@ -29,14 +29,16 @@
 #                        snapshot such as claude-haiku-4-5-20251001 matches the
 #                        undated identifier.
 
-updated = "2026-10-04"
+updated = "2026-10-11"
 
 [[models]]
 name = "GPT-6 Astra"
+variant = "≤272K"
 provider = "OpenAI"
 input = 10.00
 cachedInput = 1.00
 output = 50.00
+maximumPromptTokens = 272_000
 identifiers = ["gpt-6-astra"]
 
 [[models]]
@@ -77,17 +79,19 @@ maximumPromptTokens = 200_000
 
 [[models]]
 name = "GPT-6.1 Sol"
+variant = "≤272K"
 provider = "OpenAI"
 input = 2.00
 cachedInput = 0.10
 output = 10.00
+maximumPromptTokens = 272_000
 identifiers = ["gpt-6.1-sol"]
 
 [[models]]
 name = "Claude Sonnet 5.5"
 provider = "Anthropic"
 input = 2.00
-cachedInput = 0.20
+cachedInput = 0.10
 cacheWrite5m = 2.50
 cacheWrite1h = 4.00
 output = 10.00
@@ -188,11 +192,25 @@ output = 0.50
 
 [[models]]
 name = "GPT-6 Luna"
+variant = "≤272K"
 provider = "OpenAI"
 input = 0.10
 cachedInput = 0.01
 output = 0.50
+maximumPromptTokens = 272_000
 identifiers = ["gpt-6-luna"]
+
+[[models]]
+name = "Claude Haiku 5.5"
+variant = "≤100K"
+provider = "Anthropic"
+input = 0.10
+cachedInput = 0.01
+cacheWrite5m = 0.125
+cacheWrite1h = 0.20
+output = 0.50
+maximumPromptTokens = 100_000
+identifiers = ["claude-haiku-5-5"]
 
 [[models]]
 name = "Qwen3.8-Flash"
