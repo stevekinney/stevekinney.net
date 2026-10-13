@@ -171,7 +171,7 @@ Open the conversation in the Control UI and watch the widget while it runs. When
 
 ### 3. Make One Child Fail
 
-Run it again with a sixth file that doesn't exist, like `NOPE.md`. You should get five results and one reported failure. Depending on the model, a child may instead finish normally and report that it couldn't determine anything because the file doesn't exist, so the agent's summary is where the missing file shows up. Then ask for the same swarm using `Promise.all` instead. This time the whole run should fail, and the five good results are lost. That's why scripts should use `allSettled`.
+Run it again with a sixth file that doesn't exist, like `NOPE.md`. You should get five results and one reported failure. Depending on the model, a child may instead finish normally and report that it couldn't determine anything because the file doesn't exist, so the agent's summary is where the missing file shows up. Then ask for the same swarm using `Promise.all` instead. If a child failed outright, the whole run fails this time and the five good results are lost. If every child finished normally, `Promise.all` succeeds too, because nothing rejected. Either way, `allSettled` is the one that never throws away good results, which is why scripts should use it.
 
 ### 4. Confirm Collectors Never Ask
 
