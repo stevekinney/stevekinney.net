@@ -43,14 +43,8 @@
 
 .callout-title {
   gap: 0.75rem;
-  margin-bottom: 0.25rem;
   line-height: 1.3;
   color: oklch(from var(--callout-base) 35% 0.14 h);
-}
-
-/* Collapsed callouts render only the summary row, so drop the title gap. */
-.callout[data-collapsible='true']:not([open]) > .callout-title {
-  margin-bottom: 0;
 }
 
 /* Nested callouts keep the outer callout's size instead of shrinking again. */
@@ -63,9 +57,18 @@
   height: 1.25rem;
 }
 
-/* Indent the body under the title text so the icon reads as its own column. */
+/*
+ * Indent the body under the title text so the icon reads as its own column.
+ * The title gap lives on the body, so title-only and collapsed callouts, which
+ * render no visible body, keep their padding balanced.
+ */
 .callout-content {
+  margin-top: 0.25rem;
   padding-inline-start: 2rem;
+}
+
+.callout-content:empty {
+  display: none;
 }
 
 .prose .callout-content > * {

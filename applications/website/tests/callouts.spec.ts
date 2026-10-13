@@ -113,3 +113,18 @@ test('collapsed callouts keep balanced vertical spacing', async ({ page }) => {
 
   expect(Math.abs(topGap - bottomGap)).toBeLessThanOrEqual(1);
 });
+
+test('title-only callouts keep balanced vertical spacing', async ({ page }) => {
+  await page.setViewportSize(viewport);
+  await page.goto('/courses/figma/placeholder-components');
+
+  const callout = page.locator('[data-callout]:has(.callout-content:empty)').first();
+  await expect(callout).toBeVisible();
+  const { topGap, bottomGap } = await callout.evaluate((element) => {
+    const box = element.getBoundingClientRect();
+    const title = element.querySelector('.callout-title')!.getBoundingClientRect();
+    return { topGap: title.top - box.top, bottomGap: box.bottom - title.bottom };
+  });
+
+  expect(Math.abs(topGap - bottomGap)).toBeLessThanOrEqual(1);
+});
