@@ -73,3 +73,28 @@ for (const colorScheme of colorSchemes) {
     });
   }
 }
+
+test('callouts have balanced vertical spacing and readable leading', async ({ page }) => {
+  await page.setViewportSize(viewport);
+  await page.goto('/writing/setup-python');
+
+  const metrics = await page.locator('[data-callout]').evaluateAll((callouts) =>
+    callouts.map((callout) => {
+      const box = callout.getBoundingClientRect();
+      const title = callout.querySelector('.callout-title')!.getBoundingClientRect();
+      const body = callout.querySelector('.callout-content > :last-child')!;
+      const bodyStyle = getComputedStyle(body);
+      return {
+        topGap: title.top - box.top,
+        bottomGap: box.bottom - body.getBoundingClientRect().bottom,
+        leadingRatio: parseFloat(bodyStyle.lineHeight) / parseFloat(bodyStyle.fontSize),
+      };
+    }),
+  );
+
+  expect(metrics.length).toBeGreaterThan(0);
+  for (const { topGap, bottomGap, leadingRatio } of metrics) {
+    expect(Math.abs(topGap - bottomGap)).toBeLessThanOrEqual(1);
+    expect(leadingRatio).toBeGreaterThanOrEqual(1.45);
+  }
+});
