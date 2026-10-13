@@ -231,7 +231,7 @@ Have one child draft and another review against a checklist, with you or the par
 ## Try It Out
 
 1. **Inspect a child.** Spawn the `AGENTS.md` reader from earlier and walk through `/subagents list`, `info`, and `log ... tools`.
-2. **Ask a child what it has.** Spawn a subagent and tell it to list its own tools and which of your workspace files it can see. Compare its tool list with `/tools` in your main session. `message`, `cron`, and `gateway` should be missing.
+2. **Ask a child what it has.** Spawn a subagent and tell it to list its own tools and which of your workspace files it can see. Compare its tool list with `/tools` in your main session. `message`, `cron`, and `gateway` should be missing. A child's description of its own tools isn't proof, though. If it lists one of these, ask it to actually call it and confirm the call is refused.
 3. **Take the shell away.** Run `openclaw config set tools.subagents.tools.deny '["exec"]'`, then ask a subagent to run `uname -a`. It should report that it can't. Undo it with `openclaw config unset tools.subagents.tools.deny`.
 4. **Prove the researcher is locked down.** Ask the researcher agent to run `ls ~`. It should fail, while a web search succeeds.
 5. **Hit the depth cap.** Set `agents.defaults.subagents.maxSpawnDepth` to `1`, then ask a subagent to spawn a subagent of its own. It shouldn't be able to, because at the maximum depth children don't get the spawn tool. Set it back to what you had before (the default is `5`).

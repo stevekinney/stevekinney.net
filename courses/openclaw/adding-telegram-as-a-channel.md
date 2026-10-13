@@ -26,6 +26,10 @@ Once you message your bot for the first time, you'll see that it's still going t
 
 Run the approval command from the message on the machine hosting OpenClaw. Once we've done that, we should be good to go.
 
+You can confirm the connection in the Control UI. Open Settings and choose Channels, and Telegram shows up under Connected Channels with a Running status.
+
+![The Channels page in the OpenClaw settings with Telegram listed as running under Connected Channels](assets/openclaw-channels-telegram-running.png)
+
 If other people may communicate with the agent, configure `session.dmScope` to `"per-channel-peer"`.
 
 Once you can talk to your bot, read [Choosing a DM Policy](choosing-a-dm-policy.md) to decide who else should be able to.

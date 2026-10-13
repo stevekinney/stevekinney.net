@@ -27,6 +27,10 @@ Produce a report containing a comparison table, links, and your top three recomm
 Use the browser to navigate the actual GitHub interface. Don't substitute web search. Explain what you're doing as you navigate, and take screenshots of three interesting discoveries.
 ```
 
+Here is what a run looks like. The browser panel on the right shows the agent on a repository's releases page, while the chat on the left holds the comparison table and the top recommendation.
+
+![The Control UI chat with a comparison table of three trending repositories and a top recommendation, beside a browser side panel showing a GitHub releases page](assets/openclaw-browser-github-trending-report.png)
+
 Or, here is an even more fun one:
 
 ```md

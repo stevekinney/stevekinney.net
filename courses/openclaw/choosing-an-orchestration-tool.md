@@ -92,6 +92,10 @@ A **goal** is one objective attached to the current session. It stays visible to
 /goal clear
 ```
 
+In the Control UI, a goal also shows up as a banner above the message box, with buttons to edit, pause, or clear it.
+
+![The Control UI chat with a Pursuing goal banner above the message box, showing the goal text, a timer, and edit, pause, and clear buttons](assets/openclaw-goal-pursuing-banner.png)
+
 What to know:
 
 - **One per session.** Starting a second fails with `goal already exists` until you clear the first.

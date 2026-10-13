@@ -373,7 +373,9 @@ openclaw skills workshop apply <proposal-id>
 openclaw skills workshop reject <proposal-id> --reason "Too specific"
 ```
 
-The same queue is in the Control UI under **Plugins**, on the **Skill Workshop** tab.
+The same queue is in the Control UI under **Plugins**, on the **Skill Workshop** tab, under **Suggestions**.
+
+![The Skill workshop tab in the Control UI, with Skills and Suggestions subtabs, a Self-learning toggle, and the agent's installed workshop skills listed beside a preview of the selected skill](assets/openclaw-skill-workshop-tab.png)
 
 Whatever the mode, you can ask for a skill directly. Send `/learn` after a conversation that went well, optionally with a request like `/learn a skill for triaging my GitHub notifications`. It drafts one skill for review and never applies it on its own.
 

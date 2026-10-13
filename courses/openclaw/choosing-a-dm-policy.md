@@ -21,6 +21,10 @@ Every channel therefore has a **DM policy** that decides what happens when someo
 
 The policy lives under the channel it applies to, for example `channels.telegram.dmPolicy`. If an account inside a channel doesn't set its own, it inherits the channel's value. The default is `pairing`.
 
+You can also see and change it in the Control UI. Open _Channels_ in Settings, click the channel, and look for the DM policy control. Here's the Telegram channel on a gateway still using the default:
+
+![The Telegram channel settings in the Control UI with the Telegram DM Policy control set to pairing, beside the Group Policy control](assets/openclaw-telegram-dm-policy-setting.png)
+
 The four values are a progression, not a menu of equals. Here's what each one actually means.
 
 ### `pairing`
