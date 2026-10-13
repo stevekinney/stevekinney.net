@@ -221,5 +221,9 @@ When you're done with a synced profile, remove it properly:
 
 If you'd rather block the one-time import path entirely, set `browser.allowSystemProfileImport` to `false`. That turns off `import-profile` for both the CLI and for imports an agent triggers.
 
+In the Control UI, that switch is the Allow System Profile Import toggle under **Settings → Infrastructure → Browser**. It's on by default.
+
+![The Browser page under Infrastructure in the OpenClaw settings, with the Allow System Profile Import toggle switched on above the Browser Enabled and Browser Evaluate Enabled toggles](assets/openclaw-settings-browser-system-profile-import.png)
+
 > [!NOTE] Versions and updates
 > This lesson follows OpenClaw's `2026.9.8` documentation. The sample output comes from one `cookie-sync` run on a Mac, and the end-to-end flow against a remote Gateway wasn't rehearsed. Check `openclaw browser --help` on your build for the exact flags.

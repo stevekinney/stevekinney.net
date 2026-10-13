@@ -48,6 +48,8 @@ Show me the exact Markdown content containing the Project Magpie information and
 Do not answer based solely on our conversation history. If you cannot access or verify the file, say so explicitly.
 ```
 
+![The Control UI chat showing the agent reading MEMORY.md back from disk after the Project Magpie request](assets/openclaw-memory-write-and-verify.png)
+
 Depending on how your agent is configured, it might store the information in `MEMORY.md`, a dated Markdown file under `memory/`, or another configured memory backend.
 
 ## Step 3: Start a completely new session
@@ -57,6 +59,10 @@ In OpenClaw, type:
 ```text
 /new
 ```
+
+In the Control UI, typing `/` opens a command menu, and `/new` is listed under Session as the command that starts a new session.
+
+![The slash command menu in the Control UI composer with the new command highlighted](assets/openclaw-new-command-menu.png)
 
 This starts a fresh session without the previous conversation's active context.
 
@@ -77,6 +83,8 @@ Use your persistent memory, not previous conversation history. Tell me which mem
 ```
 
 A successful response should correctly identify all four details without needing the original conversation.
+
+![A new session answering the Project Magpie questions and naming MEMORY.md and USER.md as its sources](assets/openclaw-memory-recall-new-session.png)
 
 ## Step 4: Test semantic memory retrieval
 

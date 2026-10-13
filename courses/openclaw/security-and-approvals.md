@@ -180,7 +180,9 @@ Approvals assume someone is around to answer. Two situations change that.
 
 When you do approve an automation's command with **Always allow**, OpenClaw creates a **standing grant** instead of an allowlist entry. The grant is tied to that one job, that agent, and the exact command, working directory, and environment. If the job is edited, or the command changes by a single character, it asks again.
 
-You can review and revoke standing grants in the Control UI under **Settings → Approvals**, or from the terminal:
+You can review and revoke standing grants in the Control UI under **Settings → Approvals**, which also lists a rolling 30-day history of resolved approvals. You can also do it from the terminal:
+
+![The Approvals page in the OpenClaw settings, with empty tables for standing grants and approval history](assets/openclaw-settings-approvals.png)
 
 ```sh
 openclaw approvals grants list
@@ -205,16 +207,18 @@ The `security` and `ask` settings apply only to that message, and only senders y
 
 The Control UI adds one more dial per conversation. In the chat composer, the **Execution permissions** menu sets a **permission mode** for that session:
 
-| Mode      | Files                            | Commands outside the allowlist      |
-| --------- | -------------------------------- | ----------------------------------- |
-| Read only | Read inside the session's folder | Denied                              |
-| Guarded   | Read and write inside the folder | Ask a human                         |
-| Workspace | Read and write inside the folder | An AI reviewer decides, or asks you |
-| Full      | Anywhere                         | Run without asking                  |
+| Mode        | Files                            | Commands outside the allowlist      |
+| ----------- | -------------------------------- | ----------------------------------- |
+| Read Only   | Read inside the session's folder | Denied                              |
+| Guarded     | Read and write inside the folder | Ask a human                         |
+| Workspace   | Read and write inside the folder | An AI reviewer decides, or asks you |
+| Full Access | Anywhere                         | Run without asking                  |
 
-A session with no mode uses your global policy. The menu's **Default** label is just a description of that policy. Without any of the settings in this lesson, the default is full access.
+![The Execution permissions menu in the chat composer, listing Default, Read Only, Guarded, Workspace, and Full Access](assets/openclaw-execution-permissions-menu.png)
 
-Choosing **Full** needs admin rights on the Gateway, and it overrides the host's approval rules for that session. Changing the mode partway through a task cancels anything waiting for approval. It doesn't undo anything that already ran.
+A session with no mode uses your global policy. The menu's **Default** entry follows that policy, and its label spells out what the policy currently allows, such as **Default (Full Access)**. Without any of the settings in this lesson, the default is full access.
+
+Choosing **Full Access** needs admin rights on the Gateway, and it overrides the host's approval rules for that session. Changing the mode partway through a task cancels anything waiting for approval. It doesn't undo anything that already ran.
 
 ## Layer 4: Sandboxing
 

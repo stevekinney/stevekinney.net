@@ -65,6 +65,10 @@ openclaw automations disable <job-id>    # stop it without deleting it
 
 You can also just ask your agent, in Telegram, to set one up. Jobs created that way are limited to the tools available in the conversation that created them, which is a nice built-in guardrail. Run `openclaw automations list` afterward to check what it actually made.
 
+If you'd rather click than type, the Control UI has an Automations page with a New automation form. It asks for the same things as the flags above: a prompt, a name, whether it runs in the main session or an isolated one, and a schedule of an interval, a single time, or a cron expression.
+
+![The top of the New automation form in the Control UI, with the prompt box followed by the action, model, and reasoning settings](assets/openclaw-new-automation-form.png)
+
 ## Ground Rules
 
 These apply to every idea. They're the difference between an automation you trust and one you turn off after a week.

@@ -129,7 +129,7 @@ Use the **primary remote connection** for the node relationship. Adding a saved 
    bash openclaw-install.sh --no-onboard
    ```
 
-2. On the Gateway's **Devices** page, create a setup link. It looks like `oc-pair://<setup-code>`.
+2. On the Gateway's **Devices** page (**Settings → Devices** in the Control UI), create a setup link. It looks like `oc-pair://<setup-code>`.
 
    > [!WARNING]
    > Treat the setup link like a password. Don't paste it into chat and don't commit it.
@@ -194,6 +194,10 @@ openclaw nodes describe --node "<node-id>"
 ```
 
 When you refer to a node in configuration, use its **node ID** rather than its display name.
+
+The Control UI shows the same picture under **Settings → Devices**: each paired device, whether it's connected, and the capabilities a node offers. The **Pair device** button at the top of that page is where new pairings start.
+
+![The top of the Devices page in the OpenClaw settings, with the Paired Devices count and the Pair device button](assets/openclaw-settings-devices.png)
 
 Then check that the Mac has the tools you expect. This looks for executables without running them:
 

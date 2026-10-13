@@ -80,6 +80,10 @@ healthy: yes
 capabilities: session/set_config_option, session/set_mode, session/status
 ```
 
+In the Control UI, the same report shows up as a reply from your agent:
+
+![A Control UI chat where the agent replies to the acp doctor command with the ACPX backend report, ending in healthy: yes](assets/openclaw-acp-doctor-output.png)
+
 The lines worth reading:
 
 - **`healthy: yes`** and **`runtimeDoctor: ok`** mean OpenClaw launched an adapter and completed the protocol handshake. That's the line you're checking for.
@@ -314,6 +318,10 @@ What to look for:
 - A reply summarizing the workspace, which came from the harness and was relayed by your agent.
 - If it fails with an authentication error, the harness isn't signed in on the Gateway host. Fix the login before continuing.
 - Run `/acp doctor` again. The counters should have moved, and `turnCounts` should show a completed turn.
+
+Here's what the authentication failure looks like when the harness isn't signed in on the Gateway host. `/acp doctor` was healthy, and the spawn still failed:
+
+![A Control UI chat where the agent reports that sessions_spawn for the codex harness failed with Authentication required, with no files changed](assets/openclaw-acp-spawn-authentication-required.png)
 
 ### Exercise 2: Same Question, Two Harnesses
 

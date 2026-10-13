@@ -129,6 +129,10 @@ Everything you just did by hand, the agent can do in a chat. You don't write com
 
 > Using the browser, open https://news.ycombinator.com, read the top ten stories, and give me a one-line summary of each. Use the browser, not web search. Tell me what you did, and stop if you hit a login page.
 
+In the Control UI, the browser opens in a side panel next to the chat, labeled with the `openclaw` profile, so you can watch the page the agent is working on.
+
+![The Control UI chat with a browser side panel showing example.com under the openclaw profile, beside the agent's summary of the page](assets/openclaw-browser-side-panel.png)
+
 A good browser prompt does a few things:
 
 - **Names the profile** when it matters. "Using the `openclaw` profile" is a good default to be explicit about.

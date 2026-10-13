@@ -50,6 +50,8 @@ exec --json --shell 'echo [3,1,2]' | sort | approve --preview-from-stdin --limit
 
 Instead of finishing, the tool returns a status of `needs_approval`, the prompt, a preview of the data, and two ways to resume: a long `resumeToken` and a short `approvalId`.
 
+![The Control UI chat showing a lobster result with a status of needs_approval, the Keep going prompt, a three-item preview, a resume token, and an approval ID](assets/openclaw-lobster-needs-approval.png)
+
 ## Workflow Files
 
 Anything more than a few steps belongs in a workflow file. Here's one that cleans up `.tmp` files in a folder, but only after you've seen the list:
@@ -135,6 +137,8 @@ Install the plugin, allow the tool, and confirm it loaded with `openclaw plugins
 > Use the lobster tool to run this pipeline and show me the raw result: `exec --json --shell 'echo [3,1,2]' | sort`
 
 You should see a status of `ok` and an output of `[1, 2, 3]`. If the agent says it doesn't have a `lobster` tool, check `tools.alsoAllow` and send `/tools` to see what it can use.
+
+![The Control UI chat showing the lobster tool result with a status of ok and an output of 1, 2, 3](assets/openclaw-lobster-smoke-test-result.png)
 
 ### 2. Set Up a Lab
 
