@@ -48,6 +48,16 @@
   color: oklch(from var(--callout-base) 35% 0.14 h);
 }
 
+/* Collapsed callouts render only the summary row, so drop the title gap. */
+.callout[data-collapsible='true']:not([open]) > .callout-title {
+  margin-bottom: 0;
+}
+
+/* Nested callouts keep the outer callout's size instead of shrinking again. */
+.callout .callout {
+  font-size: 1em;
+}
+
 .callout-title-icon svg {
   width: 1.25rem;
   height: 1.25rem;

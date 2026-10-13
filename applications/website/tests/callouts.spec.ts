@@ -98,3 +98,18 @@ test('callouts have balanced vertical spacing and readable leading', async ({ pa
     expect(leadingRatio).toBeGreaterThanOrEqual(1.45);
   }
 });
+
+test('collapsed callouts keep balanced vertical spacing', async ({ page }) => {
+  await page.setViewportSize(viewport);
+  await page.goto('/courses/storybook/setting-up-tailwind');
+
+  const callout = page.locator('details.callout:not([open])').first();
+  await expect(callout).toBeVisible();
+  const { topGap, bottomGap } = await callout.evaluate((element) => {
+    const box = element.getBoundingClientRect();
+    const title = element.querySelector('.callout-title')!.getBoundingClientRect();
+    return { topGap: title.top - box.top, bottomGap: box.bottom - title.bottom };
+  });
+
+  expect(Math.abs(topGap - bottomGap)).toBeLessThanOrEqual(1);
+});
