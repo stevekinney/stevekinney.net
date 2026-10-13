@@ -35,7 +35,7 @@ There are four options, and they trade convenience against exposure.
 
 Pick the first one that works. Each step down hands over more.
 
-There's a second tool you may run into, `import-profile`. It's the one-time, same-machine cousin of cookie sync, and it's only for when the Gateway and the browser are on the **same Mac**. Which of the two exists depends on your Gateway's mode, not on a preference:
+There's a second tool you may run into, `import-profile`. It's the one-time, same-machine cousin of cookie sync, and it's only for when the Gateway and the browser are on the **same Mac**. Which one you use depends on where your Gateway runs:
 
 |                  | `import-profile`       | `cookie-sync`                                                    |
 | ---------------- | ---------------------- | ---------------------------------------------------------------- |
@@ -68,7 +68,7 @@ A few rules follow from that:
 You'll need:
 
 - **A Mac with Chrome** (or another Chrome-family browser) signed in to the sites you want. Cookie sync is macOS-only.
-- **The `openclaw` CLI on that Mac.** The macOS app keeps its own copy at `~/.openclaw/bin/openclaw`, but that folder isn't on your `PATH`, and the documentation doesn't say whether the app counts that copy as the external CLI. To be safe, install it the normal way from the [installation lesson](installation.md), then check it:
+- **The `openclaw` CLI on that Mac.** The installer from the [installation lesson](installation.md) puts it at `~/.openclaw/bin/openclaw`. Make sure that folder is on your `PATH`, then check it:
 
   ```sh
   command -v openclaw
@@ -148,7 +148,7 @@ A login form means the cookies didn't take. Common reasons are a domain that doe
 If you want to count cookies directly, stop the profile's browser so it flushes to disk, then copy its `Cookies` database somewhere and count the rows:
 
 ```sh
-openclaw browser stop --browser-profile work
+openclaw browser --browser-profile work stop
 ```
 
 On the Gateway host, `openclaw browser status` shows a running profile's data directory.
@@ -178,7 +178,7 @@ That keeps running and pushes updates as your Mac's cookies change. A few things
 
 - **It runs on your Mac.** The command has to stay alive, so run it somewhere durable, like a `tmux` session or a login item.
 - **Nothing syncs while the Mac is asleep or offline.** The remote profile just keeps what it last received.
-- **The macOS app can do it for you.** In remote mode, the app has a Cookie sync toggle that supervises the same `--watch` command against the connected Gateway. It's off by default. Find it under **Settings → This Mac → Browser**. The CLI reference lists it under **Settings → General → Browser login**, so check both.
+- **The macOS app can do it for you.** In remote mode, the app has a Cookie sync toggle that supervises the same `--watch` command against the connected Gateway. It's off by default. Find it under **Dashboard → Settings → This Mac → Browser**, where you can also edit the domain list and the target profile.
 
 ## Limits
 
@@ -194,7 +194,7 @@ That keeps running and pushes updates as your Mac's cookies change. A few things
 | An error about a missing or empty allowlist        | `--domains` is required. An empty list is a hard error and syncs nothing.                                                                                                                 |
 | `pushed=0`                                         | Nothing matched. Check the domain spelling, and make sure that Chrome profile is actually signed in to the site.                                                                          |
 | The Cookie sync toggle is greyed out in the app    | The app is connected to a local Gateway. Cookie sync only exists in remote mode.                                                                                                          |
-| `command -v openclaw` prints nothing               | The app's built-in CLI isn't on your `PATH`. Install the CLI properly, or call `~/.openclaw/bin/openclaw` directly.                                                                       |
+| `command -v openclaw` prints nothing               | `~/.openclaw/bin` isn't on your `PATH`. Add it, or call `~/.openclaw/bin/openclaw` directly.                                                                                              |
 | `Profile "…" not found. Available profiles: …`     | The profile was just created and the Browser service hasn't reloaded. Wait about ten seconds and check `openclaw browser profiles`.                                                       |
 | `unable to open database file`                     | A permissions error, not corruption. It's the failure `import-profile` hits when the Gateway can't read Chrome's cookies. `cookie-sync` avoids it because your terminal does the reading. |
 | The agent sees a login page anyway                 | The cookies expired, didn't match, or the site rejects copied sessions. Re-sync, then try driving the Mac's browser instead.                                                              |
@@ -211,7 +211,7 @@ When you're done with a synced profile, remove it properly:
 2. **Delete the profile** on the Gateway:
 
    ```sh
-   openclaw browser stop --browser-profile work
+   openclaw browser --browser-profile work stop
    openclaw browser delete-profile --name work
    ```
 
