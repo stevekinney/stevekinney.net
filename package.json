@@ -96,7 +96,7 @@
     "remark-parse": "^11.0.0",
     "rollup-plugin-visualizer": "^7.1.1",
     "satori": "^0.33.4",
-    "shiki": "^4.4.3",
+    "shiki": "^4.5.0",
     "storybook": "^10.6.0",
     "svelte": "^5.57.0",
     "svelte-check": "^4.7.6",
