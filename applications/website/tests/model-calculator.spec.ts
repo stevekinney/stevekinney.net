@@ -38,9 +38,9 @@ test('prices one million tokens in and out on every model by default', async ({ 
 
   await expect(
     page.getByRole('region', { name: 'Model pricing comparison' }).locator('tbody tr'),
-  ).toHaveCount(21);
+  ).toHaveCount(24);
   await expect(costFor(page, 'GPT-6 Astra')).toHaveText('$60.00');
-  await expect(costFor(page, 'Qwen3.8-Flash')).toHaveText('$0.50');
+  await expect(costFor(page, 'Qwen3.8-Flash')).toHaveText('$0.62');
 });
 
 test.describe('without JavaScript', () => {
@@ -90,7 +90,7 @@ test('sorts by cost from the column heading', async ({ page }) => {
     'aria-sort',
     'ascending',
   );
-  await expect(comparison.getByRole('rowheader').first()).toContainText('Qwen3.8-Flash');
+  await expect(comparison.getByRole('rowheader').first()).toContainText('GPT-6 Luna');
 });
 
 test('fills in token counts from a Claude Code session and badges the models it used', async ({
