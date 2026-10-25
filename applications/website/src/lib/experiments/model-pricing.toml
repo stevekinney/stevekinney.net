@@ -29,14 +29,16 @@
 #                        snapshot such as claude-haiku-4-5-20251001 matches the
 #                        undated identifier.
 
-updated = "2026-10-04"
+updated = "2026-10-25"
 
 [[models]]
 name = "GPT-6 Astra"
+variant = "≤272K"
 provider = "OpenAI"
 input = 10.00
 cachedInput = 1.00
 output = 50.00
+maximumPromptTokens = 272_000
 identifiers = ["gpt-6-astra"]
 
 [[models]]
@@ -67,6 +69,13 @@ cachedInput = 0.30
 output = 15.00
 
 [[models]]
+name = "Gemini 4 Argon"
+provider = "Google"
+input = 2.00
+cachedInput = 0.10
+output = 10.00
+
+[[models]]
 name = "Gemini 3.1 Pro Preview"
 variant = "≤200K"
 provider = "Google"
@@ -77,17 +86,19 @@ maximumPromptTokens = 200_000
 
 [[models]]
 name = "GPT-6.1 Sol"
+variant = "≤272K"
 provider = "OpenAI"
 input = 2.00
 cachedInput = 0.10
 output = 10.00
+maximumPromptTokens = 272_000
 identifiers = ["gpt-6.1-sol"]
 
 [[models]]
 name = "Claude Sonnet 5.5"
 provider = "Anthropic"
 input = 2.00
-cachedInput = 0.20
+cachedInput = 0.10
 cacheWrite5m = 2.50
 cacheWrite1h = 4.00
 output = 10.00
@@ -103,11 +114,29 @@ output = 6.00
 maximumPromptTokens = 200_000
 
 [[models]]
+name = "Grok 4.3"
+variant = "<200K"
+provider = "xAI"
+input = 1.25
+cachedInput = 0.20
+output = 2.50
+maximumPromptTokens = 200_000
+
+[[models]]
 name = "Qwen3.8-Max"
 provider = "Alibaba Cloud"
-input = 1.65
-cachedInput = 0.206
-output = 4.951
+input = 2.00
+cachedInput = 0.20
+output = 6.00
+
+[[models]]
+name = "Qwen3.7-Plus"
+variant = "≤256K"
+provider = "Alibaba Cloud"
+input = 0.40
+cachedInput = 0.04
+output = 1.60
+maximumPromptTokens = 256_000
 
 [[models]]
 name = "Claude Haiku 4.5"
@@ -188,15 +217,17 @@ output = 0.50
 
 [[models]]
 name = "GPT-6 Luna"
+variant = "≤272K"
 provider = "OpenAI"
 input = 0.10
 cachedInput = 0.01
 output = 0.50
+maximumPromptTokens = 272_000
 identifiers = ["gpt-6-luna"]
 
 [[models]]
 name = "Qwen3.8-Flash"
 provider = "Alibaba Cloud"
-input = 0.113
-cachedInput = 0.014
-output = 0.382
+input = 0.15
+cachedInput = 0.015
+output = 0.47
