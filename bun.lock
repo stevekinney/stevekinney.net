@@ -14,7 +14,7 @@
         "@icons-pack/svelte-simple-icons": "^7.2.0",
         "@lezer/highlight": "^1.2.5",
         "@lostgradient/skillset": "^0.1.1",
-        "@lucide/svelte": "^1.43.0",
+        "@lucide/svelte": "^1.61.0",
         "@resvg/resvg-wasm": "^2.6.2",
         "acorn": "^8.19.0",
         "class-variance-authority": "^0.7.1",
@@ -557,7 +557,7 @@
 
     "@lostgradient/skillset": ["@lostgradient/skillset@0.1.1", "", { "dependencies": { "acorn": "^8.18.0", "js-yaml": "^3.14.1", "zod": "^4.4.3" } }, "sha512-XN4GF89nVDn37zxS+rmiD4TaeGmUoAxs/NTYE49SkR59PVh2eHqet9Ev2NrASVmKTAqd/Kc4Bx9h9PnoIlaMQw=="],
 
-    "@lucide/svelte": ["@lucide/svelte@1.43.0", "", { "peerDependencies": { "svelte": "^5" } }, "sha512-IfxS4hVxojnafzFKkQGzndoM6yUODmGc07I0h6R/1SlwDoZwd/5gl90zHz+fTaBVLZo7uE5sPDySFGiK4iMQKw=="],
+    "@lucide/svelte": ["@lucide/svelte@1.61.0", "", { "peerDependencies": { "svelte": "^5" } }, "sha512-Vwj4ADoKgVogLFpEbXv2PS2hh2fj+aAqPuiNydI88Zkyb1l7veL4fXgRrOX3tgpESHhIGneNkSSYhHupvCBshg=="],
 
     "@mapbox/node-pre-gyp": ["@mapbox/node-pre-gyp@2.0.3", "", { "dependencies": { "consola": "^3.2.3", "detect-libc": "^2.0.0", "https-proxy-agent": "^7.0.5", "node-fetch": "^2.6.7", "nopt": "^8.0.0", "semver": "^7.5.3", "tar": "^7.4.0" }, "bin": { "node-pre-gyp": "bin/node-pre-gyp" } }, "sha512-uwPAhccfFJlsfCxMYTwOdVfOz3xqyj8xYL3zJj8f0pb30tLohnnFPhLuqp4/qoEz8sNxe4SESZedcBojRefIzg=="],
 
