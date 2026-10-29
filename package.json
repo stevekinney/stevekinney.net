@@ -124,7 +124,7 @@
     "@icons-pack/svelte-simple-icons": "^7.2.0",
     "@lezer/highlight": "^1.2.5",
     "@lostgradient/skillset": "^0.1.1",
-    "@lucide/svelte": "^1.43.0",
+    "@lucide/svelte": "^1.61.0",
     "@resvg/resvg-wasm": "^2.6.2",
     "acorn": "^8.19.0",
     "class-variance-authority": "^0.7.1",
