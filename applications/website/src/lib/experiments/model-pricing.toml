@@ -29,14 +29,16 @@
 #                        snapshot such as claude-haiku-4-5-20251001 matches the
 #                        undated identifier.
 
-updated = "2026-10-04"
+updated = "2026-11-01"
 
 [[models]]
 name = "GPT-6 Astra"
+variant = "≤272K"
 provider = "OpenAI"
 input = 10.00
 cachedInput = 1.00
 output = 50.00
+maximumPromptTokens = 272_000
 identifiers = ["gpt-6-astra"]
 
 [[models]]
@@ -60,11 +62,20 @@ output = 20.00
 identifiers = ["claude-opus-5-5"]
 
 [[models]]
+# Moonshot's price table did not load when this was checked, so these prices are unverified.
 name = "Kimi K3"
 provider = "Moonshot AI"
 input = 3.00
 cachedInput = 0.30
 output = 15.00
+
+# Google raises this model to $4.00 input, $0.20 cached, and $20.00 output on December 1, 2026.
+[[models]]
+name = "Gemini 4 Argon"
+provider = "Google"
+input = 2.00
+cachedInput = 0.10
+output = 10.00
 
 [[models]]
 name = "Gemini 3.1 Pro Preview"
@@ -77,17 +88,29 @@ maximumPromptTokens = 200_000
 
 [[models]]
 name = "GPT-6.1 Sol"
+variant = "≤272K"
 provider = "OpenAI"
 input = 2.00
 cachedInput = 0.10
 output = 10.00
+maximumPromptTokens = 272_000
 identifiers = ["gpt-6.1-sol"]
+
+[[models]]
+name = "GPT-6.1 Terra"
+variant = "≤272K"
+provider = "OpenAI"
+input = 1.00
+cachedInput = 0.05
+output = 5.00
+maximumPromptTokens = 272_000
+identifiers = ["gpt-6.1-terra"]
 
 [[models]]
 name = "Claude Sonnet 5.5"
 provider = "Anthropic"
 input = 2.00
-cachedInput = 0.20
+cachedInput = 0.10
 cacheWrite5m = 2.50
 cacheWrite1h = 4.00
 output = 10.00
@@ -103,11 +126,36 @@ output = 6.00
 maximumPromptTokens = 200_000
 
 [[models]]
+name = "Grok 4.3"
+variant = "<200K"
+provider = "xAI"
+input = 1.25
+cachedInput = 0.20
+output = 2.50
+maximumPromptTokens = 200_000
+
+# These prices match Alibaba Cloud's Beijing table, which uses "$" without a currency code.
+# Its Singapore (international) table lists qwen3.8-max at $2 input and $6 output.
+# The cachedInput value is not on the page, so it is unverified.
+[[models]]
 name = "Qwen3.8-Max"
 provider = "Alibaba Cloud"
 input = 1.65
 cachedInput = 0.206
 output = 4.951
+
+# Haiku 5.5 is $0.50 input, $0.625 cached, $1.00 output above 100,000 prompt tokens.
+[[models]]
+name = "Claude Haiku 5.5"
+variant = "≤100K"
+provider = "Anthropic"
+input = 0.10
+cachedInput = 0.01
+cacheWrite5m = 0.125
+cacheWrite1h = 0.20
+output = 0.50
+maximumPromptTokens = 100_000
+identifiers = ["claude-haiku-5-5"]
 
 [[models]]
 name = "Claude Haiku 4.5"
@@ -127,6 +175,13 @@ cachedInput = 0.26
 output = 4.40
 
 [[models]]
+name = "GLM-5.3-FlashX"
+provider = "Z.ai"
+input = 0.37
+cachedInput = 0.075
+output = 1.25
+
+[[models]]
 name = "DeepSeek V4 Pro"
 variant = "peak"
 provider = "DeepSeek"
@@ -134,6 +189,8 @@ input = 1.32
 cachedInput = 0.044
 output = 3.96
 
+# Moonshot is retiring the K2 series by the end of December 2026. The price stays
+# until then, and the row should go once the model is retired.
 [[models]]
 name = "Kimi K2.7 Code"
 provider = "Moonshot AI"
@@ -141,6 +198,7 @@ input = 0.95
 cachedInput = 0.19
 output = 4.00
 
+# Google raises this model to $1.50 input, $0.15 cached, and $7.50 output on January 1, 2027.
 [[models]]
 name = "Gemini 3.8 Flash"
 provider = "Google"
@@ -188,10 +246,12 @@ output = 0.50
 
 [[models]]
 name = "GPT-6 Luna"
+variant = "≤272K"
 provider = "OpenAI"
 input = 0.10
 cachedInput = 0.01
 output = 0.50
+maximumPromptTokens = 272_000
 identifiers = ["gpt-6-luna"]
 
 [[models]]
