@@ -24,34 +24,37 @@ Every request the harness sends to the model carries the entire conversation so 
 
 ## Model costs
 
-Prices are in dollars per million tokens. "Cached input" is the price of _reading_ a cache hit. The `≤200K` and `<200K` rows are the tier for requests up to about 200K tokens of context. DeepSeek publishes separate peak and off-peak rates.
+Prices are in dollars per million tokens. "Cached input" is the price of _reading_ a cache hit. The `≤272K` rows are OpenAI's tier for requests up to 272K tokens of context, and the `≤200K`, `<200K`, and `≤100K` rows work the same way for their providers. DeepSeek publishes separate peak and off-peak rates.
 
 | Model                             | Uncached input | Cached input | Output | 1M in + 1M out |
 | --------------------------------- | -------------: | -----------: | -----: | -------------: |
-| **GPT-6 Astra**                   |         $10.00 |        $1.00 | $50.00 |     **$60.00** |
+| **GPT-6 Astra** ≤272K             |         $10.00 |        $1.00 | $50.00 |     **$60.00** |
 | **Claude Fable 5.1**              |         $10.00 |        $0.25 | $50.00 |     **$60.00** |
 | **Claude Opus 5.5**               |          $4.00 |        $0.20 | $20.00 |     **$24.00** |
 | **Kimi K3**                       |          $3.00 |        $0.30 | $15.00 |     **$18.00** |
 | **Gemini 3.1 Pro Preview** ≤200K  |          $2.00 |        $0.20 | $12.00 |     **$14.00** |
-| **GPT-6.1 Sol**                   |          $2.00 |        $0.10 | $10.00 |     **$12.00** |
-| **Claude Sonnet 5.5**             |          $2.00 |        $0.20 | $10.00 |     **$12.00** |
+| **Gemini 4 Argon**                |          $2.00 |        $0.10 | $10.00 |     **$12.00** |
+| **GPT-6.1 Sol** ≤272K             |          $2.00 |        $0.10 | $10.00 |     **$12.00** |
+| **Claude Sonnet 5.5**             |          $2.00 |        $0.10 | $10.00 |     **$12.00** |
 | **Grok 4.7** <200K                |          $2.00 |        $0.50 |  $6.00 |      **$8.00** |
-| **Qwen3.8-Max**                   |          $1.65 |       $0.206 | $4.951 |     **$6.601** |
+| **Qwen3.8-Max**                   |          $2.00 |        $0.20 |  $6.00 |      **$8.00** |
 | **Claude Haiku 4.5**              |          $1.00 |        $0.10 |  $5.00 |      **$6.00** |
 | **GLM-5.3**                       |          $1.40 |        $0.26 |  $4.40 |      **$5.80** |
 | **DeepSeek V4 Pro**, peak         |          $1.32 |       $0.044 |  $3.96 |      **$5.28** |
 | **Kimi K2.7 Code**                |          $0.95 |        $0.19 |  $4.00 |      **$4.95** |
 | **Gemini 3.8 Flash**              |          $0.75 |       $0.075 |  $3.75 |      **$4.50** |
+| **Grok 4.3** <200K                |          $1.25 |        $0.20 |  $2.50 |      **$3.75** |
 | **Gemini 3.5 Flash-Lite**         |          $0.30 |        $0.03 |  $2.50 |      **$2.80** |
 | **DeepSeek V4 Pro**, off-peak     |          $0.66 |       $0.022 |  $1.98 |      **$2.64** |
 | **DeepSeek V4.1 Flash**, peak     |          $0.30 |       $0.006 |  $1.20 |      **$1.50** |
 | **DeepSeek V4.1 Flash**, off-peak |          $0.15 |       $0.003 |  $0.60 |      **$0.75** |
 | **GLM-5.3-Flash**                 |          $0.15 |        $0.03 |  $0.50 |      **$0.65** |
-| **GPT-6 Luna**                    |          $0.10 |        $0.01 |  $0.50 |      **$0.60** |
-| **Qwen3.8-Flash**                 |         $0.113 |       $0.014 | $0.382 |     **$0.495** |
+| **Qwen3.8-Flash**                 |          $0.15 |       $0.015 |  $0.47 |      **$0.62** |
+| **Claude Haiku 5.5** ≤100K        |          $0.10 |        $0.01 |  $0.50 |      **$0.60** |
+| **GPT-6 Luna** ≤272K              |          $0.10 |        $0.01 |  $0.50 |      **$0.60** |
 
 > [!NOTE] Prices and model names move quickly
-> These are October 2026 numbers. Treat the ratios as the lesson, not the exact figures.
+> These are November 2026 numbers. Treat the ratios as the lesson, not the exact figures.
 
 Compare the two input columns. Claude Fable 5.1 charges $0.25 for cached input and $10.00 for uncached. That gap is why a warm cache matters.
 

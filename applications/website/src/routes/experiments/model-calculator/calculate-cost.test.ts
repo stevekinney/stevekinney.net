@@ -36,15 +36,13 @@ describe('calculateCost', () => {
     // 30,000 × $10 + 700 × $50 per million is exactly $0.335. Dividing each part
     // first lands on 0.33499999999999996, which displays as $0.33.
     const advisorCall = { ...emptyTokenUsage(), uncachedInput: 30_000, output: 700 };
-    // The pricing table lists Qwen3.8-Flash at $0.495 for a million tokens each way.
+    // The table lists Qwen3.8-Flash at $0.15 in and $0.47 out: $0.62 a million each way.
     const millionEachWay = { ...emptyTokenUsage(), uncachedInput: 1_000_000, output: 1_000_000 };
 
     expect(formatCost(calculateCost(advisorCall, fableRates))).toBe('$0.34');
     expect(
-      formatCost(
-        calculateCost(millionEachWay, { input: 0.113, cachedInput: 0.014, output: 0.382 }),
-      ),
-    ).toBe('$0.50');
+      formatCost(calculateCost(millionEachWay, { input: 0.15, cachedInput: 0.015, output: 0.47 })),
+    ).toBe('$0.62');
   });
 
   it('reproduces the cost Claude Code recorded for a real Claude Sonnet 5.5 session', () => {

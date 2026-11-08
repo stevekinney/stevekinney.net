@@ -13,7 +13,7 @@ const fixture = (name: string): string =>
 const path = '/experiments/compact-or-clear';
 
 const DEFAULT_VERDICT =
-  'Over the next 30 turns, compact now: it comes to $4.46, against $5.89 to keep going and $6.05 to switch to Claude Sonnet 5.5.';
+  'Over the next 30 turns, compact now: it comes to $4.46, against $5.89 to keep going and $4.54 to switch to Claude Sonnet 5.5.';
 
 const calibrationZone = (page: Page): Locator =>
   page.getByRole('group', { name: 'Calibrate from my session' });
@@ -76,11 +76,11 @@ test.describe('the answer', () => {
       .getByTestId('rule-of-thumb')
       .getByRole('row')
       .filter({ has: page.getByRole('rowheader', { name: '400K', exact: true }) });
-    await expect(row.getByRole('cell')).toHaveText(['11 turns', 'Right away', '34 turns']);
+    await expect(row.getByRole('cell')).toHaveText(['11 turns', 'Right away', '18 turns']);
 
     await expect(verdict(page)).toHaveText(DEFAULT_VERDICT);
     await expect(page.getByTestId('paybacks')).toHaveText(
-      'Compacting costs $0.76 up front and pays for itself after 11 turns. Switching to Claude Sonnet 5.5 costs $1.60 up front and pays for itself after 34 turns, more than the 30 you have left.',
+      'Compacting costs $0.76 up front and pays for itself after 11 turns. Switching to Claude Sonnet 5.5 costs $1.60 up front and pays for itself after 18 turns.',
     );
   });
 
@@ -118,7 +118,7 @@ test.describe('the scenario', () => {
     await expect(page.getByText('Compact now', { exact: true })).toBeVisible();
     await expect(page.getByText('Switch model (dashed)', { exact: true })).toBeVisible();
     await expect(chart(page).locator('svg text', { hasText: /^turn 11$/ })).toHaveCount(1);
-    await expect(chart(page).locator('svg text', { hasText: /^turn 34$/ })).toHaveCount(1);
+    await expect(chart(page).locator('svg text', { hasText: /^turn 18$/ })).toHaveCount(1);
     await expect(verdict(page)).toContainText('Over the next 60 turns');
   });
 
